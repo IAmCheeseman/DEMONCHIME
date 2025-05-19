@@ -1,5 +1,6 @@
 # Boomer Shooter
 Currently this is just a 3D renderer, but in the future I want to make it into an actual game.
+hi
 
 ## Building
 Make sure to clone the repo with submodules, and ensure LuaJIT is installed.
