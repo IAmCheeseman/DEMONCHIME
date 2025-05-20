@@ -145,23 +145,23 @@ typedef struct gfx_backend_s
   adjust_viewport_fn adjust_viewport;
   set_depth_test_fn set_depth_test;
 
-  buf_obj_create_fn buffer_object_create;
-  buf_obj_destroy_fn buffer_object_destroy;
-  buf_obj_bind_fn buffer_object_bind;
-  buf_obj_unbind_fn buffer_object_unbind;
-  buf_obj_set_dat_fn buffer_object_set;
+  buf_obj_create_fn buf_obj_create;
+  buf_obj_destroy_fn buf_obj_destroy;
+  buf_obj_bind_fn buf_obj_bind;
+  buf_obj_unbind_fn buf_obj_unbind;
+  buf_obj_set_dat_fn buf_obj_set;
 
-  vert_arr_create_fn vertex_array_create;
-  vert_arr_destroy_fn vertex_array_destroy;
-  vert_arr_bind_fn vertex_array_bind;
-  vert_arr_draw_fn vertex_array_draw;
-  vert_arr_draw_idx_fn vertex_array_draw_indexed;
+  vert_arr_create_fn vert_arr_create;
+  vert_arr_destroy_fn vert_arr_destroy;
+  vert_arr_bind_fn vert_arr_bind;
+  vert_arr_draw_fn vert_arr_draw;
+  vert_arr_draw_idx_fn vert_arr_draw_idx;
 
-  framebuf_create_fn framebuffer_create;
-  framebuf_destroy_fn framebuffer_destroy;
-  framebuf_bind_fn framebuffer_bind;
-  framebuf_resize_fn framebuffer_resize;
-  framebuf_draw_fn framebuffer_draw;
+  framebuf_create_fn framebuf_create;
+  framebuf_destroy_fn framebuf_destroy;
+  framebuf_bind_fn framebuf_bind;
+  framebuf_resize_fn framebuf_resize;
+  framebuf_draw_fn framebuf_draw;
 
   shader_load_from_files_fn shader_load_files;
   shader_load_from_src_fn shader_load_src;

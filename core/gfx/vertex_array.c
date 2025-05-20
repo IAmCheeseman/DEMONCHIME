@@ -30,17 +30,17 @@ vert_arr_t* vert_arr_create(
   renderer_t* r,
   const vert_fmt_t* fmt)
 {
-  return r->backend.vertex_array_create(fmt);
+  return r->backend.vert_arr_create(fmt);
 }
 
 void vert_arr_destroy(renderer_t* r, vert_arr_t* varr)
 {
-  return r->backend.vertex_array_destroy(varr);
+  return r->backend.vert_arr_destroy(varr);
 }
 
 void vert_arr_bind(renderer_t* r, vert_arr_t* varr)
 {
-  return r->backend.vertex_array_bind(varr);
+  return r->backend.vert_arr_bind(varr);
 }
 
 void vert_arr_draw(
@@ -50,7 +50,7 @@ void vert_arr_draw(
   size_t count,
   idx_mode_t index_mode)
 {
-  return r->backend.vertex_array_draw(varr, start, count, index_mode);
+  return r->backend.vert_arr_draw(varr, start, count, index_mode);
 }
 
 void vert_arr_draw_idx(
@@ -61,7 +61,7 @@ void vert_arr_draw_idx(
   data_type_t type,
   idx_mode_t index_mode)
 {
-  return r->backend.vertex_array_draw_indexed(
+  return r->backend.vert_arr_draw_idx(
     varr,
     ebo,
     count,

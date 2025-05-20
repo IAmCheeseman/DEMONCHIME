@@ -7,7 +7,7 @@
 static int L_create_mesh(lua_State* L)
 {
   lvertex_format_t* lua_fmt = 
-    (lvertex_format_t*)read_ldata(L, 1, LUA_TYPE_VERTEX_FORMAT);
+    (lvertex_format_t*)read_ldata(L, 1, LUA_TYPE_VERT_FMT);
 
   mesh_t* mesh = (mesh_t*)mem_alloc(sizeof(mesh_t));
   *mesh = mesh_create(&lua_fmt->fmt);
@@ -29,9 +29,7 @@ static int L_MeshMt_set_vertices(lua_State* L)
 
   size_t vertex_count = lua_objlen(L, 2);
 
-  if (mesh->vertices != NULL) {
-    mem_destroy(mesh->vertices);
-  }
+  if (mesh->vertices != NULL) mem_destroy(mesh->vertices);
 
   mesh->vertices = mem_alloc(fmt->stride * vertex_count);
   mesh->vertex_count = vertex_count;
@@ -68,8 +66,10 @@ static int L_MeshMt_set_vertices(lua_State* L)
           case TYPE_FLOAT: AddAttrib(float, luaL_checknumber); break; 
           case TYPE_DOUBLE: AddAttrib(double, luaL_checknumber); break;
           case TYPE_UCHAR: AddAttrib(unsigned char, luaL_checkinteger); break;
-          case TYPE_CHAR: AddAttrib(char, luaL_checkinteger); break;
-          case TYPE_USHORT: AddAttrib(unsigned short, luaL_checkinteger); break;
+          case TYPE_CHAR: AddAttrib(signed char, luaL_checkinteger); break;
+          case TYPE_USHORT:
+            AddAttrib(unsigned short, luaL_checkinteger);
+            break;
           case TYPE_SHORT: AddAttrib(short, luaL_checkinteger); break;
           case TYPE_UINT: AddAttrib(unsigned int, luaL_checkinteger); break;
           case TYPE_INT: AddAttrib(int, luaL_checkinteger); break;

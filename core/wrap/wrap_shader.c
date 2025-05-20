@@ -45,9 +45,8 @@ static int L_ShaderMt_sendf(lua_State* L)
   const char* uniform = luaL_checkstring(L, 2);
 
   float args[4];
-  for (int i = 0; i < arg_count; i++) {
+  for (int i = 0; i < arg_count; i++)
     args[i] = luaL_checknumber(L, i + 3);
-  }
 
   renderer_t* r = get_engine(L)->renderer;
   switch (arg_count) {
@@ -71,9 +70,8 @@ static int L_ShaderMt_sendi(lua_State* L)
   const char* uniform = luaL_checkstring(L, 2);
 
   int args[4];
-  for (int i = 0; i < arg_count; i++) {
+  for (int i = 0; i < arg_count; i++)
     args[i] = luaL_checkinteger(L, i + 3);
-  }
 
   renderer_t* r = get_engine(L)->renderer;
   switch (arg_count) {

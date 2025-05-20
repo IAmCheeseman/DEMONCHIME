@@ -6,17 +6,17 @@ framebuf_t* framebuf_create(
   vec2i_t size,
   uint8_t flags)
 {
-  return r->backend.framebuffer_create(vfs, size, flags);
+  return r->backend.framebuf_create(vfs, size, flags);
 }
 
 void framebuf_destroy(renderer_t* r, framebuf_t* fb)
 {
-  return r->backend.framebuffer_destroy(fb);
+  return r->backend.framebuf_destroy(fb);
 }
 
 void framebuf_bind(renderer_t* r, framebuf_t* fb)
 {
-  return r->backend.framebuffer_bind(fb);
+  return r->backend.framebuf_bind(fb);
 }
 
 void framebuf_resize(
@@ -24,7 +24,7 @@ void framebuf_resize(
   framebuf_t* fb,
   vec2i_t size)
 {
-  return r->backend.framebuffer_resize(fb, size);
+  return r->backend.framebuf_resize(fb, size);
 }
 
 void framebuf_draw(
@@ -33,5 +33,5 @@ void framebuf_draw(
   vec2i_t start,
   vec2i_t end)
 {
-  return r->backend.framebuffer_draw(fb, start, end);
+  return r->backend.framebuf_draw(fb, start, end);
 }

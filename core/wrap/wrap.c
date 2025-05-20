@@ -34,10 +34,10 @@ static const char* ldata_type_to_str(ldata_type_t type)
   switch (type) {
     case LUA_TYPE_INVALID: return "Invalid";
     case LUA_TYPE_ENGINE: return "Engine";
-    case LUA_TYPE_IMAGE: return "Image";
-    case LUA_TYPE_TEXTURE: return "Texture";
+    case LUA_TYPE_IMG: return "Image";
+    case LUA_TYPE_TEX: return "Texture";
     case LUA_TYPE_MESH: return "Mesh";
-    case LUA_TYPE_VERTEX_FORMAT: return "VertexFormat";
+    case LUA_TYPE_VERT_FMT: return "VertexFormat";
     case LUA_TYPE_SHADER: return "Shader";
     case LUA_TYPE_MAT4: return "Mat4";
     case LUA_TYPE_PRNG: return "Prng";

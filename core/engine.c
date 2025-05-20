@@ -154,8 +154,7 @@ void engine_draw(engine_t* engine)
 
   adjust_viewport(
     engine->renderer,
-    (vec2f_t){engine->screen_size.x, engine->screen_size.y}
-  );
+    (vec2f_t){engine->screen_size.x, engine->screen_size.y});
 
   clear_bg(engine->renderer, 0.2, 0.2, 0.2);
 
@@ -178,8 +177,7 @@ void engine_draw(engine_t* engine)
     engine->renderer,
     engine->screen,
     (vec2i_t){-1, 1},
-    (vec2i_t){2, -2}
-  );
+    (vec2i_t){2, -2});
 
   timer_end_rendering(&engine->timer);
   //exit(1);

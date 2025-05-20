@@ -10,7 +10,7 @@ static int L_create_vert_fmt(lua_State* L)
   lua_fmt->count = 0;
   lua_fmt->capacity = 0;
   lua_fmt->fmt = vert_fmt_create(lua_fmt->attribs, lua_fmt->count);
-  create_ldata(L, lua_fmt, VERTEX_FORMAT_MT_NAME, LUA_TYPE_VERTEX_FORMAT);
+  create_ldata(L, lua_fmt, VERT_FMT_MT_NAME, LUA_TYPE_VERT_FMT);
   return 1;
 }
 
@@ -22,7 +22,7 @@ luaL_Reg vertex_format_funcs[] = {
 static int L_VertexFormatMt_add_attr(lua_State* L)
 {
   lvertex_format_t* lua_fmt = 
-    (lvertex_format_t*)read_ldata(L, 1, LUA_TYPE_VERTEX_FORMAT);
+    (lvertex_format_t*)read_ldata(L, 1, LUA_TYPE_VERT_FMT);
 
   size_t type_name_len;
   const char* type_name = luaL_checklstring(L, 2, &type_name_len);
@@ -49,7 +49,7 @@ static int L_VertexFormatMt_add_attr(lua_State* L)
 
 static int L_VertexFormatMt__index(lua_State* L)
 {
-  luaL_getmetatable(L, VERTEX_FORMAT_MT_NAME);
+  luaL_getmetatable(L, VERT_FMT_MT_NAME);
   lua_getfield(L, -1, luaL_checkstring(L, 2));
   return 1;
 }
@@ -57,7 +57,7 @@ static int L_VertexFormatMt__index(lua_State* L)
 static int L_VertexFormatMt__gc(lua_State* L)
 {
   lvertex_format_t* fmt =
-    (lvertex_format_t*)read_ldata(L, 1, LUA_TYPE_VERTEX_FORMAT);
+    (lvertex_format_t*)read_ldata(L, 1, LUA_TYPE_VERT_FMT);
   mem_destroy(fmt->attribs);
   mem_destroy(fmt);
   return 0;
@@ -75,7 +75,7 @@ void wrap_vert_fmt(lua_State* L)
   lua_getglobal(L, CORE_NAME);
   reg_funcs(L, vertex_format_funcs);
 
-  luaL_newmetatable(L, VERTEX_FORMAT_MT_NAME);
+  luaL_newmetatable(L, VERT_FMT_MT_NAME);
   reg_funcs(L, vertex_format_mt);
 
   lua_pop(L, 2);

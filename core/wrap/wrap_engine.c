@@ -119,9 +119,8 @@ static int L_loader(lua_State* L)
   memcpy(module_cpy, module, module_len);
   module_cpy[module_len] = '\0';
 
-  for (char* c = module_cpy; *c != '\0'; c++) {
+  for (char* c = module_cpy; *c != '\0'; c++)
     if (*c == '.') *c = '/';
-  }
 
   lua_getglobal(L, "package");
   if (lua_isnil(L, -1))
@@ -139,9 +138,8 @@ static int L_loader(lua_State* L)
 
   while (cur_path < paths + paths_len) {
     size_t cur_path_len = 0;
-    for (const char* c = cur_path; *c != ';' && *c != '\0'; c++) {
+    for (const char* c = cur_path; *c != ';' && *c != '\0'; c++)
       cur_path_len++;
-    }
     if (cur_path_len == 0) break;
 
     size_t q_pos = SIZE_MAX;
@@ -161,7 +159,10 @@ static int L_loader(lua_State* L)
     if (q_pos > 0)
       memcpy(path, cur_path, q_pos); // copy everything before ?
     memcpy(path + q_pos, module_cpy, module_len); // copy module len
-    memcpy(path + q_pos + module_len, cur_path + q_pos + 1, cur_path_len - q_pos - 1);
+    memcpy(
+      path + q_pos + module_len,
+      cur_path + q_pos + 1,
+      cur_path_len - q_pos - 1);
     path[path_len] = '\0';
 
     // check if file exists

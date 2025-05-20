@@ -1,9 +1,9 @@
 #ifndef __engine_wrap__
 #define __engine_wrap__
 
-#include <lua.h>
-#include <lauxlib.h>
-#include <lualib.h>
+#include <luajit/lua.h>
+#include <luajit/lauxlib.h>
+#include <luajit/lualib.h>
 
 #include "include.h"
 #include "engine.h"
@@ -13,10 +13,10 @@ typedef enum ldata_type_e
 {
   LUA_TYPE_INVALID = 0,
   LUA_TYPE_ENGINE,
-  LUA_TYPE_IMAGE,
-  LUA_TYPE_TEXTURE,
+  LUA_TYPE_IMG,
+  LUA_TYPE_TEX,
   LUA_TYPE_MESH,
-  LUA_TYPE_VERTEX_FORMAT,
+  LUA_TYPE_VERT_FMT,
   LUA_TYPE_SHADER,
   LUA_TYPE_MAT4,
   LUA_TYPE_PRNG,
@@ -25,10 +25,10 @@ typedef enum ldata_type_e
 #define CORE_NAME "core"
 
 #define ENGINE_MT_NAME "__ENGINE_MT__"
-#define IMAGE_MT_NAME "__IMAGE_MT__"
-#define TEXTURE_MT_NAME "__TEXTURE_MT__"
+#define IMG_MT_NAME "__IMG_MT__"
+#define TEX_MT_NAME "__TEX_MT__"
 #define MESH_MT_NAME "__MESH_MT__"
-#define VERTEX_FORMAT_MT_NAME "__VERTEX_FORMAT_MT__"
+#define VERT_FMT_MT_NAME "__VERT_FMT_MT__"
 #define SHADER_MT_NAME "__SHADER_MT__"
 #define MAT4_MT_NAME "__MAT4_MT__"
 #define PRNG_MT_NAME "__PRNG_MT__"

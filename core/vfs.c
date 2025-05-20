@@ -56,7 +56,7 @@ vfs_error_t vfs_mount(vfs_t** vfs, const char* path)
   strcpy(owned_path, path);
   if (is_char_path_sep(owned_path[len - 1])) owned_path[len - 1] = '\0';
 
-    vfs_t* mnt = (vfs_t*)mem_alloc(sizeof(vfs_t));
+  vfs_t* mnt = (vfs_t*)mem_alloc(sizeof(vfs_t));
 
   bool is_dir = is_path_dir(owned_path);
   memset(&mnt->zip, 0, sizeof(mz_zip_archive));
