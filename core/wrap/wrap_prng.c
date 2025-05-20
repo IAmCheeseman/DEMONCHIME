@@ -26,14 +26,14 @@ static int L_PrngMt__index(lua_State* L)
 static int L_PrngMt_nexti(lua_State* L)
 {
   Prng* p = (Prng*)read_ldata(L, 1, LUA_TYPE_PRNG);
-  lua_pushinteger(L, prng_nextf(p));
+  lua_pushinteger(L, prng_nexti(p));
   return 1;
 }
 
 static int L_PrngMt_nextf(lua_State* L)
 {
   Prng* p = (Prng*)read_ldata(L, 1, LUA_TYPE_PRNG);
-  lua_pushinteger(L, prng_nexti(p));
+  lua_pushnumber(L, prng_nextf(p));
   return 1;
 }
 

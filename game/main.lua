@@ -89,40 +89,61 @@ local rx = lcore.create_lerped_num()
 local ry = lcore.create_lerped_num()
 local rz = lcore.create_lerped_num()
 
+local vry = lcore.create_lerped_num()
+
+local cubet = {
+  x = 0,
+  y = 0,
+  z = 0,
+  rx = 0,
+  ry = 0,
+  rz = 0,
+  sx = 1,
+  sz = 1,
+  sy = 1,
+}
+
+local model_mat4s = {}
+local prng = core.create_prng()
+for _=1, 4000 do
+  cubet.x = prng:rangef(-15, 15)
+  cubet.y = prng:rangef(-2, 2)
+  cubet.z = prng:rangef(-15, 15)
+  cubet.rx = prng:nextf() * math.pi * 2
+  cubet.ry = prng:nextf() * math.pi * 2
+  cubet.rz = prng:nextf() * math.pi * 2
+  table.insert(model_mat4s, core.mat4_from_trans(cubet))
+end
+
 function step()
   if core.is_key_down(core.key.ESCAPE) then
     core.close_engine()
   end
 
   if core.is_key_down(core.key.SPACE) then
-    log_info(core.get_fps(), core.get_tps())
+    log_info(
+      ("%d FPS, %d TPS, %f ms"):format(
+        core.get_fps(),
+        core.get_tps(),
+        (1 / core.get_fps()) * 1000))
   end
 
   r = r + (1/30)
   rx:set(r * 0.25)
   ry:set(r)
   rz:set(r * 0.1)
+
+  vry:set(r * 0.5)
 end
 
 function draw()
-  shader:bind()
-
-  local cubet = {
-    x = 0,
-    y = 0,
-    z = -3,
-    -- rx = 0,
-    rx = rx:get(),--math.rad(-24),
-    ry = ry:get(),--math.rad(45),
-    rz = rz:get(),
-    sx = 1,
-    sz = 1,
-    sy = 1,
-  }
-
-  local m = core.mat4_from_trans(cubet)
-
-  local v = core.mat4_identity()
+  local v_pitch = core.mat4_identity()
+  v_pitch:rotate(math.rad(-45), 0, 0)
+  local vt = core.mat4_identity()
+  vt:translate(0, 7.5, -7.5)
+  local v_yaw = core.mat4_identity()
+  v_yaw:rotate(0, vry:get(), 0)
+  local v = v_pitch:mult(vt:mult(v_yaw))
 
   local sw, sh = core.get_screen_size()
   local a = sw / sh
@@ -130,12 +151,15 @@ function draw()
   local p = core.mat4_identity()
   p:perspective(45, a, 1, 100)
 
-  shader:send_mat4("m", m)
+  shader:bind()
   shader:send_mat4("v", v)
   shader:send_mat4("p", p)
 
   tex:bind(0)
   shader:sendi("tex0", 0)
 
-  cube:draw()
+  for _, m in ipairs(model_mat4s) do
+    shader:send_mat4("m", m)
+    cube:draw()
+  end
 end
