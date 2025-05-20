@@ -49,7 +49,7 @@ void create_ldata(
 void* read_ldata(lua_State* L, int index, ldata_type_t expected);
 engine_t* get_engine(lua_State* L);
 void reg_funcs(lua_State* L, const luaL_Reg* funcs);
-bool protected_do_file(lua_State* L, engine_t* engine, const char* file);
+bool protected_do_file(lua_State* L, vfs_t* vfs, const char* file);
 void raw_insert(lua_State* L, int t, int k, int pos);
 
 void wrap(lua_State* L, engine_t* engine);

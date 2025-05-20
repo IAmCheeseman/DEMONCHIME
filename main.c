@@ -19,7 +19,7 @@ int main(int argc, const char* args[])
 
   if (argc > 1) {
     for (int i = 1; i < argc; i++) {
-      vfs_error_t err = vfs_mount(&engine.vfs, args[i]);
+      vfs_err_t err = vfs_mount(&engine.vfs, args[i]);
       if (err != VFS_OK) {
         log_fatal(1, "could not load '%s'", args[i]);
       }

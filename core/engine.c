@@ -37,10 +37,16 @@ void engine_init(engine_t* engine, engine_conf_t conf)
   log_info("initializing engine...");
 
   engine->vfs = NULL;
-  vfs_error_t vfs_err = vfs_mount(&engine->vfs, conf.mount_path);
-  if (vfs_err) log_fatal(1, "could not mount '%s'", conf.mount_path);
-  vfs_err = vfs_mount(&engine->vfs, "CORE.HAD");
+
+  // mount core
+  vfs_err_t vfs_err = vfs_mount(&engine->vfs, "CORE.HAD");
   if (vfs_err) log_fatal(1, "could not mount 'CORE.HAD'");
+  engine->core_vfs = engine->vfs;
+
+  // mount game
+  vfs_err = vfs_mount(&engine->vfs, conf.mount_path);
+  if (vfs_err) log_fatal(1, "could not mount '%s'", conf.mount_path);
+  engine->game_vfs = engine->vfs;
 
   if (glfwInit() < 0) {
     log_fatal(1, "could not initialize glfw");
@@ -82,12 +88,12 @@ void engine_init_lua(engine_t* engine)
 
   log_info("initializing 'core'...");
   wrap(L, engine);
-  if (!protected_do_file(L, engine, "core.lua")) {
+  if (!protected_do_file(L, engine->core_vfs, "core.lua")) {
     log_fatal(1, "was not able to initialize 'core'");
   }
 
   log_info("starting game...");
-  if (!protected_do_file(L, engine, "main.lua")) {
+  if (!protected_do_file(L, engine->game_vfs, "main.lua")) {
     log_fatal(1, "was not able to run game");
   }
 }

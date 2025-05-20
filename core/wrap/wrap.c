@@ -93,10 +93,10 @@ void reg_funcs(lua_State* L, const luaL_Reg* funcs)
   }
 }
 
-bool protected_do_file(lua_State* L, engine_t* engine, const char* file)
+bool protected_do_file(lua_State* L, vfs_t* vfs, const char* file)
 {
   size_t src_len;
-  char* src = vfs_read_txt(engine->vfs, file, &src_len);
+  char* src = vfs_read_txt(vfs, file, &src_len);
   if (!src) {
     log_warning("cannot execute '%s'", file);
     return false;

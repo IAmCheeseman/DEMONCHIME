@@ -5,7 +5,7 @@
 
 #include "miniz.h"
 
-typedef enum vfs_error_e
+typedef enum vfs_err_e
 {
   VFS_OK = 0,
   VFS_COULD_NOT_MOUNT,
@@ -15,7 +15,7 @@ typedef enum vfs_error_e
   VFS_CANNOT_OPEN,
   VFS_CANNOT_WRITE,
   VFS_CANNOT_READ,
-} vfs_error_t;
+} vfs_err_t;
 
 typedef enum vfs_type_e
 {
@@ -31,7 +31,7 @@ typedef struct vfs_s
   char* path;
 } vfs_t;
 
-vfs_error_t vfs_mount(vfs_t** vfs, const char* path);
+vfs_err_t vfs_mount(vfs_t** vfs, const char* path);
 void vfs_destroy(vfs_t* vfs);
 bool vfs_exists(vfs_t* vfs, const char* path);
 // read the entirity of a file

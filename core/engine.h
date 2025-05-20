@@ -16,6 +16,8 @@ typedef struct engine_s
   lua_State* L;
   struct renderer_s* renderer;
   vfs_t* vfs;
+  vfs_t* core_vfs;
+  vfs_t* game_vfs;
   int lua_err_handler_idx;
 
   vec2i_t target_screen_size;

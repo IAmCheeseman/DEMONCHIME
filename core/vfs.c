@@ -49,7 +49,7 @@ static bool is_path_valid(const char *filename) {
     strstr(filename, ":\\"));
 }
 
-vfs_error_t vfs_mount(vfs_t** vfs, const char* path)
+vfs_err_t vfs_mount(vfs_t** vfs, const char* path)
 {
   size_t len = strlen(path);
   char* owned_path = (char*)mem_alloc(sizeof(char) * (len + 1));
