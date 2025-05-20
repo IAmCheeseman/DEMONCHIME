@@ -19,7 +19,7 @@ int main(int argc, const char* args[])
 
   if (argc > 1) {
     for (int i = 1; i < argc; i++) {
-      enum VfsError err =VfsMount(&engine.vfs, args[i]);
+      enum VfsError err = VfsMount(&engine.vfs, args[i]);
       if (err != VFS_OK) {
         LogFatal(1, "could not load '%s'", args[i]);
       }

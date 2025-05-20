@@ -5,7 +5,7 @@
 
 static int L_CreatePrng(lua_State* L)
 {
-  Prng* p = Create(Prng);
+  Prng* p = (Prng*)Alloc(sizeof(Prng));
   *p = PrngCreate(luaL_optinteger(L, 1, 0));
   CreateLuaData(L, p, PRNG_MT_NAME, LUA_TYPE_PRNG);
   return 1;

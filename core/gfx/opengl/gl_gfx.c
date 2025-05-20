@@ -92,7 +92,7 @@ void gl_InitBackend(struct Engine* engine)
 {
   glfwMakeContextCurrent(engine->window_handle);
 
-  struct Renderer* renderer = Create(struct Renderer);
+  struct Renderer* renderer = (struct Renderer*)Alloc(sizeof(struct Renderer));
   SetBackendPtrs(renderer);
 
   engine->renderer = renderer;

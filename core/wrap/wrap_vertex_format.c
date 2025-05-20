@@ -4,7 +4,8 @@
 
 static int L_CreateVertexFormat(lua_State* L)
 {
-  struct LuaVertexFormat* lua_fmt = Create(struct LuaVertexFormat);
+  struct LuaVertexFormat* lua_fmt =
+    (struct LuaVertexFormat*)Alloc(sizeof(struct LuaVertexFormat));
   lua_fmt->attribs = NULL;
   lua_fmt->count = 0;
   lua_fmt->capacity = 0;
@@ -31,11 +32,9 @@ static int L_VertexFormatMt_AddAttrib(lua_State* L)
 
   if (lua_fmt->count + 1 > lua_fmt->capacity) {
     lua_fmt->capacity = GrowCapacity(lua_fmt->capacity);
-    lua_fmt->attribs = GrowArray(
-      struct VertexAttrib,
+    lua_fmt->attribs = (struct VertexAttrib*)Realloc(
       lua_fmt->attribs,
-      lua_fmt->capacity
-    );
+      sizeof(struct VertexAttrib) * lua_fmt->capacity);
   }
 
   struct VertexAttrib attrib;

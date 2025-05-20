@@ -4,12 +4,17 @@
 #include "include.h"
 
 #define GrowCapacity(cap) ((cap) == 0 ? 8 : (cap) * 2)
-#define GrowArray(T, ptr, e) ((T*)realloc(ptr, sizeof(T) * (e)))
-#define GrowVoidArray(size, ptr, e) ((void*)realloc((size) * (e)))
-#define CreateArray(T, e) ((T*)malloc(sizeof(T) * (e)))
-#define CreateVoidArray(size, e) ((void*)malloc((size) * (e)))
-#define Create(T) ((T*)malloc(sizeof(T)))
-#define CreateSized(T, size) ((T*)malloc(size))
+
+#ifdef bse_use_c_alloc
+#define Create(size) malloc(size)
+#define Realloc(ptr, size) realloc(ptr, size)
 #define Destroy(ptr) free(ptr)
+#else
+#define Alloc(size) Allocate(NULL, size)
+#define Realloc(ptr, size) Allocate(ptr, size)
+#define Destroy(ptr) Allocate(ptr, 0)
+#endif
+
+void* Allocate(void* ptr, size_t size);
 
 #endif

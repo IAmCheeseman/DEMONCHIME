@@ -115,7 +115,7 @@ static int L_Loader(lua_State* L)
 
   size_t module_len;
   const char* module = luaL_checklstring(L, 1, &module_len);
-  char* module_cpy = CreateArray(char, module_len + 1);
+  char* module_cpy = (char*)Alloc(sizeof(char) * (module_len + 1));
   memcpy(module_cpy, module, module_len);
   module_cpy[module_len] = '\0';
 
@@ -157,7 +157,7 @@ static int L_Loader(lua_State* L)
 
     // -1 because ? is removed
     size_t path_len = cur_path_len + module_len - 1;
-    char* path = CreateArray(char, path_len + 1);
+    char* path = (char*)Alloc(sizeof(char) * (path_len + 1));
     if (q_pos > 0)
       memcpy(path, cur_path, q_pos); // copy everything before ?
     memcpy(path + q_pos, module_cpy, module_len); // copy module len

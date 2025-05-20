@@ -35,7 +35,8 @@ static void GrowShaderTable(struct ShaderTable* t)
 {
   size_t capacity = GrowCapacity(t->capacity);
 
-  struct ShaderVar* vars = CreateArray(struct ShaderVar, capacity);
+  struct ShaderVar* vars =
+    (struct ShaderVar*)Alloc(sizeof(struct ShaderVar) * capacity);
   for (size_t i = 0; i < capacity; i++) {
     vars[i].name = NULL;
   }

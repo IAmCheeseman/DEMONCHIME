@@ -19,7 +19,7 @@ char* Concat(const char* lhs, ...)
 
   va_end(args);
 
-  char* cat = CreateArray(char, len + 1);
+  char* cat = (char*)Alloc(sizeof(char) * (len + 1));
 
   va_start(args, lhs);
 

@@ -52,12 +52,11 @@ static bool IsFilenameValid(const char *filename) {
 enum VfsError VfsMount(struct Vfs** vfs, const char* path)
 {
   size_t len = strlen(path);
-  char* owned_path = CreateArray(char, len + 1);
-  if (!owned_path) return VFS_OUT_OF_MEM;
+  char* owned_path = (char*)Alloc(sizeof(char) * (len + 1));
   strcpy(owned_path, path);
   if (IsCharPathSep(owned_path[len - 1])) owned_path[len - 1] = '\0';
 
-  struct Vfs* mnt = Create(struct Vfs);
+    struct Vfs* mnt = (struct Vfs*)Alloc(sizeof(struct Vfs));
 
   bool is_dir = IsPathDir(owned_path);
   memset(&mnt->zip, 0, sizeof(mz_zip_archive));
@@ -136,12 +135,7 @@ char* VfsReadFile(struct Vfs* vfs, const char* path, size_t* size)
       size_t file_size = ftell(file);
       rewind(file);
 
-      char* dat = CreateArray(char, file_size + 1);
-      if (dat == NULL) {
-        LogWarning("ran out of memory to read '%s'", full_path);
-        Destroy(full_path);
-        return NULL;
-      }
+      char* dat = (char*)Alloc(sizeof(char) * (file_size + 1));
 
       size_t bytes_read = fread(dat, sizeof(char), file_size, file);
       if (bytes_read < file_size) {
@@ -168,12 +162,7 @@ char* VfsReadFile(struct Vfs* vfs, const char* path, size_t* size)
 
       // miniz doesn't null terminate their stuff :(
 
-      char* dat = CreateArray(char, zdat_size + 1);
-      if (!dat) {
-        LogWarning("could not allocate for file '%s'", path);
-        free(zdat);
-        return NULL;
-      }
+      char* dat = (char*)Alloc(sizeof(char) * (zdat_size + 1));
       memcpy(dat, zdat, zdat_size);
 
       if (size) *size = zdat_size;

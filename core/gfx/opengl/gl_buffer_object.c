@@ -7,7 +7,8 @@
 
 struct BufferObject* gl_BufferObjectCreate(enum BufferObjectType type)
 {
-  struct BufferObject* buf = Create(struct BufferObject);
+  struct BufferObject* buf =
+    (struct BufferObject*)Alloc(sizeof(struct BufferObject));
   buf->type = type;
   glGenBuffers(1, &buf->handle);
   LogDebug("created buffer object %d", buf->handle);

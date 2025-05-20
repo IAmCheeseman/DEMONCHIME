@@ -8,7 +8,8 @@
 
 struct VertexArray* gl_VertexArrayCreate(const struct VertexFormat* fmt)
 {
-  struct VertexArray* varr = Create(struct VertexArray);
+  struct VertexArray* varr =
+    (struct VertexArray*)Alloc(sizeof(struct VertexArray));
 
   glGenVertexArrays(1, &varr->handle);
   LogDebug("created vertex array %d", varr->handle);

@@ -13,8 +13,8 @@ PROJECT_NAME = DEMONCHIME
 
 EXE = $(PROJECT_NAME)
 OBJ = \
-	main.o core/include.o core/log.o core/engine.o core/image.o core/prng.o \
-	core/timer.o core/vfs.o core/math/mat4.o core/math/transform.o \
+	main.o core/include.o core/mem.o core/log.o core/engine.o core/image.o \
+	core/prng.o core/timer.o core/vfs.o core/math/mat4.o core/math/transform.o \
 	core/wrap/wrap.o core/wrap/wrap_enums.o core/wrap/wrap_engine.o \
 	core/wrap/wrap_log.o core/wrap/wrap_mat4.o core/wrap/wrap_mesh.o \
 	core/wrap/wrap_vertex_format.o core/wrap/wrap_shader.o \

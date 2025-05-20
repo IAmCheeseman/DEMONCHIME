@@ -9,7 +9,7 @@ static int L_CreateMesh(lua_State* L)
   struct LuaVertexFormat* lua_fmt = 
     (struct LuaVertexFormat*)ReadLuaData(L, 1, LUA_TYPE_VERTEX_FORMAT);
 
-  struct Mesh* mesh = Create(struct Mesh);
+  struct Mesh* mesh = (struct Mesh*)Alloc(sizeof(struct Mesh));
   *mesh = MeshCreate(&lua_fmt->fmt);
   CreateLuaData(L, mesh, MESH_MT_NAME, LUA_TYPE_MESH);
   return 1;
@@ -33,7 +33,7 @@ static int L_MeshMt_SetVertices(lua_State* L)
     Destroy(mesh->vertices);
   }
 
-  mesh->vertices = CreateVoidArray(fmt->stride, vertex_count);
+  mesh->vertices = Alloc(fmt->stride * vertex_count);
   mesh->vertex_count = vertex_count;
 
   for (size_t vertex_i = 0; vertex_i < vertex_count; vertex_i++) {

@@ -26,7 +26,7 @@ struct Texture gl_TextureLoadFromImg(struct Image* img)
 
   LogDebug("loaded texture %d", handle);
 
-  uint32_t* handle_ptr = Create(uint32_t);
+  uint32_t* handle_ptr = (uint32_t*)Alloc(sizeof(uint32_t));
   *handle_ptr = handle;
 
   tex.handle = handle_ptr;

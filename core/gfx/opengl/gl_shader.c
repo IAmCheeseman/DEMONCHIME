@@ -23,7 +23,7 @@ static void FindShaderUniforms(struct Shader* s)
     glGetActiveUniform(
        s->handle, i, UNIFORM_NAME_MAX, &name_len, &var.count, &var.type, name);
 
-    var.name = CreateArray(char, name_len + 1);
+    var.name = (char*)Alloc(sizeof(char) * (name_len + 1));
     memcpy(var.name, name, name_len);
     var.name[name_len] = '\0';
     var.len = name_len;
@@ -50,7 +50,7 @@ static void FindShaderAttribs(struct Shader* s)
     glGetActiveAttrib(
        s->handle, i, UNIFORM_NAME_MAX, &name_len, &var.count, &var.type, name);
 
-    var.name = CreateArray(char, name_len + 1);
+    var.name = (char*)Alloc(sizeof(char) * (name_len + 1));
     memcpy(var.name, name, name_len);
     var.name[name_len] = '\0';
     var.len = name_len;
@@ -62,7 +62,7 @@ static void FindShaderAttribs(struct Shader* s)
 
 static struct Shader* ShaderCreate(uint32_t vert, uint32_t frag)
 {
-  struct Shader* s = Create(struct Shader);
+  struct Shader* s = (struct Shader*)Alloc(sizeof(struct Shader));
 
   uint32_t handle = glCreateProgram();
 
@@ -165,7 +165,7 @@ static struct ShaderVar* GetUniform(struct Shader* s, const char* name)
     struct ShaderVar new_var;
     new_var.loc = loc;
 
-    new_var.name = CreateArray(char, len + 1);
+    new_var.name = (char*)Alloc(sizeof(char) * (len + 1));
     memcpy(new_var.name, name, len);
     new_var.name[len] = '\0';
     new_var.len = len;

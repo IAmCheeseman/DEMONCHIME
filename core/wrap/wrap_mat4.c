@@ -7,7 +7,7 @@
 
 static int L_Mat4Identity(lua_State* L)
 {
-  struct LuaMat4* m = Create(struct LuaMat4);
+  struct LuaMat4* m = (struct LuaMat4*)Alloc(sizeof(struct LuaMat4));
   Mat4Identity(m->m);
   CreateLuaData(L, m, MAT4_MT_NAME, LUA_TYPE_MAT4);
   return 1;
@@ -52,7 +52,7 @@ static int L_Mat4FromTransform(lua_State* L)
   trans.rot = (vec3f_t){rx, ry, rz};
   trans.scale = (vec3f_t){sx, sy, sz};
 
-  struct LuaMat4* m = Create(struct LuaMat4);
+  struct LuaMat4* m = (struct LuaMat4*)Alloc(sizeof(struct LuaMat4));
   TransformToMatrix(trans, m->m);
   CreateLuaData(L, m, MAT4_MT_NAME, LUA_TYPE_MAT4);
   return 1;
@@ -69,7 +69,7 @@ static int L_Mat4Mt_Multiply(lua_State* L)
   struct LuaMat4* m0 = (struct LuaMat4*)ReadLuaData(L, 1, LUA_TYPE_MAT4);
   struct LuaMat4* m1 = (struct LuaMat4*)ReadLuaData(L, 2, LUA_TYPE_MAT4);
   
-  struct LuaMat4* mout = Create(struct LuaMat4);
+  struct LuaMat4* mout = (struct LuaMat4*)Alloc(sizeof(struct LuaMat4));
   Mat4Multiply(mout->m, m0->m, m1->m);
   CreateLuaData(L, mout, MAT4_MT_NAME, LUA_TYPE_MAT4);
   return 1;

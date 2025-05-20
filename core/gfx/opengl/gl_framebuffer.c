@@ -87,7 +87,8 @@ struct Framebuffer* gl_FramebufferCreate(
   vec2i_t size,
   uint8_t flags)
 {
-  struct Framebuffer* fb = Create(struct Framebuffer);
+  struct Framebuffer* fb =
+    (struct Framebuffer*)Alloc(sizeof(struct Framebuffer));
 
   fb->size = size;
   fb->flags = flags;
