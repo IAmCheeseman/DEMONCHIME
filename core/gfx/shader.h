@@ -12,7 +12,7 @@
 #include "math/mat4.h"
 #include "texture.h"
 
-struct ShaderVar
+typedef struct shader_var_s
 {
   char* name;
   size_t len;
@@ -21,94 +21,49 @@ struct ShaderVar
   int loc;
   int count;
   uint32_t type;
-};
+} shader_var_t;
 
-struct ShaderTable
+typedef struct shader_table_s
 {
-  struct ShaderVar* vars;
+  shader_var_t* vars;
   size_t count;
   size_t capacity;
-};
+} shader_tab_t;
 
-struct Shader;
+typedef struct shader_s shader_t;
 
-void ShaderTableAddVar(struct ShaderTable* t, struct ShaderVar var);
-struct ShaderVar* ShaderTableFindVar(
-  struct ShaderVar* vars, 
+void shader_tab_add_var(shader_tab_t* t, shader_var_t var);
+shader_var_t* shader_tab_find_var(
+  shader_var_t* vars, 
   size_t capacity,
   const char* name,
   size_t name_len,
   uint32_t name_hash
 );
-void ShaderTableDestroy(struct ShaderTable* t);
-uint32_t HashVarName(const char* name, size_t len);
+void shader_tab_destroy(shader_tab_t* t);
+uint32_t hash_var_name(const char* name, size_t len);
 
-struct Shader* ShaderLoadFromFiles(
-  struct Renderer* r,
-  struct Vfs* vfs,
+shader_t* shader_load_from_files(
+  renderer_t* r,
+  vfs_t* vfs,
   const char* vert,
   const char* frag
 );
-struct Shader* ShaderLoadFromSource(
-  struct Renderer* r,
+shader_t* shader_load_from_src(
+  renderer_t* r,
   const char* vert,
   const char* frag
 );
-void ShaderSendInt(
-  struct Renderer* r,
-  struct Shader* s,
-  const char* name,
-  int i
-);
-void ShaderSendFloat(
-  struct Renderer* r,
-  struct Shader* s,
-  const char* name,
-  float f
-);
-void ShaderSendVec2f(
-  struct Renderer* r,
-  struct Shader* s,
-  const char* name,
-  vec2f_t v
-);
-void ShaderSendVec2i(
-  struct Renderer* r,
-  struct Shader* s,
-  const char* name,
-  vec2i_t v
-);
-void ShaderSendVec3f(
-  struct Renderer* r,
-  struct Shader* s,
-  const char* name,
-  vec3f_t v
-);
-void ShaderSendVec3i(
-  struct Renderer* r,
-  struct Shader* s,
-  const char* name,
-  vec3i_t v
-);
-void ShaderSendVec4f(
-  struct Renderer* r,
-  struct Shader* s,
-  const char* name,
-  vec4f_t v
-);
-void ShaderSendVec4i(
-  struct Renderer* r,
-  struct Shader* s,
-  const char* name,
-  vec4i_t v
-);
-void ShaderSendMat4(
-  struct Renderer* r,
-  struct Shader* s,
-  const char* name,
-  mat4_t m
-);
-void ShaderBind(struct Renderer* r, struct Shader* s);
-void ShaderDestroy(struct Renderer* r, struct Shader* s);
+void shader_send_int(renderer_t* r, shader_t* s, const char* name, int i);
+void shader_send_float(renderer_t* r, shader_t* s, const char* name, float f);
+void shader_send_vec2f(renderer_t* r, shader_t* s, const char* name, vec2f_t v);
+void shader_send_vec2i(renderer_t* r, shader_t* s, const char* name, vec2i_t v);
+void shader_send_vec3f(renderer_t* r, shader_t* s, const char* name, vec3f_t v);
+void shader_send_vec3i(renderer_t* r, shader_t* s, const char* name, vec3i_t v);
+void shader_send_vec4f(renderer_t* r, shader_t* s, const char* name, vec4f_t v);
+void shader_send_vec4i(renderer_t* r, shader_t* s, const char* name, vec4i_t v);
+void shader_send_mat4(renderer_t* r, shader_t* s, const char* name, mat4_t m);
+void shader_bind(renderer_t* r, shader_t* s);
+void shader_destroy(renderer_t* r, shader_t* s);
 
 #endif

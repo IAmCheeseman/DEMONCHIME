@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-uint32_t BufferObjectTypeToOpenGl(enum BufferObjectType type)
+uint32_t buf_obj_type_to_gl(buf_obj_type_t type)
 {
   switch (type) {
     case BUFFER_ARRAY: return GL_ARRAY_BUFFER;
@@ -11,7 +11,7 @@ uint32_t BufferObjectTypeToOpenGl(enum BufferObjectType type)
   return GL_INVALID_ENUM; // unreachable
 }
 
-uint32_t DrawModeToOpenGl(enum DrawMode mode)
+uint32_t draw_mode_to_gl(draw_mode_t mode)
 {
   switch (mode) {
     case DRAW_STATIC: return GL_STATIC_DRAW;
@@ -21,7 +21,7 @@ uint32_t DrawModeToOpenGl(enum DrawMode mode)
   return GL_INVALID_ENUM; // unreachable
 }
 
-uint32_t GfxDataTypeToOpenGl(enum GfxDataType type)
+uint32_t data_type_to_gl(data_type_t type)
 {
   switch (type) {
     case TYPE_UNKNOWN: return GL_BYTE;
@@ -38,7 +38,7 @@ uint32_t GfxDataTypeToOpenGl(enum GfxDataType type)
   return GL_INVALID_ENUM; // unreachable
 }
 
-uint32_t IndexModeToOpenGl(enum IndexMode mode)
+uint32_t idx_mode_to_gl(idx_mode_t mode)
 {
   switch (mode) {
     case INDEX_TRIANGLES: return GL_TRIANGLES;
@@ -52,7 +52,7 @@ uint32_t IndexModeToOpenGl(enum IndexMode mode)
   return GL_INVALID_ENUM; // unreachable
 }
 
-uint32_t ImageFormatToOpenGl(enum ImageFormat format)
+uint32_t img_fmt_to_gl(img_fmt_t format)
 {
   switch (format) {
     case IMAGE_FORMAT_R8: return GL_RED;
@@ -64,7 +64,7 @@ uint32_t ImageFormatToOpenGl(enum ImageFormat format)
   return GL_INVALID_ENUM; // unreachable
 }
 
-uint32_t TextureFilterToOpenGl(enum TextureFilter filter)
+uint32_t tex_filter_to_gl(tex_filter_t filter)
 {
   switch (filter) {
     case TEXTURE_FILTER_NEAREST: return GL_NEAREST;
@@ -78,7 +78,7 @@ uint32_t TextureFilterToOpenGl(enum TextureFilter filter)
   return GL_INVALID_ENUM; // unreachable
 }
 
-uint32_t TextureWrapToOpenGl(enum TextureWrap wrap)
+uint32_t tex_wrap_to_gl(tex_wrap_t wrap)
 {
   switch (wrap) {
     case TEXTURE_WRAP_REPEAT: return GL_REPEAT;

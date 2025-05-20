@@ -3,19 +3,11 @@
 
 #include "gfx/texture.h"
 
-struct Texture gl_TextureLoadFromImg(struct Image* img);
-void gl_TextureDestroy(struct Texture* tex);
-void gl_TextureBind(struct Texture* tex, uint8_t slot);
-void gl_TextureGenerateMipmaps(struct Texture* tex);
-void gl_TextureSetFilter(
-  struct Texture* tex,
-  enum TextureFilter min,
-  enum TextureFilter mag
-);
-void gl_TextureSetWrap(
-  struct Texture* tex,
-  enum TextureWrap x_wrap,
-  enum TextureWrap y_wrap
-);
+tex_t gl_tex_load_from_img(img_t* img);
+void gl_tex_destroy(tex_t* tex);
+void gl_tex_bind(tex_t* tex, uint8_t slot);
+void gl_tex_gen_mipmap(tex_t* tex);
+void gl_tex_set_filter(tex_t* tex, tex_filter_t min, tex_filter_t mag);
+void gl_tex_set_wrap(tex_t* tex, tex_wrap_t x_wrap, tex_wrap_t y_wrap);
 
 #endif

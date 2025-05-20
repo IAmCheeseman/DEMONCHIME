@@ -3,16 +3,16 @@
 #include "prng.h"
 #include "mem.h"
 
-static int L_CreatePrng(lua_State* L)
+static int L_create_prng(lua_State* L)
 {
-  Prng* p = (Prng*)Alloc(sizeof(Prng));
-  *p = PrngCreate(luaL_optinteger(L, 1, 0));
-  CreateLuaData(L, p, PRNG_MT_NAME, LUA_TYPE_PRNG);
+  Prng* p = (Prng*)mem_alloc(sizeof(Prng));
+  *p = prng_create(luaL_optinteger(L, 1, 0));
+  create_ldata(L, p, PRNG_MT_NAME, LUA_TYPE_PRNG);
   return 1;
 }
 
 luaL_Reg prng_funcs[] = {
-  {"CreatePrng", L_CreatePrng},
+  {"create_prng", L_create_prng},
   {NULL, NULL},
 };
 
@@ -23,21 +23,21 @@ static int L_PrngMt__index(lua_State* L)
   return 1;
 }
 
-static int L_PrngMt_NextI(lua_State* L)
+static int L_PrngMt_nexti(lua_State* L)
 {
-  Prng* p = (Prng*)ReadLuaData(L, 1, LUA_TYPE_PRNG);
-  lua_pushinteger(L, PrngGetInt(p));
+  Prng* p = (Prng*)read_ldata(L, 1, LUA_TYPE_PRNG);
+  lua_pushinteger(L, prng_nextf(p));
   return 1;
 }
 
-static int L_PrngMt_NextF(lua_State* L)
+static int L_PrngMt_nextf(lua_State* L)
 {
-  Prng* p = (Prng*)ReadLuaData(L, 1, LUA_TYPE_PRNG);
-  lua_pushinteger(L, PrngGetDouble(p));
+  Prng* p = (Prng*)read_ldata(L, 1, LUA_TYPE_PRNG);
+  lua_pushinteger(L, prng_nexti(p));
   return 1;
 }
 
-static int L_PrngMt_RangeI(lua_State* L)
+static int L_PrngMt_rangei(lua_State* L)
 {
   int arg_count = lua_gettop(L) - 1;
   
@@ -52,12 +52,12 @@ static int L_PrngMt_RangeI(lua_State* L)
     upper = luaL_checkinteger(L, 3);
   }
 
-  Prng* p = (Prng*)ReadLuaData(L, 1, LUA_TYPE_PRNG);
-  lua_pushinteger(L, PrngGetIntRange(p, lower, upper));
+  Prng* p = (Prng*)read_ldata(L, 1, LUA_TYPE_PRNG);
+  lua_pushinteger(L, prng_get_rangei(p, lower, upper));
   return 1;
 }
 
-static int L_PrngMt_RangeF(lua_State* L)
+static int L_PrngMt_rangef(lua_State* L)
 {
   int arg_count = lua_gettop(L) - 1;
   
@@ -72,35 +72,35 @@ static int L_PrngMt_RangeF(lua_State* L)
     upper = luaL_checknumber(L, 3);
   }
 
-  Prng* p = (Prng*)ReadLuaData(L, 1, LUA_TYPE_PRNG);
-  lua_pushinteger(L, PrngGetDoubleRange(p, lower, upper));
+  Prng* p = (Prng*)read_ldata(L, 1, LUA_TYPE_PRNG);
+  lua_pushinteger(L, prng_get_rangef(p, lower, upper));
   return 1;
 }
 
 static int L_PrngMt__gc(lua_State* L)
 {
-  Prng* p = (Prng*)ReadLuaData(L, 1, LUA_TYPE_PRNG);
-  Destroy(p);
+  Prng* p = (Prng*)read_ldata(L, 1, LUA_TYPE_PRNG);
+  mem_destroy(p);
   return 0;
 }
 
 luaL_Reg prng_mt[] = {
-  {"NextI", L_PrngMt_NextI},
-  {"NextF", L_PrngMt_NextF},
-  {"RangeI", L_PrngMt_RangeI},
-  {"RangeF", L_PrngMt_RangeF},
+  {"nexti", L_PrngMt_nexti},
+  {"nextf", L_PrngMt_nextf},
+  {"rangei", L_PrngMt_rangei},
+  {"rangef", L_PrngMt_rangef},
   {"__index", L_PrngMt__index},
   {"__gc", L_PrngMt__gc},
   {NULL, NULL},
 };
 
-void WrapPrng(lua_State* L)
+void wrap_prng(lua_State* L)
 {
   lua_getglobal(L, CORE_NAME);
-  RegisterFunctions(L, prng_funcs);
+  reg_funcs(L, prng_funcs);
 
   luaL_newmetatable(L, PRNG_MT_NAME);
-  RegisterFunctions(L, prng_mt);
+  reg_funcs(L, prng_mt);
 
   lua_pop(L, 2);
 }

@@ -3,62 +3,62 @@
 #include "gfx/texture.h"
 #include "mem.h"
 
-static int L_LoadTexture(lua_State* L)
+static int L_load_tex(lua_State* L)
 {
-  struct Engine* engine = GetEngine(L);
+  engine_t* engine = get_engine(L);
   const char* path = luaL_checkstring(L, 1);
-  struct Texture* tex = (struct Texture*)Alloc(sizeof(struct Texture));
-  *tex = TextureLoad(engine->renderer, engine->vfs, path);
-  CreateLuaData(L, tex, TEXTURE_MT_NAME, LUA_TYPE_TEXTURE);
+  tex_t* tex = (tex_t*)mem_alloc(sizeof(tex_t));
+  *tex = tex_load(engine->renderer, engine->vfs, path);
+  create_ldata(L, tex, TEXTURE_MT_NAME, LUA_TYPE_TEXTURE);
   return 1;
 }
 
 luaL_Reg texture_funcs[] = {
-  {"LoadTexture", L_LoadTexture},
+  {"load_tex", L_load_tex},
   {NULL, NULL},
 };
 
-static int L_TextureMt_GetSize(lua_State* L)
+static int L_TextureMt_get_size(lua_State* L)
 {
-  struct Texture* tex = (struct Texture*)ReadLuaData(L, 1, LUA_TYPE_TEXTURE);
+  tex_t* tex = (tex_t*)read_ldata(L, 1, LUA_TYPE_TEXTURE);
   lua_pushinteger(L, tex->size.x);
   lua_pushinteger(L, tex->size.y);
   return 2;
 }
 
-static int L_TextureMt_GenerateMipmaps(lua_State* L)
+static int L_TextureMt_gen_mipmap(lua_State* L)
 {
-  struct Renderer* r = GetEngine(L)->renderer;
-  struct Texture* tex = (struct Texture*)ReadLuaData(L, 1, LUA_TYPE_TEXTURE);
-  TextureGenerateMipmaps(r, tex);
+  renderer_t* r = get_engine(L)->renderer;
+  tex_t* tex = (tex_t*)read_ldata(L, 1, LUA_TYPE_TEXTURE);
+  tex_gen_mipmap(r, tex);
   return 0;
 }
 
-static int L_TextureMt_SetFilter(lua_State* L)
+static int L_TextureMt_set_filter(lua_State* L)
 {
-  struct Renderer* r = GetEngine(L)->renderer;
-  struct Texture* tex = (struct Texture*)ReadLuaData(L, 1, LUA_TYPE_TEXTURE);
-  enum TextureFilter min = luaL_checkinteger(L, 2);
-  enum TextureFilter mag = luaL_checkinteger(L, 3);
-  TextureSetFilter(r, tex, min, mag);
+  renderer_t* r = get_engine(L)->renderer;
+  tex_t* tex = (tex_t*)read_ldata(L, 1, LUA_TYPE_TEXTURE);
+  tex_filter_t min = luaL_checkinteger(L, 2);
+  tex_filter_t mag = luaL_checkinteger(L, 3);
+  tex_set_filter(r, tex, min, mag);
   return 0;
 }
 
-static int L_TextureMt_SetWrap(lua_State* L)
+static int L_TextureMt_set_wrap(lua_State* L)
 {
-  struct Renderer* r = GetEngine(L)->renderer;
-  struct Texture* tex = (struct Texture*)ReadLuaData(L, 1, LUA_TYPE_TEXTURE);
-  enum TextureWrap x = luaL_checkinteger(L, 2);
-  enum TextureWrap y = luaL_checkinteger(L, 3);
-  TextureSetWrap(r, tex, x, y);
+  renderer_t* r = get_engine(L)->renderer;
+  tex_t* tex = (tex_t*)read_ldata(L, 1, LUA_TYPE_TEXTURE);
+  tex_wrap_t x = luaL_checkinteger(L, 2);
+  tex_wrap_t y = luaL_checkinteger(L, 3);
+  tex_set_wrap(r, tex, x, y);
   return 0;
 }
 
-static int L_TextureMt_Bind(lua_State* L)
+static int L_TextureMt_bind(lua_State* L)
 {
-  struct Renderer* r = GetEngine(L)->renderer;
-  struct Texture* tex = (struct Texture*)ReadLuaData(L, 1, LUA_TYPE_TEXTURE);
-  TextureBind(r, tex, luaL_checkinteger(L, 2));
+  renderer_t* r = get_engine(L)->renderer;
+  tex_t* tex = (tex_t*)read_ldata(L, 1, LUA_TYPE_TEXTURE);
+  tex_bind(r, tex, luaL_checkinteger(L, 2));
   return 2;
 }
 
@@ -71,31 +71,31 @@ static int L_TextureMt__index(lua_State* L)
 
 static int L_TextureMt__gc(lua_State* L)
 {
-  struct Renderer* r = GetEngine(L)->renderer;
-  struct Texture* tex = (struct Texture*)ReadLuaData(L, 1, LUA_TYPE_TEXTURE);
-  TextureDestroy(r, tex);
-  Destroy(tex);
+  renderer_t* r = get_engine(L)->renderer;
+  tex_t* tex = (tex_t*)read_ldata(L, 1, LUA_TYPE_TEXTURE);
+  tex_destroy(r, tex);
+  mem_destroy(tex);
   return 0;
 }
 
 luaL_Reg texture_mt[] = {
-  {"GetSize", L_TextureMt_GetSize},
-  {"GenerateMipmaps", L_TextureMt_GenerateMipmaps},
-  {"SetFilter", L_TextureMt_SetFilter},
-  {"SetWrap", L_TextureMt_SetWrap},
-  {"Bind", L_TextureMt_Bind},
+  {"get_size", L_TextureMt_get_size},
+  {"gen_mipmap", L_TextureMt_gen_mipmap},
+  {"set_filter", L_TextureMt_set_filter},
+  {"set_wrap", L_TextureMt_set_wrap},
+  {"bind", L_TextureMt_bind},
   {"__index", L_TextureMt__index},
   {"__gc", L_TextureMt__gc},
   {NULL, NULL},
 };
 
-void WrapTexture(lua_State* L)
+void wrap_tex(lua_State* L)
 {
   lua_getglobal(L, CORE_NAME);
-  RegisterFunctions(L, texture_funcs);
+  reg_funcs(L, texture_funcs);
 
   luaL_newmetatable(L, TEXTURE_MT_NAME);
-  RegisterFunctions(L, texture_mt);
+  reg_funcs(L, texture_mt);
 
   lua_pop(L, 2);
 }

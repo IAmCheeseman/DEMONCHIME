@@ -5,26 +5,26 @@
 
 #include "gfx/vertex_array.h"
 
-struct VertexArray
+struct vert_arr_s
 {
   uint32_t handle;
 };
 
-struct VertexArray* gl_VertexArrayCreate(const struct VertexFormat* fmt);
-void gl_VertexArrayBind(struct VertexArray* varr);
-void gl_VertexArrayDestroy(struct VertexArray* varr);
-void gl_VertexArrayDraw(
-  struct VertexArray* varr,
+vert_arr_t* gl_vert_arr_create(const vert_fmt_t* fmt);
+void gl_vert_arr_bind(vert_arr_t* varr);
+void gl_vert_arr_destroy(vert_arr_t* varr);
+void gl_vert_arr_draw(
+  vert_arr_t* varr,
   size_t start,
   size_t count,
-  enum IndexMode index_mode
+  idx_mode_t index_mode
 );
-void gl_VertexArrayDrawIndexed(
-  struct VertexArray* varr,
-  struct BufferObject* ebo,
+void gl_vert_arr_draw_idx(
+  vert_arr_t* varr,
+  buf_obj_t* ebo,
   size_t count,
-  enum GfxDataType type,
-  enum IndexMode index_mode
+  data_type_t type,
+  idx_mode_t index_mode
 );
 
 #endif

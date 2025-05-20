@@ -2,7 +2,7 @@
 
 #include "log.h"
 
-static void CatArgs(lua_State* L, int start)
+static void cat_args(lua_State* L, int start)
 {
   int argc = lua_gettop(L);
 
@@ -18,45 +18,45 @@ static void CatArgs(lua_State* L, int start)
   lua_concat(L, (argc - start + 1) * 2 - 1);
 }
 
-static int L_LogInfo(lua_State* L)
+static int L_log_info(lua_State* L)
 {
-  CatArgs(L, 1);
-  LogInfo("%s", lua_tostring(L, -1));
+  cat_args(L, 1);
+  log_info("%s", lua_tostring(L, -1));
   return 0;
 }
 
-static int L_LogWarning(lua_State* L)
+static int L_log_warning(lua_State* L)
 {
-  CatArgs(L, 1);
-  LogWarning("%s", lua_tostring(L, -1));
+  cat_args(L, 1);
+  log_warning("%s", lua_tostring(L, -1));
   return 0;
 }
 
-static int L_LogError(lua_State* L)
+static int L_log_error(lua_State* L)
 {
-  CatArgs(L, 1);
-  LogError("%s", lua_tostring(L, -1));
+  cat_args(L, 1);
+  log_error("%s", lua_tostring(L, -1));
   return 0;
 }
 
-static int L_LogFatal(lua_State* L)
+static int L_log_fatal(lua_State* L)
 {
-  CatArgs(L, 2);
-  LogFatal(luaL_checkinteger(L, 1), "%s", lua_tostring(L, -1));
+  cat_args(L, 2);
+  log_fatal(luaL_checkinteger(L, 1), "%s", lua_tostring(L, -1));
   return 0;
 }
 
 luaL_Reg log_funcs[] = {
-  {"LogInfo", L_LogInfo},
-  {"LogWarning", L_LogWarning},
-  {"LogError", L_LogError},
-  {"LogFatal", L_LogFatal},
+  {"log_info", L_log_info},
+  {"log_warning", L_log_warning},
+  {"log_error", L_log_error},
+  {"log_fatal", L_log_fatal},
   {NULL, NULL},
 };
 
-void WrapLog(lua_State* L)
+void wrap_log(lua_State* L)
 {
-  lua_getglobal(L, CORE_NAME);
-  RegisterFunctions(L, log_funcs);
+  lua_getglobal(L, "_G");
+  reg_funcs(L, log_funcs);
   lua_pop(L, 1);
 }

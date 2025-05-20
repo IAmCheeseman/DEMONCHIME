@@ -5,41 +5,41 @@
 #include "mem.h"
 #include "gl_type_conv.h"
 
-struct BufferObject* gl_BufferObjectCreate(enum BufferObjectType type)
+buf_obj_t* gl_buf_obj_create(buf_obj_type_t type)
 {
-  struct BufferObject* buf =
-    (struct BufferObject*)Alloc(sizeof(struct BufferObject));
+  buf_obj_t* buf =
+    (buf_obj_t*)mem_alloc(sizeof(buf_obj_t));
   buf->type = type;
   glGenBuffers(1, &buf->handle);
-  LogDebug("created buffer object %d", buf->handle);
+  log_debug("created buffer object %d", buf->handle);
   return buf;
 }
 
-void gl_BufferObjectDestroy(struct BufferObject* buf)
+void gl_buf_obj_destroy(buf_obj_t* buf)
 {
   glDeleteBuffers(1, &buf->handle);
-  LogDebug("destroyed buffer object %d", buf->handle);
-  Destroy(buf);
+  log_debug("destroyed buffer object %d", buf->handle);
+  mem_destroy(buf);
 }
 
-void gl_BufferObjectBind(struct BufferObject* buf)
+void gl_buf_obj_bind(buf_obj_t* buf)
 {
-  glBindBuffer(BufferObjectTypeToOpenGl(buf->type), buf->handle);
+  glBindBuffer(buf_obj_type_to_gl(buf->type), buf->handle);
 }
 
-void gl_BufferObjectUnbind(enum BufferObjectType type)
+void gl_buf_obj_unbind(buf_obj_type_t type)
 {
-  glBindBuffer(BufferObjectTypeToOpenGl(type), 0);
+  glBindBuffer(buf_obj_type_to_gl(type), 0);
 }
 
-void gl_BufferObjectSet(
-  struct BufferObject* buf,
+void gl_buf_obj_set_dat(
+  buf_obj_t* buf,
   void* data,
   size_t size,
-  enum DrawMode mode)
+  draw_mode_t mode)
 {
-  uint32_t gl_mode = DrawModeToOpenGl(mode);
-  uint32_t type = BufferObjectTypeToOpenGl(buf->type);
+  uint32_t gl_mode = draw_mode_to_gl(mode);
+  uint32_t type = buf_obj_type_to_gl(buf->type);
   glBindBuffer(type, buf->handle);
   glBufferData(type, size, data, gl_mode);
   glBindBuffer(type, 0);

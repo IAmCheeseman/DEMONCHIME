@@ -12,177 +12,177 @@
 #include "math/vec4i.h"
 #include "math/mat4.h"
 
-struct Engine;
-struct BufferObject;
-struct VertexArray;
-struct VertexFormat;
-struct Image;
-struct Texture;
-struct Shader;
-struct Framebuffer;
-struct Vfs;
+struct engine_s;
+struct buf_obj_s;
+struct vert_arr_s;
+struct vert_fmt_s;
+struct img_s;
+struct tex_s;
+struct shader_s;
+struct framebuf_s;
+struct vfs_s;
 
-typedef void (*ClearBackgroundFn)(float r, float g, float b);
-typedef void (*AdjustViewportFn)(vec2f_t size);
-typedef void (*SetDepthTestFn)(bool do_test);
+typedef void (*clear_bg_fn)(float r, float g, float b);
+typedef void (*adjust_viewport_fn)(vec2f_t size);
+typedef void (*set_depth_test_fn)(bool do_test);
 
-typedef struct BufferObject* (*BufferObjectCreateFn)(
-  enum BufferObjectType type
+typedef struct buf_obj_s* (*buf_obj_create_fn)(
+  buf_obj_type_t type
 );
-typedef void (*BufferObjectBindFn)(struct BufferObject* buf);
-typedef void (*BufferObjectUnbindFn)(enum BufferObjectType type);
-typedef void (*BufferObjectSetFn)(
-  struct BufferObject* buf,
+typedef void (*buf_obj_bind_fn)(struct buf_obj_s* buf);
+typedef void (*buf_obj_unbind_fn)(buf_obj_type_t type);
+typedef void (*buf_obj_set_dat_fn)(
+  struct buf_obj_s* buf,
   void* data,
   size_t size,
-  enum DrawMode mode
+  draw_mode_t mode
 );
-typedef void (*BufferObjectDestroyFn)(struct BufferObject* buf);
+typedef void (*buf_obj_destroy_fn)(struct buf_obj_s* buf);
 
-typedef struct VertexArray* (*VertexArrayCreateFn)(
-  const struct VertexFormat* fmt);
-typedef void (*VertexArrayDestroyFn)(struct VertexArray* varr);
-typedef void (*VertexArrayBindFn)(struct VertexArray* varr);
-typedef void (*VertexArrayDrawFn)(
-  struct VertexArray* varr,
+typedef struct vert_arr_s* (*vert_arr_create_fn)(
+  const struct vert_fmt_s* fmt);
+typedef void (*vert_arr_destroy_fn)(struct vert_arr_s* varr);
+typedef void (*vert_arr_bind_fn)(struct vert_arr_s* varr);
+typedef void (*vert_arr_draw_fn)(
+  struct vert_arr_s* varr,
   size_t start,
   size_t count,
-  enum IndexMode index_mode
+  idx_mode_t index_mode
 );
-typedef void (*VertexArrayDrawIndexedFn)(
-  struct VertexArray* varr,
-  struct BufferObject* ebo,
+typedef void (*vert_arr_draw_idx_fn)(
+  struct vert_arr_s* varr,
+  struct buf_obj_s* ebo,
   size_t count,
-  enum GfxDataType type,
-  enum IndexMode index_mode
+  data_type_t type,
+  idx_mode_t index_mode
 );
 
-typedef struct Framebuffer* (*FramebufferCreateFn)(
-  struct Vfs* vfs,
+typedef struct framebuf_s* (*framebuf_create_fn)(
+  struct vfs_s* vfs,
   vec2i_t size,
   uint8_t flags
 );
-typedef void (*FramebufferDestroyFn)(struct Framebuffer* fb);
-typedef void (*FramebufferBindFn)(struct Framebuffer* fb);
-typedef void (*FramebufferResizeFn)(struct Framebuffer* fb, vec2i_t size);
-typedef void (*FramebufferDrawFn)(
-  struct Framebuffer* fb,
+typedef void (*framebuf_destroy_fn)(struct framebuf_s* fb);
+typedef void (*framebuf_bind_fn)(struct framebuf_s* fb);
+typedef void (*framebuf_resize_fn)(struct framebuf_s* fb, vec2i_t size);
+typedef void (*framebuf_draw_fn)(
+  struct framebuf_s* fb,
   vec2i_t start,
   vec2i_t end
 );
 
-typedef struct Shader* (*ShaderLoadFromFilesFn)(
-  struct Vfs* vfs,
+typedef struct shader_s* (*shader_load_from_files_fn)(
+  struct vfs_s* vfs,
   const char* vert,
   const char* frag
 );
-typedef struct Shader* (*ShaderLoadFromSourceFn)(
+typedef struct shader_s* (*shader_load_from_src_fn)(
   const char* vert,
   const char* frag
 );
-typedef void (*ShaderSendIntFn)(
-  struct Shader* s,
+typedef void (*shader_send_int_fn)(
+  struct shader_s* s,
   const char* name,
   int i
 );
-typedef void (*ShaderSendFloatFn)(
-  struct Shader* s,
+typedef void (*shader_send_float_fn)(
+  struct shader_s* s,
   const char* name,
   float f
 );
-typedef void (*ShaderSendVec2fFn)(
-  struct Shader* s,
+typedef void (*shader_send_vec2f_fn)(
+  struct shader_s* s,
   const char* name,
   vec2f_t v
 );
-typedef void (*ShaderSendVec2iFn)(
-  struct Shader* s,
+typedef void (*shader_send_vec2i_fn)(
+  struct shader_s* s,
   const char* name,
   vec2i_t v
 );
-typedef void (*ShaderSendVec3fFn)(
-  struct Shader* s,
+typedef void (*shader_send_vec3f_fn)(
+  struct shader_s* s,
   const char* name, 
   vec3f_t v
 );
-typedef void (*ShaderSendVec3iFn)(
-  struct Shader* s,
+typedef void (*shader_send_vec3i_fn)(
+  struct shader_s* s,
   const char* name,
   vec3i_t v
 );
-typedef void (*ShaderSendVec4fFn)(
-  struct Shader* s,
+typedef void (*shader_send_vec4f_fn)(
+  struct shader_s* s,
   const char* name,
   vec4f_t v
 );
-typedef void (*ShaderSendVec4iFn)(
-  struct Shader* s,
+typedef void (*shader_send_vec4i_fn)(
+  struct shader_s* s,
   const char* name,
   vec4i_t v
 );
-typedef void (*ShaderSendMat4Fn)(struct Shader* s, const char* name, mat4_t m);
-typedef void (*ShaderBindFn)(struct Shader* s);
-typedef void (*ShaderDestroyFn)(struct Shader* s);
+typedef void (*shader_send_mat4_fn)(struct shader_s* s, const char* name, mat4_t m);
+typedef void (*shader_bind_fn)(struct shader_s* s);
+typedef void (*shader_destroy_fn)(struct shader_s* s);
 
-typedef struct Texture (*TextureLoadFromImgFn)(struct Image* img);
-typedef void (*TextureGenerateMipmapsFn)(struct Texture* tex);
-typedef void (*TextureBindFn)(struct Texture* tex, uint8_t slot);
-typedef void (*TextureSetFilterFn)(
-  struct Texture* tex,
-  enum TextureFilter min,
-  enum TextureFilter mag
+typedef struct tex_s (*tex_load_from_img_fn)(struct img_s* img);
+typedef void (*tex_gen_mipmap_fn)(struct tex_s* tex);
+typedef void (*tex_bind_fn)(struct tex_s* tex, uint8_t slot);
+typedef void (*tex_set_filter_fn)(
+  struct tex_s* tex,
+  tex_filter_t min,
+  tex_filter_t mag
 );
-typedef void (*TextureSetWrapFn)(
-  struct Texture* tex,
-  enum TextureWrap x_wrap,
-  enum TextureWrap y_wrap
+typedef void (*tex_set_wrap_fn)(
+  struct tex_s* tex,
+  tex_wrap_t x_wrap,
+  tex_wrap_t y_wrap
 );
-typedef void (*TextureDestroyFn)(struct Texture* tex);
+typedef void (*tex_destroy_fn)(struct tex_s* tex);
 
-struct GraphicsBackend
+typedef struct gfx_backend_s
 {
-  ClearBackgroundFn clear_background;
-  AdjustViewportFn adjust_viewport;
-  SetDepthTestFn set_depth_test;
+  clear_bg_fn clear_background;
+  adjust_viewport_fn adjust_viewport;
+  set_depth_test_fn set_depth_test;
 
-  BufferObjectCreateFn buffer_object_create;
-  BufferObjectDestroyFn buffer_object_destroy;
-  BufferObjectBindFn buffer_object_bind;
-  BufferObjectUnbindFn buffer_object_unbind;
-  BufferObjectSetFn buffer_object_set;
+  buf_obj_create_fn buffer_object_create;
+  buf_obj_destroy_fn buffer_object_destroy;
+  buf_obj_bind_fn buffer_object_bind;
+  buf_obj_unbind_fn buffer_object_unbind;
+  buf_obj_set_dat_fn buffer_object_set;
 
-  VertexArrayCreateFn vertex_array_create;
-  VertexArrayDestroyFn vertex_array_destroy;
-  VertexArrayBindFn vertex_array_bind;
-  VertexArrayDrawFn vertex_array_draw;
-  VertexArrayDrawIndexedFn vertex_array_draw_indexed;
+  vert_arr_create_fn vertex_array_create;
+  vert_arr_destroy_fn vertex_array_destroy;
+  vert_arr_bind_fn vertex_array_bind;
+  vert_arr_draw_fn vertex_array_draw;
+  vert_arr_draw_idx_fn vertex_array_draw_indexed;
 
-  FramebufferCreateFn framebuffer_create;
-  FramebufferDestroyFn framebuffer_destroy;
-  FramebufferBindFn framebuffer_bind;
-  FramebufferResizeFn framebuffer_resize;
-  FramebufferDrawFn framebuffer_draw;
+  framebuf_create_fn framebuffer_create;
+  framebuf_destroy_fn framebuffer_destroy;
+  framebuf_bind_fn framebuffer_bind;
+  framebuf_resize_fn framebuffer_resize;
+  framebuf_draw_fn framebuffer_draw;
 
-  ShaderLoadFromFilesFn shader_load_files;
-  ShaderLoadFromSourceFn shader_load_src;
-  ShaderDestroyFn shader_destroy;;
-  ShaderSendIntFn shader_send_int;
-  ShaderSendFloatFn shader_send_float;
-  ShaderSendVec2fFn shader_send_vec2f;
-  ShaderSendVec2iFn shader_send_vec2i;
-  ShaderSendVec3fFn shader_send_vec3f;
-  ShaderSendVec3iFn shader_send_vec3i;
-  ShaderSendVec4fFn shader_send_vec4f;
-  ShaderSendVec4iFn shader_send_vec4i;
-  ShaderSendMat4Fn shader_send_mat4;
-  ShaderBindFn shader_bind;
+  shader_load_from_files_fn shader_load_files;
+  shader_load_from_src_fn shader_load_src;
+  shader_destroy_fn shader_destroy;;
+  shader_send_int_fn shader_send_int;
+  shader_send_float_fn shader_send_float;
+  shader_send_vec2f_fn shader_send_vec2f;
+  shader_send_vec2i_fn shader_send_vec2i;
+  shader_send_vec3f_fn shader_send_vec3f;
+  shader_send_vec3i_fn shader_send_vec3i;
+  shader_send_vec4f_fn shader_send_vec4f;
+  shader_send_vec4i_fn shader_send_vec4i;
+  shader_send_mat4_fn shader_send_mat4;
+  shader_bind_fn shader_bind;
 
-  TextureLoadFromImgFn texture_load_img;
-  TextureDestroyFn texture_destroy;
-  TextureGenerateMipmapsFn texture_gen_mipmaps;
-  TextureBindFn texture_bind;
-  TextureSetFilterFn texture_set_filter;
-  TextureSetWrapFn texture_set_wrap;
-};
+  tex_load_from_img_fn texture_load_img;
+  tex_destroy_fn texture_destroy;
+  tex_gen_mipmap_fn texture_gen_mipmaps;
+  tex_bind_fn texture_bind;
+  tex_set_filter_fn texture_set_filter;
+  tex_set_wrap_fn texture_set_wrap;
+} gfx_backend_t;
 
 #endif

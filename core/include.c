@@ -4,7 +4,7 @@
 #include <stdarg.h>
 #include <string.h>
 
-char* Concat(const char* lhs, ...)
+char* concat(const char* lhs, ...)
 {
   const char* str;
 
@@ -19,7 +19,7 @@ char* Concat(const char* lhs, ...)
 
   va_end(args);
 
-  char* cat = (char*)Alloc(sizeof(char) * (len + 1));
+  char* cat = (char*)mem_alloc(sizeof(char) * (len + 1));
 
   va_start(args, lhs);
 

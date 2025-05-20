@@ -3,18 +3,18 @@
 #include "gfx/gfx_types.h"
 #include "key.h"
 
-struct LuaEnum
+typedef struct lenum_s
 {
   const char* name;
   int value;
-};
+} lenum_t;
 
 #define IMAGE_FORMAT_NAME "img_format"
 #define TEXTURE_FILTER_NAME "tex_filter"
 #define TEXTURE_WRAP_NAME "tex_wrap"
 #define KEY_NAME "key"
 
-struct LuaEnum image_format[] = {
+lenum_t image_format[] = {
   {"R8", IMAGE_FORMAT_R8},
   {"RA8", IMAGE_FORMAT_RA8},
   {"RGB8", IMAGE_FORMAT_RGB8},
@@ -22,7 +22,7 @@ struct LuaEnum image_format[] = {
   {NULL, 0},
 };
 
-struct LuaEnum texture_filter[] = {
+lenum_t texture_filter[] = {
   {"NEAREST", TEXTURE_FILTER_NEAREST},
   {"NEAREST_MIPMAP", TEXTURE_FILTER_NEAREST_MIPMAP},
   {"NEAREST_MIPMAP_NEAREST", TEXTURE_FILTER_NEAREST_MIPMAP_NEAREST},
@@ -32,7 +32,7 @@ struct LuaEnum texture_filter[] = {
   {NULL, 0},
 };
 
-struct LuaEnum texture_wrap[] = {
+lenum_t texture_wrap[] = {
   {"REPEAT", TEXTURE_WRAP_REPEAT},
   {"MIRRORED_REPEAT", TEXTURE_WRAP_MIRRORED_REPEAT},
   {"CLAMP_EDGE", TEXTURE_WRAP_CLAMP_EDGE},
@@ -40,21 +40,21 @@ struct LuaEnum texture_wrap[] = {
   {NULL, 0},
 };
 
-struct LuaEnum key_wrap[] = {
+lenum_t key_wrap[] = {
 #define KEY_DEF(name, _) {#name, KEY_##name},
 #include "key_def.h"
 #undef KEY_DEF
   {NULL, 0},
 };
 
-static void RegisterEnum(
+static void reg_enum(
   lua_State* L,
   const char* name,
-  struct LuaEnum* enooms)
+  lenum_t* lenums)
 {
   lua_newtable(L);
 
-  for (struct LuaEnum* enoom = enooms; enoom->name != NULL; enoom++) {
+  for (lenum_t* enoom = lenums; enoom->name != NULL; enoom++) {
     lua_pushinteger(L, enoom->value);
     lua_setfield(L, -2, enoom->name);
   }
@@ -62,14 +62,14 @@ static void RegisterEnum(
   lua_setfield(L, -2, name);
 }
 
-void WrapEnums(lua_State* L)
+void wrap_enums(lua_State* L)
 {
   lua_getglobal(L, CORE_NAME);
 
-  RegisterEnum(L, IMAGE_FORMAT_NAME, image_format);
-  RegisterEnum(L, TEXTURE_FILTER_NAME, texture_filter);
-  RegisterEnum(L, TEXTURE_WRAP_NAME, texture_wrap);
-  RegisterEnum(L, KEY_NAME, key_wrap);
+  reg_enum(L, IMAGE_FORMAT_NAME, image_format);
+  reg_enum(L, TEXTURE_FILTER_NAME, texture_filter);
+  reg_enum(L, TEXTURE_WRAP_NAME, texture_wrap);
+  reg_enum(L, KEY_NAME, key_wrap);
 
   lua_pop(L, 1);
 }

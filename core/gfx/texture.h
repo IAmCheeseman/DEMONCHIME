@@ -8,37 +8,31 @@
 #include "math/vec2i.h"
 
 // TODO: make this consistent with other implementation-defined stuff
-struct Texture
+typedef struct tex_s
 {
   void* handle;
   vec2i_t size;
-  enum ImageFormat format;
-  enum TextureFilter min_filter;
-  enum TextureFilter mag_filter;
-  enum TextureWrap x_wrap;
-  enum TextureWrap y_wrap;
-};
+  img_fmt_t format;
+  tex_filter_t min_filter;
+  tex_filter_t mag_filter;
+  tex_wrap_t x_wrap;
+  tex_wrap_t y_wrap;
+} tex_t;
 
-struct Texture TextureLoad(
-  struct Renderer* r,
-  struct Vfs* vfs,
-  const char* path
-);
-struct Texture TextureLoadFromImg(struct Renderer* r, struct Image* img);
-void TextureDestroy(struct Renderer* r, struct Texture* tex);
-void TextureGenerateMipmaps(struct Renderer* r, struct Texture* tex);
-void TextureBind(struct Renderer* r, struct Texture* tex, uint8_t slot);
-void TextureSetFilter(
-  struct Renderer* r,
-  struct Texture* tex,
-  enum TextureFilter min,
-  enum TextureFilter mag
-);
-void TextureSetWrap(
-  struct Renderer* r,
-  struct Texture* tex,
-  enum TextureWrap x_wrap,
-  enum TextureWrap y_wrap
-);
+tex_t tex_load(renderer_t* r, vfs_t* vfs, const char* path);
+tex_t tex_load_from_img(renderer_t* r, img_t* img);
+void tex_destroy(renderer_t* r, tex_t* tex);
+void tex_gen_mipmap(renderer_t* r, tex_t* tex);
+void tex_bind(renderer_t* r, tex_t* tex, uint8_t slot);
+void tex_set_filter(
+  renderer_t* r,
+  tex_t* tex,
+  tex_filter_t min,
+  tex_filter_t mag);
+void tex_set_wrap(
+  renderer_t* r,
+  tex_t* tex,
+  tex_wrap_t x_wrap,
+  tex_wrap_t y_wrap);
 
 #endif

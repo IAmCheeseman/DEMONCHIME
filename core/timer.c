@@ -2,9 +2,9 @@
 
 #include <GLFW/glfw3.h>
 
-struct Timer TimerCreate()
+timer_t timer_create()
 {
-  struct Timer t;
+  timer_t t;
   t.tick_rate = 30;
   t.accum = 0;
   t.fps = 0;
@@ -16,19 +16,19 @@ struct Timer TimerCreate()
   return t;
 }
 
-bool TimerShouldTick(const struct Timer* t)
+bool timer_should_tick(const timer_t* t)
 {
   return t->accum > 1.0 / t->tick_rate;
 }
 
-void TimerNewTick(struct Timer* t)
+void timer_start_tick(timer_t* t)
 {
   t->accum -= 1.0 / t->tick_rate;
   if (t->accum < 0) t->accum = 0;
   t->ticks_ticked++;
 }
 
-void TimerStep(struct Timer* t)
+void timer_step(timer_t* t)
 {
   double current_time = glfwGetTime();
   double dt = current_time - t->prev_time;
@@ -47,7 +47,7 @@ void TimerStep(struct Timer* t)
   }
 }
 
-void TimerDoneRendering(struct Timer* t)
+void timer_end_rendering(timer_t* t)
 {
   t->frames_rendered++;
 }

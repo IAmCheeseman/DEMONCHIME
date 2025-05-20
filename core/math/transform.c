@@ -2,7 +2,7 @@
 
 #include "mat4.h"
 
-void TransformToMatrix(struct Transform trans, mat4_t mat)
+void TransformToMatrix(transform_t trans, mat4_t mat)
 {
   mat4_t translation;
   Mat4Translate(translation, trans.pos);

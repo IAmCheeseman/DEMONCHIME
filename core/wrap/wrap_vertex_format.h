@@ -5,12 +5,12 @@
 #include "wrap.h"
 #include "gfx/vertex_array.h"
 
-struct LuaVertexFormat
+typedef struct lvertex_format_s
 {
-  struct VertexAttrib* attribs;
+  vert_attr_t* attribs;
   size_t count;
   size_t capacity;
-  struct VertexFormat fmt;
-};
+  vert_fmt_t fmt;
+} lvertex_format_t;
 
 #endif

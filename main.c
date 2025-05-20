@@ -4,9 +4,9 @@
 
 int main(int argc, const char* args[])
 {
-  LogInfo("os: %s", bse_os_str);
+  log_info("os: %s", bse_os_str);
 
-  struct EngineConfig conf = (struct EngineConfig){
+  engine_conf_t conf = (engine_conf_t){
     .mount_path = "DEMONCHIME.HAD",
     .window_title = "DEMONCHIME",
     .window_size = (vec2i_t){320 * 3, 180 * 3},
@@ -14,25 +14,25 @@ int main(int argc, const char* args[])
     .vsync = 0,
   };
 
-  struct Engine engine;
-  EngineInit(&engine, conf);
+  engine_t engine;
+  engine_init(&engine, conf);
 
   if (argc > 1) {
     for (int i = 1; i < argc; i++) {
-      enum VfsError err = VfsMount(&engine.vfs, args[i]);
+      vfs_error_t err = vfs_mount(&engine.vfs, args[i]);
       if (err != VFS_OK) {
-        LogFatal(1, "could not load '%s'", args[i]);
+        log_fatal(1, "could not load '%s'", args[i]);
       }
     }
   }
 
-  EngineInitLua(&engine);
+  engine_init_lua(&engine);
 
-  while (!EngineIsClosed(&engine))
+  while (!is_engine_closed(&engine))
   {
-    EngineUpdate(&engine);
-    EngineDraw(&engine);
+    engine_update(&engine);
+    engine_draw(&engine);
   }
 
-  EngineDestroy(&engine);
+  engine_destroy(&engine);
 }

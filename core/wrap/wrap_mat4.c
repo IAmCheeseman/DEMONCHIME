@@ -5,15 +5,15 @@
 #include "math/vec3f.h"
 #include "mem.h"
 
-static int L_Mat4Identity(lua_State* L)
+static int L_mat4_identity(lua_State* L)
 {
-  struct LuaMat4* m = (struct LuaMat4*)Alloc(sizeof(struct LuaMat4));
+  lmat4_t* m = (lmat4_t*)mem_alloc(sizeof(lmat4_t));
   Mat4Identity(m->m);
-  CreateLuaData(L, m, MAT4_MT_NAME, LUA_TYPE_MAT4);
+  create_ldata(L, m, MAT4_MT_NAME, LUA_TYPE_MAT4);
   return 1;
 }
 
-static int L_Mat4FromTransform(lua_State* L)
+static int L_mat4_from_trans(lua_State* L)
 {
   luaL_checktype(L, 1, LUA_TTABLE);
 
@@ -47,37 +47,37 @@ static int L_Mat4FromTransform(lua_State* L)
   float sz = luaL_optnumber(L, -1, 1);
   lua_pop(L, 1);
 
-  struct Transform trans;
+  transform_t trans;
   trans.pos = (vec3f_t){x, y, z};
   trans.rot = (vec3f_t){rx, ry, rz};
   trans.scale = (vec3f_t){sx, sy, sz};
 
-  struct LuaMat4* m = (struct LuaMat4*)Alloc(sizeof(struct LuaMat4));
+  lmat4_t* m = (lmat4_t*)mem_alloc(sizeof(lmat4_t));
   TransformToMatrix(trans, m->m);
-  CreateLuaData(L, m, MAT4_MT_NAME, LUA_TYPE_MAT4);
+  create_ldata(L, m, MAT4_MT_NAME, LUA_TYPE_MAT4);
   return 1;
 }
 
 luaL_Reg mat4_funcs[] = {
-  {"Mat4Identity", L_Mat4Identity},
-  {"Mat4FromTransform", L_Mat4FromTransform},
+  {"mat4_identity", L_mat4_identity},
+  {"mat4_from_trans", L_mat4_from_trans},
   {NULL, NULL},
 };
 
-static int L_Mat4Mt_Multiply(lua_State* L)
+static int L_Mat4Mt_mult(lua_State* L)
 {
-  struct LuaMat4* m0 = (struct LuaMat4*)ReadLuaData(L, 1, LUA_TYPE_MAT4);
-  struct LuaMat4* m1 = (struct LuaMat4*)ReadLuaData(L, 2, LUA_TYPE_MAT4);
+  lmat4_t* m0 = (lmat4_t*)read_ldata(L, 1, LUA_TYPE_MAT4);
+  lmat4_t* m1 = (lmat4_t*)read_ldata(L, 2, LUA_TYPE_MAT4);
   
-  struct LuaMat4* mout = (struct LuaMat4*)Alloc(sizeof(struct LuaMat4));
+  lmat4_t* mout = (lmat4_t*)mem_alloc(sizeof(lmat4_t));
   Mat4Multiply(mout->m, m0->m, m1->m);
-  CreateLuaData(L, mout, MAT4_MT_NAME, LUA_TYPE_MAT4);
+  create_ldata(L, mout, MAT4_MT_NAME, LUA_TYPE_MAT4);
   return 1;
 }
 
-static int L_Mat4Mt_Translate(lua_State* L)
+static int L_Mat4Mt_translate(lua_State* L)
 {
-  struct LuaMat4* m = (struct LuaMat4*)ReadLuaData(L, 1, LUA_TYPE_MAT4);
+  lmat4_t* m = (lmat4_t*)read_ldata(L, 1, LUA_TYPE_MAT4);
   
   float x = luaL_checknumber(L, 2);
   float y = luaL_checknumber(L, 3);
@@ -88,9 +88,9 @@ static int L_Mat4Mt_Translate(lua_State* L)
   return 0;
 }
 
-static int L_Mat4Mt_Scale(lua_State* L)
+static int L_Mat4Mt_scale(lua_State* L)
 {
-  struct LuaMat4* m = (struct LuaMat4*)ReadLuaData(L, 1, LUA_TYPE_MAT4);
+  lmat4_t* m = (lmat4_t*)read_ldata(L, 1, LUA_TYPE_MAT4);
   
   float x = luaL_checknumber(L, 2);
   float y = luaL_checknumber(L, 3);
@@ -101,9 +101,9 @@ static int L_Mat4Mt_Scale(lua_State* L)
   return 0;
 }
 
-static int L_Mat4Mt_Rotate(lua_State* L)
+static int L_Mat4Mt_rotate(lua_State* L)
 {
-  struct LuaMat4* m = (struct LuaMat4*)ReadLuaData(L, 1, LUA_TYPE_MAT4);
+  lmat4_t* m = (lmat4_t*)read_ldata(L, 1, LUA_TYPE_MAT4);
   
   float x = luaL_checknumber(L, 2);
   float y = luaL_checknumber(L, 3);
@@ -114,9 +114,9 @@ static int L_Mat4Mt_Rotate(lua_State* L)
   return 0;
 }
 
-static int L_Mat4Mt_Perspective(lua_State* L)
+static int L_Mat4Mt_perspective(lua_State* L)
 {
-  struct LuaMat4* m = (struct LuaMat4*)ReadLuaData(L, 1, LUA_TYPE_MAT4);
+  lmat4_t* m = (lmat4_t*)read_ldata(L, 1, LUA_TYPE_MAT4);
   
   float yfov = luaL_checknumber(L, 2);
   float a = luaL_checknumber(L, 3);
@@ -128,9 +128,9 @@ static int L_Mat4Mt_Perspective(lua_State* L)
   return 0;
 }
 
-static int L_Mat4Mt_Ortho(lua_State* L)
+static int L_Mat4Mt_ortho(lua_State* L)
 {
-  struct LuaMat4* m = (struct LuaMat4*)ReadLuaData(L, 1, LUA_TYPE_MAT4);
+  lmat4_t* m = (lmat4_t*)read_ldata(L, 1, LUA_TYPE_MAT4);
   
   float l = luaL_checknumber(L, 3);
   float r = luaL_checknumber(L, 4);
@@ -153,30 +153,30 @@ static int L_Mat4Mt__index(lua_State* L)
 
 static int L_Mat4Mt__gc(lua_State* L)
 {
-  struct LuaMat4* m = (struct LuaMat4*)ReadLuaData(L, 1, LUA_TYPE_MAT4);
-  Destroy(m);
+  lmat4_t* m = (lmat4_t*)read_ldata(L, 1, LUA_TYPE_MAT4);
+  mem_destroy(m);
   return 0;
 }
 
 luaL_Reg mat4_mt[] = {
-  {"Multiply", L_Mat4Mt_Multiply},
-  {"Translate", L_Mat4Mt_Translate},
-  {"Scale", L_Mat4Mt_Scale},
-  {"Rotate", L_Mat4Mt_Rotate},
-  {"Perspective", L_Mat4Mt_Perspective},
-  {"Ortho", L_Mat4Mt_Ortho},
+  {"mult", L_Mat4Mt_mult},
+  {"translate", L_Mat4Mt_translate},
+  {"scale", L_Mat4Mt_scale},
+  {"rotate", L_Mat4Mt_rotate},
+  {"perspective", L_Mat4Mt_perspective},
+  {"ortho", L_Mat4Mt_ortho},
   {"__index", L_Mat4Mt__index},
   {"__gc", L_Mat4Mt__gc},
   {NULL, NULL},
 };
 
-void WrapMat4(lua_State* L)
+void wrap_mat4(lua_State* L)
 {
   lua_getglobal(L, CORE_NAME);
-  RegisterFunctions(L, mat4_funcs);
+  reg_funcs(L, mat4_funcs);
 
   luaL_newmetatable(L, MAT4_MT_NAME);
-  RegisterFunctions(L, mat4_mt);
+  reg_funcs(L, mat4_mt);
 
   lua_pop(L, 2);
 }

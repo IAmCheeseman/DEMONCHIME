@@ -7,20 +7,20 @@
 #include "math/mat4.h"
 #include "backend.h"
 
-enum GraphicsBackendType
+typedef enum gfx_backend_type_e
 {
   GFX_BACKEND_OPENGL,
-};
+} gfx_backend_type_t;
 
 // might put more stuff here later
-struct Renderer
+typedef struct renderer_s
 {
-  struct GraphicsBackend backend;
-};
+  gfx_backend_t backend;
+} renderer_t;
 
-void InitBackend(struct Engine* engine, enum GraphicsBackendType backend);
-void ClearBackground(struct Renderer* renderer, float r, float g, float b);
-void AdjustViewport(struct Renderer* r, vec2f_t size);
-void SetDepthTest(struct Renderer* r, bool test);
+void init_backend(engine_t* engine, gfx_backend_type_t backend);
+void clear_bg(renderer_t* renderer, float r, float g, float b);
+void adjust_viewport(renderer_t* r, vec2f_t size);
+void set_depth_test(renderer_t* r, bool test);
 
 #endif

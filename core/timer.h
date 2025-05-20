@@ -4,7 +4,7 @@
 #include "include.h"
 
 /// handles the fixed update loop and measures FPS and TPS
-struct Timer
+typedef struct timer_s
 {
   double tick_rate;
   double accum;
@@ -16,12 +16,12 @@ struct Timer
   double last_fps;
   int frames_rendered;
   int ticks_ticked;
-};
+} timer_t;
 
-struct Timer TimerCreate();
-bool TimerShouldTick(const struct Timer* t);
-void TimerNewTick(struct Timer* t);
-void TimerStep(struct Timer* t);
-void TimerDoneRendering(struct Timer* t);
+timer_t timer_create();
+bool timer_should_tick(const timer_t* t);
+void timer_start_tick(timer_t* t);
+void timer_step(timer_t* t);
+void timer_end_rendering(timer_t* t);
 
 #endif

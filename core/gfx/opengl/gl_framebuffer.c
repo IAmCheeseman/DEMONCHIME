@@ -9,10 +9,10 @@
 #include "gl_buffer_object.h"
 #include "mem.h"
 
-struct Shader* framebuffer_draw_shader = NULL;
+shader_t* framebuffer_draw_shader = NULL;
 
-static void GenerateTexture(
-  struct Framebuffer* fb,
+static void gen_tex(
+  framebuf_t* fb,
   uint32_t* handle, 
   GLenum attachment,
   GLenum internal,
@@ -46,10 +46,10 @@ static void GenerateTexture(
   glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-static void GenerateTextures(struct Framebuffer* fb)
+static void gen_texs(framebuf_t* fb)
 {
   if (fb->flags & FRAMEBUFFER_COLOR_BUF) {
-    GenerateTexture(
+    gen_tex(
       fb,
       &fb->color_handle,
       GL_COLOR_ATTACHMENT0,
@@ -62,7 +62,7 @@ static void GenerateTextures(struct Framebuffer* fb)
   // TODO: maybe make depth/stencil use renderbuffers? they're faster when not 
   // being read and i doubt i'll be doing much reading from these
   if (fb->flags & FRAMEBUFFER_DEPTH_MASK_BUF) {
-    GenerateTexture(
+    gen_tex(
       fb,
       &fb->z_mask_handle,
       GL_DEPTH_STENCIL_ATTACHMENT,
@@ -71,7 +71,7 @@ static void GenerateTextures(struct Framebuffer* fb)
       GL_UNSIGNED_INT_24_8
     );
   } else if (fb->flags & FRAMEBUFFER_DEPTH_BUF) {
-    GenerateTexture(
+    gen_tex(
       fb,
       &fb->z_mask_handle,
       GL_DEPTH_ATTACHMENT,
@@ -82,13 +82,13 @@ static void GenerateTextures(struct Framebuffer* fb)
   }
 }
 
-struct Framebuffer* gl_FramebufferCreate(
-  struct Vfs* vfs,
+framebuf_t* gl_framebuf_create(
+  vfs_t* vfs,
   vec2i_t size,
   uint8_t flags)
 {
-  struct Framebuffer* fb =
-    (struct Framebuffer*)Alloc(sizeof(struct Framebuffer));
+  framebuf_t* fb =
+    (framebuf_t*)mem_alloc(sizeof(framebuf_t));
 
   fb->size = size;
   fb->flags = flags;
@@ -101,21 +101,21 @@ struct Framebuffer* gl_FramebufferCreate(
 
   glBindFramebuffer(GL_FRAMEBUFFER, fb->fb_handle);
 
-  GenerateTextures(fb);
+  gen_texs(fb);
 
   if (flags & FRAMEBUFFER_DRAWABLE) {
-    struct VertexAttrib attribs[] = {
+    vert_attr_t attribs[] = {
       {TYPE_FLOAT, 2}, // position
       {TYPE_FLOAT, 2}, // UV
     };
-    struct VertexFormat format = VertexFormatCreate(attribs, 2);
-    fb->vbo = gl_BufferObjectCreate(BUFFER_ARRAY);
-    gl_BufferObjectSet(fb->vbo, NULL, 0, DRAW_DYNAMIC);
-    gl_BufferObjectBind(fb->vbo);
-    fb->vao = gl_VertexArrayCreate(&format);
+    vert_fmt_t format = vert_fmt_create(attribs, 2);
+    fb->vbo = gl_buf_obj_create(BUFFER_ARRAY);
+    gl_buf_obj_set_dat(fb->vbo, NULL, 0, DRAW_DYNAMIC);
+    gl_buf_obj_bind(fb->vbo);
+    fb->vao = gl_vert_arr_create(&format);
 
     if (framebuffer_draw_shader == NULL) {
-      framebuffer_draw_shader = gl_ShaderLoadFromFiles(
+      framebuffer_draw_shader = gl_shader_load_from_files(
         vfs,
         "res/vfbdraw.glsl",
         "res/ffbdraw.glsl"
@@ -124,36 +124,36 @@ struct Framebuffer* gl_FramebufferCreate(
   }
 
   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-    LogWarning("framebuffer %d could not be completed", fb->fb_handle);
+    log_warning("framebuffer %d could not be completed", fb->fb_handle);
   }
 
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-  LogDebug(
+  log_debug(
     "created framebuffer %d (with color tex %d, depth/mask tex %d)",
     fb->fb_handle, fb->color_handle, fb->z_mask_handle);
 
   return fb;
 }
 
-void gl_FramebufferDestroy(struct Framebuffer* fb)
+void gl_framebuf_destroy(framebuf_t* fb)
 {
   if (fb->color_handle != 0) glDeleteTextures(1, &fb->color_handle);
   if (fb->z_mask_handle != 0) glDeleteTextures(1, &fb->z_mask_handle);
-  if (fb->vao != NULL) gl_VertexArrayDestroy(fb->vao);
-  if (fb->vbo != NULL) gl_BufferObjectDestroy(fb->vbo);
+  if (fb->vao != NULL) gl_vert_arr_destroy(fb->vao);
+  if (fb->vbo != NULL) gl_buf_obj_destroy(fb->vbo);
   glDeleteFramebuffers(1, &fb->fb_handle);
-  Destroy(fb);
+  mem_destroy(fb);
 }
 
-void gl_FramebufferBind(struct Framebuffer* fb)
+void gl_framebuf_bind(framebuf_t* fb)
 {
   uint32_t handle = 0;
   if (fb != NULL) handle = fb->fb_handle;
   glBindFramebuffer(GL_FRAMEBUFFER, handle);
 }
 
-void gl_FramebufferResize(struct Framebuffer* fb, vec2i_t size)
+void gl_framebuf_resize(framebuf_t* fb, vec2i_t size)
 {
   if (fb->color_handle != 0) glDeleteTextures(1, &fb->color_handle);
   if (fb->z_mask_handle != 0) glDeleteTextures(1, &fb->z_mask_handle);
@@ -161,10 +161,10 @@ void gl_FramebufferResize(struct Framebuffer* fb, vec2i_t size)
   fb->size = size;
 
   glBindFramebuffer(GL_FRAMEBUFFER, fb->fb_handle);
-  GenerateTextures(fb);
+  gen_texs(fb);
 
   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-    LogWarning(
+    log_warning(
       "framebuffer %d resizing could not be completed",
       fb->fb_handle
     );
@@ -172,10 +172,10 @@ void gl_FramebufferResize(struct Framebuffer* fb, vec2i_t size)
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void gl_FramebufferDraw(struct Framebuffer* fb, vec2i_t start, vec2i_t end)
+void gl_framebuf_draw(framebuf_t* fb, vec2i_t start, vec2i_t end)
 {
   if (fb->vbo == NULL || fb->vao == NULL) {
-    LogWarning(
+    log_warning(
       "cannot draw framebuffer %d, because it is not drawable",
       fb->fb_handle
     );
@@ -192,13 +192,13 @@ void gl_FramebufferDraw(struct Framebuffer* fb, vec2i_t start, vec2i_t end)
     start.x, start.y + end.y, 0, 1, // bl
   };
 
-  gl_VertexArrayBind(fb->vao);
-  gl_BufferObjectSet(fb->vbo, vertices, sizeof(vertices), DRAW_DYNAMIC);
+  gl_vert_arr_bind(fb->vao);
+  gl_buf_obj_set_dat(fb->vbo, vertices, sizeof(vertices), DRAW_DYNAMIC);
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, fb->color_handle);
 
-  gl_ShaderBind(framebuffer_draw_shader);
-  gl_ShaderSendInt(framebuffer_draw_shader, "tex0", 0);
-  gl_VertexArrayDraw(fb->vao, 0, 6, INDEX_TRIANGLES);
+  gl_shader_bind(framebuffer_draw_shader);
+  gl_shader_send_int(framebuffer_draw_shader, "tex0", 0);
+  gl_vert_arr_draw(fb->vao, 0, 6, INDEX_TRIANGLES);
 }

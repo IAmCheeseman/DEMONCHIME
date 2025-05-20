@@ -5,7 +5,7 @@ Q = @
 INCLUDE = \
 	-Icore -Ilib/glad/include -Ilib/miniz/include \
 	-Ilib/stb/include -Ilib/luajit -Ilib 
-CFLAGS = -std=c99 -Wall -Wextra -Wno-unused-parameter $(INCLUDE) \
+CFLAGS = $(cflags) -std=c99 -Wall -Wextra -Wno-unused-parameter $(INCLUDE) \
 	-Dbse_allow_opengl
 LDFLAGS =
 

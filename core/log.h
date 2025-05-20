@@ -24,36 +24,36 @@
 #ifdef bse_debug
 # define stringify2(x) #x
 # define stringify(x) stringify2(x)
-# define LogDebug(...) \
-  __Log(stderr, \
+# define log_debug(...) \
+  __log_msg(stderr, \
     "[" TEXT_BOLD_GREEN "debug" TEXT_NORMAL "] [" TEXT_DARK_GRAY \
     __FILE__ ":" stringify(__LINE__) TEXT_NORMAL "] ", \
     __VA_ARGS__)
 #else
-# define LogDebug(...)
+# define log_debug(...)
 #endif
 
-#define LogInfo(...) \
-  __Log(stdout, \
+#define log_info(...) \
+  __log_msg(stdout, \
     "[" TEXT_DARK_GRAY "info" TEXT_NORMAL "] ", \
     __VA_ARGS__)
 
-#define LogWarning(...) \
-  __Log(stderr, \
+#define log_warning(...) \
+  __log_msg(stderr, \
     "[" TEXT_BOLD_YELLOW "warning" TEXT_NORMAL "] ", \
     __VA_ARGS__)
 
-#define LogError(...) \
-  __Log(stderr, \
+#define log_error(...) \
+  __log_msg(stderr, \
     "[" TEXT_BOLD_RED "error" TEXT_NORMAL "] ", \
     __VA_ARGS__)
 
-#define LogFatal(c, ...) \
-  (__Log( \
+#define log_fatal(c, ...) \
+  (__log_msg( \
          stderr, \
          "[" TEXT_BOLD_RED "error" TEXT_NORMAL "] ", \
          __VA_ARGS__), exit(c))
 
-void __Log(FILE* file, const char* tag, const char* fmt, ...);
+void __log_msg(FILE* file, const char* tag, const char* fmt, ...);
 
 #endif

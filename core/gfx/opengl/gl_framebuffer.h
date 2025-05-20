@@ -3,8 +3,10 @@
 
 #include "include.h"
 #include "gfx/framebuffer.h"
+#include "gfx/vertex_array.h"
+#include "gfx/buffer_object.h"
 
-struct Framebuffer
+struct framebuf_s
 {
   vec2i_t size;
   uint8_t flags;
@@ -14,18 +16,18 @@ struct Framebuffer
   uint32_t z_mask_handle;
 
   // to draw the framebuffer as a quad
-  struct VertexArray* vao;
-  struct BufferObject* vbo;
+  vert_arr_t* vao;
+  buf_obj_t* vbo;
 };
 
-struct Framebuffer* gl_FramebufferCreate(
-  struct Vfs* vfs,
+framebuf_t* gl_framebuf_create(
+  vfs_t* vfs,
   vec2i_t size,
   uint8_t flags
 );
-void gl_FramebufferDestroy(struct Framebuffer* fb);
-void gl_FramebufferBind(struct Framebuffer* fb);
-void gl_FramebufferResize(struct Framebuffer* fb, vec2i_t size);
-void gl_FramebufferDraw(struct Framebuffer* fb, vec2i_t start, vec2i_t end);
+void gl_framebuf_destroy(framebuf_t* fb);
+void gl_framebuf_bind(framebuf_t* fb);
+void gl_framebuf_resize(framebuf_t* fb, vec2i_t size);
+void gl_framebuf_draw(framebuf_t* fb, vec2i_t start, vec2i_t end);
 
 #endif

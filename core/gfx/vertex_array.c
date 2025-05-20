@@ -1,17 +1,17 @@
 #include "vertex_array.h"
 
-struct VertexFormat VertexFormatCreate(
-  const struct VertexAttrib* attribs,
+vert_fmt_t vert_fmt_create(
+  const vert_attr_t* attribs,
   size_t count)
 {
-  struct VertexFormat fmt;
-  VertexFormatUpdate(&fmt, attribs, count);
+  vert_fmt_t fmt;
+  vert_fmt_update(&fmt, attribs, count);
   return fmt;
 }
 
-void VertexFormatUpdate(
-  struct VertexFormat* fmt,
-  const struct VertexAttrib* attribs,
+void vert_fmt_update(
+  vert_fmt_t* fmt,
+  const vert_attr_t* attribs,
   size_t count)
 {
   fmt->attribs = attribs;
@@ -19,47 +19,47 @@ void VertexFormatUpdate(
 
   size_t stride = 0;
   for (size_t i = 0; i < fmt->attrib_count; i++) {
-    size_t size = GetGfxDataTypeSize(fmt->attribs[i].type);
+    size_t size = get_data_type_size(fmt->attribs[i].type);
     stride += size * fmt->attribs[i].components;
   }
 
   fmt->stride = stride;
 }
 
-struct VertexArray* VertexArrayCreate(
-  struct Renderer* r,
-  const struct VertexFormat* fmt)
+vert_arr_t* vert_arr_create(
+  renderer_t* r,
+  const vert_fmt_t* fmt)
 {
   return r->backend.vertex_array_create(fmt);
 }
 
-void VertexArrayDestroy(struct Renderer* r, struct VertexArray* varr)
+void vert_arr_destroy(renderer_t* r, vert_arr_t* varr)
 {
   return r->backend.vertex_array_destroy(varr);
 }
 
-void VertexArrayBind(struct Renderer* r, struct VertexArray* varr)
+void vert_arr_bind(renderer_t* r, vert_arr_t* varr)
 {
   return r->backend.vertex_array_bind(varr);
 }
 
-void VertexArrayDraw(
-  struct Renderer* r,
-  struct VertexArray* varr,
+void vert_arr_draw(
+  renderer_t* r,
+  vert_arr_t* varr,
   size_t start,
   size_t count,
-  enum IndexMode index_mode)
+  idx_mode_t index_mode)
 {
   return r->backend.vertex_array_draw(varr, start, count, index_mode);
 }
 
-void VertexArrayDrawIndexed(
-  struct Renderer* r,
-  struct VertexArray* varr,
-  struct BufferObject* ebo,
+void vert_arr_draw_idx(
+  renderer_t* r,
+  vert_arr_t* varr,
+  buf_obj_t* ebo,
   size_t count,
-  enum GfxDataType type,
-  enum IndexMode index_mode)
+  data_type_t type,
+  idx_mode_t index_mode)
 {
   return r->backend.vertex_array_draw_indexed(
     varr,

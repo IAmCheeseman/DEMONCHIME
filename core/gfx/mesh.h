@@ -5,23 +5,23 @@
 #include "buffer_object.h"
 #include "vertex_array.h"
 
-struct Mesh
+typedef struct mesh_s
 {
   void* vertices;
   size_t vertex_count;
   uint16_t* indices;
   size_t index_count;
 
-  struct VertexFormat* fmt;
+  vert_fmt_t* fmt;
 
-  struct VertexArray* vao;
-  struct BufferObject* vbo;
-  struct BufferObject* ebo;
-};
+  vert_arr_t* vao;
+  buf_obj_t* vbo;
+  buf_obj_t* ebo;
+} mesh_t;
 
-struct Mesh MeshCreate(struct VertexFormat* fmt);
-void MeshDestroy(struct Renderer* r, struct Mesh* m);
-void MeshFinalize(struct Renderer* r, struct Mesh* m, bool is_static);
-void MeshDraw(struct Renderer* r, struct Mesh* m);
+mesh_t mesh_create(vert_fmt_t* fmt);
+void mesh_destroy(renderer_t* r, mesh_t* m);
+void mesh_finalize(renderer_t* r, mesh_t* m, bool is_static);
+void mesh_draw(renderer_t* r, mesh_t* m);
 
 #endif

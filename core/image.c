@@ -3,7 +3,7 @@
 #include "stb_image.h"
 #include "mem.h"
 
-static enum ImageFormat ImageFormatFromChannelCount(int channels)
+static img_fmt_t img_fmt_from_channel_count(int channels)
 {
   switch (channels) {
     case 1: return IMAGE_FORMAT_R8;
@@ -14,41 +14,41 @@ static enum ImageFormat ImageFormatFromChannelCount(int channels)
   return IMAGE_FORMAT_INVALID;
 }
 
-struct Image ImageLoad(struct Vfs* vfs, const char* path)
+img_t image_load(vfs_t* vfs, const char* path)
 {
   vec2i_t size;
   int channel_count;
   size_t file_dat_len;
-  uint8_t* file_dat = (uint8_t*)VfsReadFile(vfs, path, &file_dat_len);
+  uint8_t* file_dat = (uint8_t*)vfs_read(vfs, path, &file_dat_len);
   if (!file_dat)
-    LogFatal(1, "could not load texture '%s'", path);
+    log_fatal(1, "could not load texture '%s'", path);
   uint8_t* data = stbi_load_from_memory(
     file_dat, file_dat_len, &size.x, &size.y, &channel_count, 0);
-  Destroy(file_dat);
+  mem_destroy(file_dat);
   // uint8_t* data = stbi_load(path, &size.x, &size.y, &channel_count, 0);
 
-  enum ImageFormat format = ImageFormatFromChannelCount(channel_count);
+  img_fmt_t format = img_fmt_from_channel_count(channel_count);
 
-  LogDebug("loading image '%s'", path);
+  log_debug("loading image '%s'", path);
 
-  return ImageLoadFromMemory(data, size, format);
+  return image_load_from_mem(data, size, format);
 }
 
-struct Image ImageLoadFromMemory(
+img_t image_load_from_mem(
   uint8_t* data,
   vec2i_t size,
-  enum ImageFormat format)
+  img_fmt_t format)
 {
-  struct Image img;
+  img_t img;
   img.data = data;
   img.size = size;
   img.format = format;
   return img;
 }
 
-void ImageDestroy(struct Image* img)
+void image_destroy(img_t* img)
 {
-  Destroy(img->data);
+  mem_destroy(img->data);
   img->data = NULL;
   img->size = (vec2i_t){0, 0};
   img->format = IMAGE_FORMAT_INVALID;

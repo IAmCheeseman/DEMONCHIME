@@ -4,12 +4,12 @@
 #include "include.h"
 #include "gfx/gfx_types.h"
 
-uint32_t BufferObjectTypeToOpenGl(enum BufferObjectType type);
-uint32_t DrawModeToOpenGl(enum DrawMode mode);
-uint32_t GfxDataTypeToOpenGl(enum GfxDataType type);
-uint32_t IndexModeToOpenGl(enum IndexMode mode);
-uint32_t ImageFormatToOpenGl(enum ImageFormat format);
-uint32_t TextureFilterToOpenGl(enum TextureFilter filter);
-uint32_t TextureWrapToOpenGl(enum TextureWrap wrap);
+uint32_t buf_obj_type_to_gl(buf_obj_type_t type);
+uint32_t draw_mode_to_gl(draw_mode_t mode);
+uint32_t data_type_to_gl(data_type_t type);
+uint32_t idx_mode_to_gl(idx_mode_t mode);
+uint32_t img_fmt_to_gl(img_fmt_t format);
+uint32_t tex_filter_to_gl(tex_filter_t filter);
+uint32_t tex_wrap_to_gl(tex_wrap_t wrap);
 
 #endif

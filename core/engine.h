@@ -10,48 +10,48 @@
 #include "timer.h"
 #include "vfs.h"
 
-struct Engine
+typedef struct engine_s
 {
   struct GLFWwindow* window_handle;
   lua_State* L;
-  struct Renderer* renderer;
-  struct Vfs* vfs;
-  int lua_error_handler_index;
+  struct renderer_s* renderer;
+  vfs_t* vfs;
+  int lua_err_handler_idx;
 
   vec2i_t target_screen_size;
-  struct Framebuffer* screen;
+  struct framebuf_s* screen;
   vec2i_t screen_size;
 
-  struct Timer timer;
-};
+  timer_t timer;
+} engine_t;
 
-struct EngineConfig
+typedef struct engine_conf_s
 {
   const char* mount_path;
   const char* window_title;
   vec2i_t window_size;
   vec2i_t screen_size;
   float vsync;
-};
+} engine_conf_t;
 
-void EngineInit(struct Engine* engine, struct EngineConfig conf);
-void EngineInitLua(struct Engine* engine);
-void EngineDestroy(struct Engine* engine);
-bool EngineIsInit(struct Engine* engine);
+void engine_init(engine_t* engine, engine_conf_t conf);
+void engine_init_lua(engine_t* engine);
+void engine_destroy(engine_t* engine);
+bool is_engine_init(engine_t* engine);
 
-void EngineUpdate(struct Engine* engine);
-void EngineDraw(struct Engine* engine);
+void engine_update(engine_t* engine);
+void engine_draw(engine_t* engine);
 
-void EngineSwapBuffers(struct Engine* engine);
-void EngineClose(struct Engine* engine);
-bool EngineIsClosed(struct Engine* engine);
+void engine_swap_buffers(engine_t* engine);
+void engine_close(engine_t* engine);
+bool is_engine_closed(engine_t* engine);
 
-vec2i_t EngineGetWindowSize(struct Engine* engine);
-vec2i_t EngineGetScreenSize(struct Engine* engine);
+vec2i_t engine_get_window_size(engine_t* engine);
+vec2i_t engine_get_screen_size(engine_t* engine);
 
-bool IsKeyDown(struct Engine* engine, enum Key key);
-bool IsMouseDown(struct Engine* engine, int btn);
+bool is_key_down(engine_t* engine, key_t key);
+bool is_mouse_down(engine_t* engine, int btn);
 
-vec2f_t GetMousePosition(struct Engine* engine);
+vec2f_t get_mouse_pos(engine_t* engine);
 
 #endif

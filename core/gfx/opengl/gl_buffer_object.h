@@ -4,21 +4,21 @@
 #include "include.h"
 #include "gfx/buffer_object.h"
 
-struct BufferObject
+struct buf_obj_s
 {
-  enum BufferObjectType type;
+  buf_obj_type_t type;
   uint32_t handle;
 };
 
-struct BufferObject* gl_BufferObjectCreate(enum BufferObjectType type);
-void gl_BufferObjectDestroy(struct BufferObject* buf);
-void gl_BufferObjectBind(struct BufferObject* buf);
-void gl_BufferObjectUnbind(enum BufferObjectType type);
-void gl_BufferObjectSet(
-  struct BufferObject* buf,
+buf_obj_t* gl_buf_obj_create(buf_obj_type_t type);
+void gl_buf_obj_destroy(buf_obj_t* buf);
+void gl_buf_obj_bind(buf_obj_t* buf);
+void gl_buf_obj_unbind(buf_obj_type_t type);
+void gl_buf_obj_set_dat(
+  buf_obj_t* buf,
   void* data,
   size_t size,
-  enum DrawMode mode
+  draw_mode_t mode
 );
 
 #endif

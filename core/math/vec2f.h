@@ -3,7 +3,7 @@
 
 #include "include.h"
 
-typedef struct
+typedef struct vec2f_s
 {
   float x;
   float y;

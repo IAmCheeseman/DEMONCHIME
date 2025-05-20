@@ -3,7 +3,7 @@
 
 #include "include.h"
 
-typedef struct
+typedef struct vec2i_s
 {
   int x;
   int y;

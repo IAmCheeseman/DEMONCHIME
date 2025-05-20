@@ -6,15 +6,15 @@
 #define GrowCapacity(cap) ((cap) == 0 ? 8 : (cap) * 2)
 
 #ifdef bse_use_c_alloc
-#define Create(size) malloc(size)
-#define Realloc(ptr, size) realloc(ptr, size)
-#define Destroy(ptr) free(ptr)
+#define mem_alloc(size) malloc(size)
+#define mem_realloc(ptr, size) realloc(ptr, size)
+#define mem_destroy(ptr) free(ptr)
 #else
-#define Alloc(size) Allocate(NULL, size)
-#define Realloc(ptr, size) Allocate(ptr, size)
-#define Destroy(ptr) Allocate(ptr, 0)
+#define mem_alloc(size) allocate(NULL, size)
+#define mem_realloc(ptr, size) allocate(ptr, size)
+#define mem_destroy(ptr) ((void)allocate(ptr, 0))
 #endif
 
-void* Allocate(void* ptr, size_t size);
+void* allocate(void* ptr, size_t size);
 
 #endif

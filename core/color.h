@@ -3,22 +3,22 @@
 
 #include "include.h"
 
-struct Color
+typedef struct color_s
 {
   float r;
   float g;
   float b;
   float a;
-};
+} color_t;
 
-struct Color ColorFromRGBA(float r, float g, float b, float a);
-struct Color ColorFromRGB(float r, float g, float b);
+color_t color_from_rgba(float r, float g, float b, float a);
+color_t color_from_rgb(float r, float g, float b);
 
-struct Color ColorFromRGBA8(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
-struct Color ColorFromRGB8(uint8_t r, uint8_t g, uint8_t b);
+color_t color_from_rgba8(uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+color_t color_from_rgb8(uint8_t r, uint8_t g, uint8_t b);
 
-void ColorToBytes(
-  struct Color c,
+void color_to_bytes(
+  color_t c,
   uint8_t* r, uint8_t* g, uint8_t* b, uint8_t* a
 );
 

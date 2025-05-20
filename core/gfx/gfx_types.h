@@ -3,20 +3,20 @@
 
 #include "include.h"
 
-enum BufferObjectType
+typedef enum buf_obj_type_e
 {
   BUFFER_ARRAY,
   BUFFER_INDEX,
-};
+} buf_obj_type_t;
 
-enum DrawMode
+typedef enum draw_mode_e
 {
   DRAW_STATIC,
   DRAW_DYNAMIC,
   DRAW_STREAM,
-};
+} draw_mode_t;
 
-enum IndexMode
+typedef enum idx_mode_e
 {
   INDEX_TRIANGLES,
   INDEX_TRIANGLE_STRIP,
@@ -25,9 +25,9 @@ enum IndexMode
   INDEX_LINE_STRIP,
   INDEX_LINE_LOOP,
   INDEX_POINTS,
-};
+} idx_mode_t;
 
-enum GfxDataType
+typedef enum data_type_e
 {
   TYPE_UNKNOWN = 0,
 
@@ -43,18 +43,18 @@ enum GfxDataType
 
   TYPE_UINT,
   TYPE_INT,
-};
+} data_type_t;
 
-enum ImageFormat
+typedef enum img_fmt_e
 {
   IMAGE_FORMAT_INVALID = 0,
   IMAGE_FORMAT_R8,
   IMAGE_FORMAT_RA8,
   IMAGE_FORMAT_RGB8,
   IMAGE_FORMAT_RGBA8,
-};
+} img_fmt_t;
 
-enum TextureFilter
+typedef enum tex_filter_e
 {
   TEXTURE_FILTER_NEAREST,
   TEXTURE_FILTER_NEAREST_MIPMAP,
@@ -62,22 +62,22 @@ enum TextureFilter
   TEXTURE_FILTER_LINEAR,
   TEXTURE_FILTER_LINEAR_MIPMAP,
   TEXTURE_FILTER_LINEAR_MIPMAP_NEAREST,
-};
+} tex_filter_t;
 
-enum TextureWrap
+typedef enum tex_wrap_e
 {
   TEXTURE_WRAP_REPEAT,
   TEXTURE_WRAP_MIRRORED_REPEAT,
   TEXTURE_WRAP_CLAMP_EDGE,
   TEXTURE_WRAP_CLAMP_BORDER,
-};
+} tex_wrap_t;
 
 #define FRAMEBUFFER_COLOR_BUF (1 << 0)
 #define FRAMEBUFFER_DEPTH_BUF (1 << 1)
 #define FRAMEBUFFER_DEPTH_MASK_BUF (1 << 2)
 #define FRAMEBUFFER_DRAWABLE (1 << 3)
 
-size_t GetGfxDataTypeSize(enum GfxDataType type);
-enum GfxDataType StringToDataType(const char* str, size_t len);
+size_t get_data_type_size(data_type_t type);
+data_type_t str_to_data_type(const char* str, size_t len);
 
 #endif

@@ -1,8 +1,8 @@
 #include "mesh.h"
 
-struct Mesh MeshCreate(struct VertexFormat* fmt)
+mesh_t mesh_create(vert_fmt_t* fmt)
 {
-  struct Mesh m;
+  mesh_t m;
   m.vertices = NULL;
   m.vertex_count = 0;
   m.indices = NULL;
@@ -14,7 +14,7 @@ struct Mesh MeshCreate(struct VertexFormat* fmt)
   return m;
 }
 
-void MeshDestroy(struct Renderer* r, struct Mesh* m)
+void mesh_destroy(renderer_t* r, mesh_t* m)
 {
   m->vertices = NULL;
   m->vertex_count = 0;
@@ -23,32 +23,32 @@ void MeshDestroy(struct Renderer* r, struct Mesh* m)
   m->fmt = NULL;
 
   if (m->vao != NULL) {
-    VertexArrayDestroy(r, m->vao);
+    vert_arr_destroy(r, m->vao);
   }
   if (m->vbo != NULL) {
-    BufferObjectDestroy(r, m->vbo);
+    buf_obj_destroy(r, m->vbo);
     m->vbo = NULL;
   }
   if (m->ebo != NULL) {
-    BufferObjectDestroy(r, m->ebo);
+    buf_obj_destroy(r, m->ebo);
     m->ebo = NULL;
   }
 }
 
-void MeshFinalize(struct Renderer* r, struct Mesh* m, bool is_static)
+void mesh_finalize(renderer_t* r, mesh_t* m, bool is_static)
 {
-  enum DrawMode mode = is_static ? DRAW_STATIC : DRAW_DYNAMIC;
+  draw_mode_t mode = is_static ? DRAW_STATIC : DRAW_DYNAMIC;
 
-  struct BufferObject* vbo = BufferObjectCreate(r, BUFFER_ARRAY);
-  BufferObjectSet(r, vbo, m->vertices, m->fmt->stride * m->vertex_count, mode);
-  BufferObjectBind(r, vbo);
-  struct VertexArray* vao = VertexArrayCreate(r, m->fmt);
+  buf_obj_t* vbo = buf_obj_create(r, BUFFER_ARRAY);
+  buf_obj_set_dat(r, vbo, m->vertices, m->fmt->stride * m->vertex_count, mode);
+  buf_obj_bind(r, vbo);
+  vert_arr_t* vao = vert_arr_create(r, m->fmt);
   m->vao = vao;
   m->vbo = vbo;
 
   if (m->index_count != 0) {
-    struct BufferObject* ebo = BufferObjectCreate(r, BUFFER_INDEX);
-    BufferObjectSet(
+    buf_obj_t* ebo = buf_obj_create(r, BUFFER_INDEX);
+    buf_obj_set_dat(
       r,
       ebo,
       m->indices,
@@ -59,15 +59,15 @@ void MeshFinalize(struct Renderer* r, struct Mesh* m, bool is_static)
   }
 }
 
-void MeshDraw(struct Renderer* r, struct Mesh* m)
+void mesh_draw(renderer_t* r, mesh_t* m)
 {
   if (m->vao == NULL || m->vbo == NULL) {
-    LogError("attempt to draw unfinalized mesh");
+    log_error("attempt to draw unfinalized mesh");
     return;
   }
 
   if (m->ebo != NULL) {
-    VertexArrayDrawIndexed(
+    vert_arr_draw_idx(
       r,
       m->vao,
       m->ebo,
@@ -76,6 +76,6 @@ void MeshDraw(struct Renderer* r, struct Mesh* m)
       INDEX_TRIANGLES
     );
   } else {
-    VertexArrayDraw(r, m->vao, 0, m->vertex_count, INDEX_TRIANGLES);
+    vert_arr_draw(r, m->vao, 0, m->vertex_count, INDEX_TRIANGLES);
   }
 }

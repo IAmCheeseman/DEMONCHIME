@@ -1,7 +1,7 @@
 #include "log.h"
 #include <stdarg.h>
 
-void __Log(FILE* file, const char* tag, const char* fmt, ...)
+void __log_msg(FILE* file, const char* tag, const char* fmt, ...)
 {
   if (file == NULL) file = stderr;
   if (fmt == NULL) {

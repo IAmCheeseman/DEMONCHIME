@@ -6,20 +6,20 @@
 #include "math/vec2i.h"
 #include "vfs.h"
 
-struct Image
+typedef struct img_s
 {
   uint8_t* data;
   vec2i_t size;
-  enum ImageFormat format;
-};
+  img_fmt_t format;
+} img_t;
 
-struct Image ImageLoad(struct Vfs* vfs, const char* path);
+img_t image_load(vfs_t* vfs, const char* path);
 // will take ownership of data
-struct Image ImageLoadFromMemory(
+img_t image_load_from_mem(
   uint8_t* data,
   vec2i_t size,
-  enum ImageFormat format
+  img_fmt_t format
 );
-void ImageDestroy(struct Image* img);
+void image_destroy(img_t* img);
 
 #endif

@@ -1,3 +1,3 @@
 return {
-  CreateLerpedNumber = require("core.LerpedNumber"),
+  create_lerped_num = require("core.lerped_num"),
 }

@@ -6,18 +6,18 @@ end
 
 local lcore = require("core")
 
-local tex = core.LoadTexture("res/textures/puzzle_cube.png")
-tex:SetFilter(core.tex_filter.NEAREST, core.tex_filter.NEAREST)
+local tex = core.load_tex("res/textures/puzzle_cube.png")
+tex:set_filter(core.tex_filter.NEAREST, core.tex_filter.NEAREST)
 
-local fmt = core.CreateVertexFormat()
-fmt:AddAttrib("float", 3) -- position
-fmt:AddAttrib("float", 3) -- normal
-fmt:AddAttrib("float", 2) -- uv
-fmt:AddAttrib("float", 4) -- color
+local fmt = core.create_vert_fmt()
+fmt:add_attr("float", 3) -- position
+fmt:add_attr("float", 3) -- normal
+fmt:add_attr("float", 2) -- uv
+fmt:add_attr("float", 4) -- color
 
-local shader = core.LoadShader("res/vdefault.glsl", "res/fdefault.glsl")
+local shader = core.load_shader("res/vdefault.glsl", "res/fdefault.glsl")
 
-local cube = core.CreateMesh(fmt)
+local cube = core.create_mesh(fmt)
 local vp = {
   {0.5, 0.5, -0.5},
   {0.5, -0.5, -0.5},
@@ -34,7 +34,7 @@ local vp = {
 -- 3 4
 
 -- 1 2 3  1 3 4
-cube:SetVertices({
+cube:set_vertices({
   {vp[7][1], vp[7][2], vp[7][3],  0, 1, 0,  1, 1,  1, 0.5, 0, 1},
   {vp[5][1], vp[5][2], vp[5][3],  0, 1, 0,  1, 0,  1, 0.5, 0, 1},
   {vp[1][1], vp[1][2], vp[1][3],  0, 1, 0,  0, 0,  1, 0.5, 0, 1}, -- orange OK
@@ -82,20 +82,20 @@ cube:SetVertices({
   {vp[1][1], vp[1][2], vp[1][3],  0, 0, -1,  0, 1,  0, 1, 0, 1},
   {vp[6][1], vp[6][2], vp[6][3],  0, 0, -1,  1, 0,  0, 1, 0, 1},
 })
-cube:Finalize(true)
+cube:finalize(true)
 
 local r = 0
-local rx = lcore.CreateLerpedNumber()
-local ry = lcore.CreateLerpedNumber()
-local rz = lcore.CreateLerpedNumber()
+local rx = lcore.create_lerped_num()
+local ry = lcore.create_lerped_num()
+local rz = lcore.create_lerped_num()
 
 function step()
-  if core.IsKeyDown(core.key.ESCAPE) then
-    core.CloseEngine()
+  if core.is_key_down(core.key.ESCAPE) then
+    core.close_engine()
   end
 
-  if core.IsKeyDown(core.key.SPACE) then
-    core.LogInfo(core.GetFps(), core.GetTps())
+  if core.is_key_down(core.key.SPACE) then
+    log_info(core.get_fps(), core.get_tps())
   end
 
   r = r + (1/30)
@@ -105,7 +105,7 @@ function step()
 end
 
 function draw()
-  shader:Bind()
+  shader:bind()
 
   local cubet = {
     x = 0,
@@ -120,22 +120,22 @@ function draw()
     sy = 1,
   }
 
-  local m = core.Mat4FromTransform(cubet)
+  local m = core.mat4_from_trans(cubet)
 
-  local v = core.Mat4Identity()
+  local v = core.mat4_identity()
 
-  local sw, sh = core.GetScreenSize()
+  local sw, sh = core.get_screen_size()
   local a = sw / sh
 
-  local p = core.Mat4Identity()
-  p:Perspective(45, a, 1, 100)
+  local p = core.mat4_identity()
+  p:perspective(45, a, 1, 100)
 
-  shader:SendMat4("m", m)
-  shader:SendMat4("v", v)
-  shader:SendMat4("p", p)
+  shader:send_mat4("m", m)
+  shader:send_mat4("v", v)
+  shader:send_mat4("p", p)
 
-  tex:Bind(0)
-  shader:SendI("tex0", 0)
+  tex:bind(0)
+  shader:sendi("tex0", 0)
 
-  cube:Draw()
+  cube:draw()
 end

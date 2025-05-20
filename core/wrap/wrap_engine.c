@@ -5,61 +5,61 @@
 #include "math/vec2i.h"
 #include "mem.h"
 
-static int L_GetTotalTime(lua_State* L)
+static int L_get_total_time(lua_State* L)
 {
   lua_pushnumber(L, glfwGetTime());
   return 1;
 }
 
-static int L_GetFps(lua_State* L)
+static int L_get_fps(lua_State* L)
 {
-  struct Engine* engine = GetEngine(L);
+  engine_t* engine = get_engine(L);
   lua_pushnumber(L, engine->timer.fps);
   return 1;
 }
 
-static int L_GetTps(lua_State* L)
+static int L_get_tps(lua_State* L)
 {
-  struct Engine* engine = GetEngine(L);
+  engine_t* engine = get_engine(L);
   lua_pushnumber(L, engine->timer.tps);
   return 1;
 }
 
-static int L_CloseEngine(lua_State* L)
+static int L_close_engine(lua_State* L)
 {
-  struct Engine* engine = GetEngine(L);
-  EngineClose(engine);
+  engine_t* engine = get_engine(L);
+  engine_close(engine);
   return 0;
 }
 
-static int L_GetWindowSize(lua_State* L)
+static int L_get_window_size(lua_State* L)
 {
-  struct Engine* engine = GetEngine(L);
-  vec2i_t s = EngineGetWindowSize(engine);
+  engine_t* engine = get_engine(L);
+  vec2i_t s = engine_get_window_size(engine);
   lua_pushinteger(L, s.x);
   lua_pushinteger(L, s.y);
   return 2;
 }
 
-static int L_GetScreenSize(lua_State* L)
+static int L_get_screen_size(lua_State* L)
 {
-  struct Engine* engine = GetEngine(L);
-  vec2i_t s = EngineGetScreenSize(engine);
+  engine_t* engine = get_engine(L);
+  vec2i_t s = engine_get_screen_size(engine);
   lua_pushinteger(L, s.x);
   lua_pushinteger(L, s.y);
   return 2;
 }
 
-static int L_GetInterpolation(lua_State* L)
+static int L_get_interpolation(lua_State* L)
 {
-  struct Engine* engine = GetEngine(L);
+  engine_t* engine = get_engine(L);
   lua_pushnumber(L, engine->timer.accum / (1.0 / engine->timer.tick_rate));
   return 1;
 }
 
-static int L_Interpolate(lua_State* L)
+static int L_interpolate(lua_State* L)
 {
-  struct Engine* engine = GetEngine(L);
+  engine_t* engine = get_engine(L);
   double a = luaL_checknumber(L, 1);
   double b = luaL_checknumber(L, 2);
   lua_pushnumber(
@@ -69,53 +69,53 @@ static int L_Interpolate(lua_State* L)
   return 1;
 }
 
-static int L_IsKeyDown(lua_State* L)
+static int L_is_key_down(lua_State* L)
 {
-  struct Engine* engine = GetEngine(L);
+  engine_t* engine = get_engine(L);
   int key = luaL_checkinteger(L, 1);
-  lua_pushboolean(L, IsKeyDown(engine, (enum Key)key));
+  lua_pushboolean(L, is_key_down(engine, (key_t)key));
   return 1;
 }
 
-static int L_IsMouseDown(lua_State* L)
+static int L_is_mouse_down(lua_State* L)
 {
-  struct Engine* engine = GetEngine(L);
+  engine_t* engine = get_engine(L);
   int btn = luaL_checkinteger(L, 1);
-  lua_pushboolean(L, IsMouseDown(engine, btn));
+  lua_pushboolean(L, is_mouse_down(engine, btn));
   return 1;
 }
 
-static int L_GetMousePosition(lua_State* L)
+static int L_get_mouse_pos(lua_State* L)
 {
-  struct Engine* engine = GetEngine(L);
-  vec2f_t pos = GetMousePosition(engine);
+  engine_t* engine = get_engine(L);
+  vec2f_t pos = get_mouse_pos(engine);
   lua_pushnumber(L, pos.x);
   lua_pushnumber(L, pos.y);
   return 2;
 } 
 
 luaL_Reg engine_funcs[] = {
-  {"GetTotalTime", L_GetTotalTime},
-  {"GetFps", L_GetFps},
-  {"GetTps", L_GetTps},
-  {"CloseEngine", L_CloseEngine},
-  {"GetWindowSize", L_GetWindowSize},
-  {"GetScreenSize", L_GetScreenSize},
-  {"GetInterpolation", L_GetInterpolation},
-  {"Interpolate", L_Interpolate},
-  {"IsKeyDown", L_IsKeyDown},
-  {"IsMouseDown", L_IsMouseDown},
-  {"GetMousePosition", L_GetMousePosition},
+  {"get_total_time", L_get_total_time},
+  {"get_fps", L_get_fps},
+  {"get_tps", L_get_tps},
+  {"close_engine", L_close_engine},
+  {"get_window_size", L_get_window_size},
+  {"get_screen_size", L_get_screen_size},
+  {"get_interpolation", L_get_interpolation},
+  {"interpolate", L_interpolate},
+  {"is_key_down", L_is_key_down},
+  {"is_mouse_down", L_is_mouse_down},
+  {"get_mouse_pos", L_get_mouse_pos},
   {NULL, NULL},
 };
 
-static int L_Loader(lua_State* L)
+static int L_loader(lua_State* L)
 {
-  struct Engine* engine = GetEngine(L);
+  engine_t* engine = get_engine(L);
 
   size_t module_len;
   const char* module = luaL_checklstring(L, 1, &module_len);
-  char* module_cpy = (char*)Alloc(sizeof(char) * (module_len + 1));
+  char* module_cpy = (char*)mem_alloc(sizeof(char) * (module_len + 1));
   memcpy(module_cpy, module, module_len);
   module_cpy[module_len] = '\0';
 
@@ -157,7 +157,7 @@ static int L_Loader(lua_State* L)
 
     // -1 because ? is removed
     size_t path_len = cur_path_len + module_len - 1;
-    char* path = (char*)Alloc(sizeof(char) * (path_len + 1));
+    char* path = (char*)mem_alloc(sizeof(char) * (path_len + 1));
     if (q_pos > 0)
       memcpy(path, cur_path, q_pos); // copy everything before ?
     memcpy(path + q_pos, module_cpy, module_len); // copy module len
@@ -165,13 +165,13 @@ static int L_Loader(lua_State* L)
     path[path_len] = '\0';
 
     // check if file exists
-    if (VfsDoesFileExist(engine->vfs, path)) {
+    if (vfs_exists(engine->vfs, path)) {
       // it does; load
       size_t src_len;
-      char* src = VfsReadTxtFile(engine->vfs, path, &src_len);
+      char* src = vfs_read_txt(engine->vfs, path, &src_len);
       if (src == NULL) {
-        Destroy(path);
-        Destroy(module_cpy);
+        mem_destroy(path);
+        mem_destroy(module_cpy);
         return luaL_error(L, "error loading file");
       }
 
@@ -184,26 +184,26 @@ static int L_Loader(lua_State* L)
           return luaL_error(L, "syntax error: %s\n", lua_tostring(L, -1));
       }
 
-      Destroy(src);
-      Destroy(path);
-      Destroy(module_cpy);
+      mem_destroy(src);
+      mem_destroy(path);
+      mem_destroy(module_cpy);
       return 1;
     }
 
-    Destroy(path);
+    mem_destroy(path);
     cur_path += cur_path_len + 1;
   }
 
-  Destroy(module_cpy);
+  mem_destroy(module_cpy);
 
   lua_pushfstring(L, "\n\tno file '%s' in default vfs", module);
   return 1;
 }
 
-void WrapEngine(lua_State* L)
+void wrap_engine(lua_State* L)
 {
   lua_getglobal(L, CORE_NAME);
-  RegisterFunctions(L, engine_funcs);
+  reg_funcs(L, engine_funcs);
   lua_pushstring(L, bse_os_str);
   lua_setfield(L, -2, "os");
   lua_pop(L, 1);
@@ -211,8 +211,8 @@ void WrapEngine(lua_State* L)
   // register loader
   lua_getglobal(L, "package"); // cannot be nil, nothing has yet been loaded
   lua_getfield(L, -1, "loaders"); // ditto
-  lua_pushcfunction(L, L_Loader);
+  lua_pushcfunction(L, L_loader);
   lua_rawseti(L, -2, 2); // TODO: maybe actually insert someday
   // LuaRawInsert(L, -2, -1, 2);
-  lua_pop(L, 3);
+  lua_pop(L, 2);
 }

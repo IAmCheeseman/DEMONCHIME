@@ -3,29 +3,29 @@
 
 #include "gfx/shader.h"
 
-struct Shader
+struct shader_s
 {
   uint32_t handle;
-  struct ShaderTable uniforms;
-  struct ShaderTable attrs;
+  shader_tab_t uniforms;
+  shader_tab_t attrs;
 };
 
-struct Shader* gl_ShaderLoadFromFiles(
-  struct Vfs* vfs,
+shader_t* gl_shader_load_from_files(
+  vfs_t* vfs,
   const char* vert,
   const char* frag
 );
-struct Shader* gl_ShaderLoadFromSource(const char* vert, const char* frag);
-void gl_ShaderSendInt(struct Shader* s, const char* name, int i);
-void gl_ShaderSendFloat(struct Shader* s, const char* name, float f);
-void gl_ShaderSendVec2f(struct Shader* s, const char* name, vec2f_t v);
-void gl_ShaderSendVec2i(struct Shader* s, const char* name, vec2i_t v);
-void gl_ShaderSendVec3f(struct Shader* s, const char* name, vec3f_t v);
-void gl_ShaderSendVec3i(struct Shader* s, const char* name, vec3i_t v);
-void gl_ShaderSendVec4f(struct Shader* s, const char* name, vec4f_t v);
-void gl_ShaderSendVec4i(struct Shader* s, const char* name, vec4i_t v);
-void gl_ShaderSendMat4(struct Shader* s, const char* name, mat4_t m);
-void gl_ShaderBind(struct Shader* s);
-void gl_ShaderDestroy(struct Shader* s);
+shader_t* gl_shader_load_from_src(const char* vert, const char* frag);
+void gl_shader_send_int(shader_t* s, const char* name, int i);
+void gl_shader_send_float(shader_t* s, const char* name, float f);
+void gl_shader_send_vec2f(shader_t* s, const char* name, vec2f_t v);
+void gl_shader_send_vec2i(shader_t* s, const char* name, vec2i_t v);
+void gl_shader_send_vec3f(shader_t* s, const char* name, vec3f_t v);
+void gl_shader_send_vec3i(shader_t* s, const char* name, vec3i_t v);
+void gl_shader_send_vec4f(shader_t* s, const char* name, vec4f_t v);
+void gl_shader_send_vec4i(shader_t* s, const char* name, vec4i_t v);
+void gl_shader_send_mat4(shader_t* s, const char* name, mat4_t m);
+void gl_shader_bind(shader_t* s);
+void gl_shader_destroy(shader_t* s);
 
 #endif

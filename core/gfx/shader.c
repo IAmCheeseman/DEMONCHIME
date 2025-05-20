@@ -4,8 +4,8 @@
 
 #include "mem.h"
 
-struct ShaderVar* ShaderTableFindVar(
-  struct ShaderVar* vars, 
+shader_var_t* shader_tab_find_var(
+  shader_var_t* vars, 
   size_t capacity,
   const char* name,
   size_t name_len,
@@ -16,7 +16,7 @@ struct ShaderVar* ShaderTableFindVar(
   uint32_t index = name_hash & (capacity - 1);
 
   while (true) {
-    struct ShaderVar* var = &vars[index];
+    shader_var_t* var = &vars[index];
     if (var->name == NULL) {
       return var;
     } else if (
@@ -31,21 +31,21 @@ struct ShaderVar* ShaderTableFindVar(
   }
 }
 
-static void GrowShaderTable(struct ShaderTable* t)
+static void grow_shader_tab(shader_tab_t* t)
 {
   size_t capacity = GrowCapacity(t->capacity);
 
-  struct ShaderVar* vars =
-    (struct ShaderVar*)Alloc(sizeof(struct ShaderVar) * capacity);
+  shader_var_t* vars =
+    (shader_var_t*)mem_alloc(sizeof(shader_var_t) * capacity);
   for (size_t i = 0; i < capacity; i++) {
     vars[i].name = NULL;
   }
 
   for (size_t i = 0; i < t->capacity; i++) {
-    struct ShaderVar* var = &t->vars[i];
+    shader_var_t* var = &t->vars[i];
     if (var->name == NULL) continue; // empty
     
-    struct ShaderVar* new_position = ShaderTableFindVar(
+    shader_var_t* new_position = shader_tab_find_var(
       vars,
       capacity,
       var->name,
@@ -55,18 +55,18 @@ static void GrowShaderTable(struct ShaderTable* t)
     *new_position = *var;
   }
 
-  Destroy(t->vars);
+  mem_destroy(t->vars);
   t->vars = vars;
   t->capacity = capacity;
 }
 
-void ShaderTableAddVar(struct ShaderTable* t, struct ShaderVar var)
+void shader_tab_add_var(shader_tab_t* t, shader_var_t var)
 {
   if (t->count + 1 > t->capacity * 0.75) {
-    GrowShaderTable(t);
+    grow_shader_tab(t);
   }
 
-  struct ShaderVar* ptr = ShaderTableFindVar(
+  shader_var_t* ptr = shader_tab_find_var(
     t->vars,
     t->capacity,
     var.name,
@@ -77,20 +77,20 @@ void ShaderTableAddVar(struct ShaderTable* t, struct ShaderVar var)
   t->count++;
 }
 
-void ShaderTableDestroy(struct ShaderTable* t)
+void shader_tab_destroy(shader_tab_t* t)
 {
   for (size_t i = 0; i < t->capacity; i++) {
-    struct ShaderVar* var = &t->vars[i];
+    shader_var_t* var = &t->vars[i];
     if (var->name == NULL) continue;
-    Destroy(var->name);
+    mem_destroy(var->name);
   }
-  Destroy(t->vars);
+  mem_destroy(t->vars);
 
   t->vars = NULL;
   t->count = 0;
 }
 
-uint32_t HashVarName(const char* str, size_t len)
+uint32_t hash_var_name(const char* str, size_t len)
 {
   uint32_t hash = 2166136261u;
   for (size_t i = 0; i < len; i++) {
@@ -100,110 +100,110 @@ uint32_t HashVarName(const char* str, size_t len)
   return hash;
 }
 
-struct Shader* ShaderLoadFromFiles(
-  struct Renderer* r,
-  struct Vfs* vfs,
+shader_t* shader_load_from_files(
+  renderer_t* r,
+  vfs_t* vfs,
   const char* vert,
   const char* frag)
 {
   return r->backend.shader_load_files(vfs, vert, frag);
 }
 
-struct Shader* ShaderLoadFromSource(
-  struct Renderer* r,
+shader_t* shader_load_from_src(
+  renderer_t* r,
   const char* vert,
   const char* frag)
 {
   return r->backend.shader_load_src(vert, frag);
 }
 
-void ShaderSendInt(
-  struct Renderer* r,
-  struct Shader* s,
+void shader_send_int(
+  renderer_t* r,
+  shader_t* s,
   const char* name,
   int i)
 {
   return r->backend.shader_send_int(s, name, i);
 }
 
-void ShaderSendFloat(
-  struct Renderer* r,
-  struct Shader* s,
+void shader_send_float(
+  renderer_t* r,
+  shader_t* s,
   const char* name,
   float f)
 {
   return r->backend.shader_send_float(s, name, f);
 }
 
-void ShaderSendVec2f(
-  struct Renderer* r,
-  struct Shader* s,
+void shader_send_vec2f(
+  renderer_t* r,
+  shader_t* s,
   const char* name,
   vec2f_t v)
 {
   return r->backend.shader_send_vec2f(s, name, v);
 }
 
-void ShaderSendVec2i(
-  struct Renderer* r,
-  struct Shader* s,
+void shader_send_vec2i(
+  renderer_t* r,
+  shader_t* s,
   const char* name,
   vec2i_t v)
 {
   return r->backend.shader_send_vec2i(s, name, v);
 }
 
-void ShaderSendVec3f(
-  struct Renderer* r,
-  struct Shader* s,
+void shader_send_vec3f(
+  renderer_t* r,
+  shader_t* s,
   const char* name,
   vec3f_t v)
 {
   return r->backend.shader_send_vec3f(s, name, v);
 }
 
-void ShaderSendVec3i(
-  struct Renderer* r,
-  struct Shader* s,
+void shader_send_vec3i(
+  renderer_t* r,
+  shader_t* s,
   const char* name,
   vec3i_t v)
 {
   return r->backend.shader_send_vec3i(s, name, v);
 }
 
-void ShaderSendVec4f(
-  struct Renderer* r,
-  struct Shader* s,
+void shader_send_vec4f(
+  renderer_t* r,
+  shader_t* s,
   const char* name,
   vec4f_t v)
 {
   return r->backend.shader_send_vec4f(s, name, v);
 }
 
-void ShaderSendVec4i(
-  struct Renderer* r,
-  struct Shader* s,
+void shader_send_vec4i(
+  renderer_t* r,
+  shader_t* s,
   const char* name,
   vec4i_t v)
 {
   return r->backend.shader_send_vec4i(s, name, v);
 }
 
-void ShaderSendMat4(
-  struct Renderer* r,
-  struct Shader* s,
+void shader_send_mat4(
+  renderer_t* r,
+  shader_t* s,
   const char* name,
   mat4_t m)
 {
   return r->backend.shader_send_mat4(s, name, m);
 }
 
-void ShaderBind(struct Renderer* r, struct Shader* s)
+void shader_bind(renderer_t* r, shader_t* s)
 {
   return r->backend.shader_bind(s);
 }
 
-void ShaderDestroy(struct Renderer* r, struct Shader* s)
+void shader_destroy(renderer_t* r, shader_t* s)
 {
   return r->backend.shader_destroy(s);
 }

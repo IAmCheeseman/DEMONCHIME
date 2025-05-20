@@ -17,6 +17,8 @@
 # endif
 #endif
 
-char* Concat(const char* lhs, ...);
+#define unused(x) ((void)x)
+
+char* concat(const char* lhs, ...);
 
 #endif

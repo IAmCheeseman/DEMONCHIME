@@ -6,51 +6,39 @@
 #include "gfx.h"
 #include "buffer_object.h"
 
-struct VertexAttrib
+typedef struct vert_attr_s
 {
-  enum GfxDataType type : 8;
+  data_type_t type : 8;
   uint8_t components; // is it a vec2, vec3, or whatever?
-};
+} vert_attr_t;
 
-struct VertexFormat
+typedef struct vert_fmt_s
 {
-  const struct VertexAttrib* attribs;
+  const vert_attr_t* attribs;
   size_t attrib_count;
   size_t stride;
-};
+} vert_fmt_t;
 
-struct VertexArray;
+typedef struct vert_arr_s vert_arr_t;
 
-struct VertexFormat VertexFormatCreate(
-  const struct VertexAttrib* attribs,
-  size_t count
-);
-void VertexFormatUpdate(
-  struct VertexFormat* fmt,
-  const struct VertexAttrib* attribs,
-  size_t count
-);
+vert_fmt_t vert_fmt_create(const vert_attr_t* attribs, size_t count);
+void vert_fmt_update(vert_fmt_t* fmt, const vert_attr_t* attribs, size_t count);
 
-struct VertexArray* VertexArrayCreate(
-  struct Renderer* r,
-  const struct VertexFormat* fmt
-);
-void VertexArrayDestroy(struct Renderer* r, struct VertexArray* varr);
-void VertexArrayBind(struct Renderer* r, struct VertexArray* varr);
-void VertexArrayDraw(
-  struct Renderer* r,
-  struct VertexArray* varr,
+vert_arr_t* vert_arr_create(renderer_t* r, const vert_fmt_t* fmt);
+void vert_arr_destroy(renderer_t* r, vert_arr_t* varr);
+void vert_arr_bind(renderer_t* r, vert_arr_t* varr);
+void vert_arr_draw(
+  renderer_t* r,
+  vert_arr_t* varr,
   size_t start,
   size_t count,
-  enum IndexMode index_mode
-);
-void VertexArrayDrawIndexed(
-  struct Renderer* r,
-  struct VertexArray* varr,
-  struct BufferObject* ebo,
+  idx_mode_t index_mode);
+void vert_arr_draw_idx(
+  renderer_t* r,
+  vert_arr_t* varr,
+  buf_obj_t* ebo,
   size_t count,
-  enum GfxDataType type,
-  enum IndexMode index_mode
-);
+  data_type_t type,
+  idx_mode_t index_mode);
 
 #endif

@@ -5,7 +5,7 @@
 
 #include "miniz.h"
 
-enum VfsError
+typedef enum vfs_error_e
 {
   VFS_OK = 0,
   VFS_COULD_NOT_MOUNT,
@@ -15,28 +15,28 @@ enum VfsError
   VFS_CANNOT_OPEN,
   VFS_CANNOT_WRITE,
   VFS_CANNOT_READ,
-};
+} vfs_error_t;
 
-enum VfsType
+typedef enum vfs_type_e
 {
   VFS_DIR,
   VFS_ZIP,
-};
+} vfs_type_t;
 
-struct Vfs
+typedef struct vfs_s
 {
-  struct Vfs* next;
-  enum VfsType type;
+  struct vfs_s* next;
+  vfs_type_t type;
   mz_zip_archive zip;
   char* path;
-};
+} vfs_t;
 
-enum VfsError VfsMount(struct Vfs** vfs, const char* path);
-void VfsDestroy(struct Vfs* vfs);
-bool VfsDoesFileExist(struct Vfs* vfs, const char* path);
+vfs_error_t vfs_mount(vfs_t** vfs, const char* path);
+void vfs_destroy(vfs_t* vfs);
+bool vfs_exists(vfs_t* vfs, const char* path);
 // read the entirity of a file
-char* VfsReadFile(struct Vfs* vfs, const char* path, size_t* size);
-// same as `VfsReadFile`, except it adds a null terminator
-char* VfsReadTxtFile(struct Vfs* vfs, const char* path, size_t* size);
+char* vfs_read(vfs_t* vfs, const char* path, size_t* size);
+// same as `vfs_read`, except it adds a null terminator
+char* vfs_read_txt(vfs_t* vfs, const char* path, size_t* size);
 
 #endif
