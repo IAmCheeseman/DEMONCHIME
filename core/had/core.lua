@@ -1,1 +1,1 @@
-core.create_lerped_num = require("core.lerped_num")
+core.create_lerped_num = require("lerped_num")

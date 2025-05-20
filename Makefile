@@ -31,9 +31,13 @@ DEP = $(OBJ:%.o=%.d)
 # this one contains every core resource and script
 CORE_HAD = CORE.HAD
 CORE_HAD_DIR = core/had
+CORE_HAD_DEP = res
+CORE_HAD_DEP := $(CORE_HAD_DIR) $(addprefix $(CORE_HAD_DIR)/,$(CORE_HAD_DEP))
 
 GAME_HAD = $(PROJECT_NAME).HAD
 GAME_HAD_DIR = game
+GAME_HAD_DEP = res res/textures res/fgd
+GAME_HAD_DEP := $(GAME_HAD_DIR) $(addprefix $(GAME_HAD_DIR)/,$(GAME_HAD_DEP))
 
 CLEAN_FILES = $(OBJ) $(DEP) $(EXE) $(CORE_HAD) $(GAME_HAD)
 
@@ -83,11 +87,11 @@ $(EXE): $(OBJ)
 	@$(ECHO) "cc $< -> $@"
 	$(Q)$(CC) $(CFLAGS) -MMD -c -o $@ $<
 
-$(CORE_HAD): $(CORE_HAD_DIR)
+$(CORE_HAD): $(CORE_HAD_DEP)
 	@$(ECHO) "had $@"
 	$(Q)$(CD) $(CORE_HAD_DIR) && 7z a -tzip ../../$@ ./* $(SILENCE)
 
-$(GAME_HAD): $(GAME_HAD_DIR)
+$(GAME_HAD): $(GAME_HAD_DEP)
 	@$(ECHO) "had $@"
 	$(Q)$(CD) $(GAME_HAD_DIR) && 7z a -tzip ../$@ ./* $(SILENCE)
 
