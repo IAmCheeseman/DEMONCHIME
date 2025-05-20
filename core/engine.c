@@ -79,7 +79,12 @@ void engine_init_lua(engine_t* engine)
 {
   lua_State* L = luaL_newstate();
   luaL_openlibs(L);
+
+  log_info("initializing 'core'...");
   wrap(L, engine);
+  if (!protected_do_file(L, engine, "core.lua")) {
+    log_fatal(1, "was not able to initialize 'core'");
+  }
 
   log_info("starting game...");
   if (!protected_do_file(L, engine, "main.lua")) {

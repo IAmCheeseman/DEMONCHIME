@@ -6,8 +6,6 @@ end
 
 core.set_tick_rate(30)
 
-local lcore = require("core")
-
 local tex = core.load_tex("res/textures/puzzle_cube.png")
 tex:set_filter(core.tex_filter.NEAREST, core.tex_filter.NEAREST)
 
@@ -111,7 +109,7 @@ for _=1, 4000 do
 end
 
 local r = 0
-local vry = lcore.create_lerped_num()
+local vry = core.create_lerped_num()
 
 function step()
   if core.is_key_down(core.key.ESCAPE) then
