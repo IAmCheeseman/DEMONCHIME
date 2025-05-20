@@ -4,6 +4,8 @@ elseif core.os == "linux" then
   package.path = package.path .. ";./?/init.lua"
 end
 
+core.set_tick_rate(30)
+
 local lcore = require("core")
 
 local tex = core.load_tex("res/textures/puzzle_cube.png")
@@ -84,13 +86,6 @@ cube:set_vertices({
 })
 cube:finalize(true)
 
-local r = 0
-local rx = lcore.create_lerped_num()
-local ry = lcore.create_lerped_num()
-local rz = lcore.create_lerped_num()
-
-local vry = lcore.create_lerped_num()
-
 local cubet = {
   x = 0,
   y = 0,
@@ -115,6 +110,9 @@ for _=1, 4000 do
   table.insert(model_mat4s, core.mat4_from_trans(cubet))
 end
 
+local r = 0
+local vry = lcore.create_lerped_num()
+
 function step()
   if core.is_key_down(core.key.ESCAPE) then
     core.close_engine()
@@ -128,11 +126,7 @@ function step()
         (1 / core.get_fps()) * 1000))
   end
 
-  r = r + (1/30)
-  rx:set(r * 0.25)
-  ry:set(r)
-  rz:set(r * 0.1)
-
+  r = r + core.get_tick_rate_ms()
   vry:set(r * 0.5)
 end
 
@@ -147,7 +141,6 @@ function draw()
 
   local sw, sh = core.get_screen_size()
   local a = sw / sh
-
   local p = core.mat4_identity()
   p:perspective(45, a, 1, 100)
 
