@@ -96,7 +96,9 @@ local cubet = {
   sy = 1,
 }
 
-local model_mat4s = {}
+
+local cubes = ecs.query("model", "trans_mat")
+
 local prng = core.create_prng()
 for _=1, 1000 do
   cubet.x = prng:rangef(-15, 15)
@@ -105,17 +107,20 @@ for _=1, 1000 do
   cubet.rx = prng:nextf() * math.pi * 2
   cubet.ry = prng:nextf() * math.pi * 2
   cubet.rz = prng:nextf() * math.pi * 2
-  table.insert(model_mat4s, core.mat4_from_trans(cubet))
+
+  local cube_ent = {}
+  cube_ent.model = cube
+  cube_ent.trans_mat = core.mat4_from_trans(cubet)
+  ecs.add_ent(cube_ent)
 end
 
-local r = 0
-local vry = core.create_lerped_num()
-
-function step()
+event.on("@tick", function()
   if core.is_key_down(core.key.ESCAPE) then
     core.close_engine()
   end
+end)
 
+event.on("@tick", function()
   if core.is_key_down(core.key.SPACE) then
     log_info(
       ("%d FPS, %d TPS, %f ms"):format(
@@ -123,34 +128,44 @@ function step()
         core.get_tps(),
         (1 / core.get_fps()) * 1000))
   end
+end)
 
-  r = r + core.get_tick_rate_ms()
+local r = 0
+local vry = core.create_lerped_num()
+
+event.on("@tick", function()
+  r = r + math.rad(2)
   vry:set(r * 0.5)
-end
+end)
 
-function draw()
+local view_mat
+local perspective_mat
+
+event.on("@frame", function()
   local v_pitch = core.mat4_identity()
   v_pitch:rotate(math.rad(-45), 0, 0)
   local vt = core.mat4_identity()
   vt:translate(0, 7, -7)
   local v_yaw = core.mat4_identity()
   v_yaw:rotate(0, vry:get(), 0)
-  local v = v_pitch:mult(vt:mult(v_yaw))
+  view_mat = v_pitch:mult(vt:mult(v_yaw))
 
   local sw, sh = core.get_screen_size()
   local a = sw / sh
-  local p = core.mat4_identity()
-  p:perspective(45, a, 1, 100)
+  perspective_mat = core.mat4_identity()
+  perspective_mat:perspective(45, a, 1, 100)
+end)
 
+event.on("@draw", function()
   shader:bind()
-  shader:send_mat4("v", v)
-  shader:send_mat4("p", p)
+  shader:send_mat4("v", view_mat)
+  shader:send_mat4("p", perspective_mat)
 
   tex:bind(0)
   shader:sendi("tex0", 0)
 
-  for _, m in ipairs(model_mat4s) do
-    shader:send_mat4("m", m)
-    cube:draw()
+  for _, cube_ent in ipairs(cubes.ents) do
+    shader:send_mat4("m", cube_ent.trans_mat)
+    cube_ent.model:draw()
   end
-end
+end)

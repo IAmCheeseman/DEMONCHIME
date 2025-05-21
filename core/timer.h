@@ -6,6 +6,7 @@
 /// handles the fixed update loop and measures FPS and TPS
 typedef struct timer_s
 {
+  double dt;
   double tick_rate;
   double accum;
 

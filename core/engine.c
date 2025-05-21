@@ -142,11 +142,32 @@ static bool call_lua_global(engine_t* engine, const char* fn_name)
   return true;
 }
 
+static bool call_lua_update(engine_t* engine, const char* fn_name)
+{
+  if (engine->L == NULL) return true;
+  lua_getglobal(engine->L, fn_name);
+  if (!lua_isnil(engine->L, -1)) {
+    if (!lua_isfunction(engine->L, -1)) {
+      log_error("global '%s' must be a function", fn_name);
+      return false;
+    }
+    lua_pushnumber(engine->L, engine->timer.dt);
+    int res = lua_pcall(engine->L, 1, 0, engine->lua_err_handler_idx);
+    return res == LUA_OK;
+  }
+  return true;
+}
+
 void engine_update(engine_t* engine)
 {
   glfwPollEvents();
 
   timer_update(&engine->timer);
+
+  if (!call_lua_update(engine, "update")) {
+    engine_close(engine);
+    return;
+  }
 
   while (timer_should_tick(&engine->timer)) {
     timer_start_tick(&engine->timer);

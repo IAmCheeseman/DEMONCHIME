@@ -39,7 +39,7 @@ static int L_get_tick_rate(lua_State* L)
   return 1;
 }
 
-static int L_get_tick_rate_ms(lua_State* L)
+static int L_get_tick_rate_sec(lua_State* L)
 {
   engine_t* engine = get_engine(L);
   lua_pushnumber(L, 1.0 / engine->timer.tick_rate);
@@ -121,7 +121,7 @@ luaL_Reg engine_funcs[] = {
   {"get_tps", L_get_tps},
   {"set_tick_rate", L_set_tick_rate},
   {"get_tick_rate", L_get_tick_rate},
-  {"get_tick_rate_ms", L_get_tick_rate_ms},
+  {"get_tick_rate_sec", L_get_tick_rate_sec},
   {"close_engine", L_close_engine},
   {"get_window_size", L_get_window_size},
   {"get_screen_size", L_get_screen_size},
