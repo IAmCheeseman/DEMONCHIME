@@ -21,7 +21,7 @@ static void find_shader_uniforms(shader_t* s)
     shader_var_t var;
     var.loc = i;
     glGetActiveUniform(
-       s->handle, i, UNIFORM_NAME_MAX, &name_len, &var.count, &var.type, name);
+       s->handle, i, UNIFORM_NAME_MAX, &name_len, NULL, NULL, name);
 
     var.name = (char*)mem_alloc(sizeof(char) * (name_len + 1));
     memcpy(var.name, name, name_len);
@@ -48,7 +48,7 @@ static void find_shader_attrs(shader_t* s)
     shader_var_t var;
     var.loc = i;
     glGetActiveAttrib(
-       s->handle, i, UNIFORM_NAME_MAX, &name_len, &var.count, &var.type, name);
+       s->handle, i, UNIFORM_NAME_MAX, &name_len, NULL, NULL, name);
 
     var.name = (char*)mem_alloc(sizeof(char) * (name_len + 1));
     memcpy(var.name, name, name_len);
@@ -154,27 +154,19 @@ static shader_var_t* get_uniform(shader_t* s, const char* name)
   shader_var_t* var = shader_tab_find_var(
     s->uniforms.vars,
     s->uniforms.capacity,
-    name,
-    len,
-    hash
-  );
+    name, len, hash);
+
   if (var == NULL || var->name == NULL) {
     int loc = glGetUniformLocation(s->handle, name);
     if (loc == -1) log_fatal(1, "uniform '%s' does not exist", name);
 
     shader_var_t new_var;
     new_var.loc = loc;
-
     new_var.name = (char*)mem_alloc(sizeof(char) * (len + 1));
-    memcpy(new_var.name, name, len);
-    new_var.name[len] = '\0';
+    strcpy(new_var.name, name);
     new_var.len = len;
     new_var.hash = hash;
-    new_var.type = TYPE_FLOAT;
-    new_var.count = 1;
-
-    shader_tab_add_var(&s->uniforms, new_var);
-    return get_uniform(s, name);
+    return shader_tab_add_var(&s->uniforms, new_var);
   }
   return var;
 }

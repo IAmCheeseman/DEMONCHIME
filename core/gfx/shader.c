@@ -60,7 +60,7 @@ static void grow_shader_tab(shader_tab_t* t)
   t->capacity = capacity;
 }
 
-void shader_tab_add_var(shader_tab_t* t, shader_var_t var)
+shader_var_t* shader_tab_add_var(shader_tab_t* t, shader_var_t var)
 {
   if (t->count + 1 > t->capacity * 0.75) {
     grow_shader_tab(t);
@@ -75,6 +75,8 @@ void shader_tab_add_var(shader_tab_t* t, shader_var_t var)
   );
   *ptr = var;
   t->count++;
+
+  return ptr;
 }
 
 void shader_tab_destroy(shader_tab_t* t)

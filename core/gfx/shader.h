@@ -17,10 +17,7 @@ typedef struct shader_var_s
   char* name;
   size_t len;
   uint32_t hash;
-
   int loc;
-  int count;
-  uint32_t type;
 } shader_var_t;
 
 typedef struct shader_table_s
@@ -32,7 +29,7 @@ typedef struct shader_table_s
 
 typedef struct shader_s shader_t;
 
-void shader_tab_add_var(shader_tab_t* t, shader_var_t var);
+shader_var_t* shader_tab_add_var(shader_tab_t* t, shader_var_t var);
 shader_var_t* shader_tab_find_var(
   shader_var_t* vars, 
   size_t capacity,
