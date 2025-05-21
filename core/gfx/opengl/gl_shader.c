@@ -151,10 +151,7 @@ static shader_var_t* get_uniform(shader_t* s, const char* name)
 {
   size_t len = strlen(name);
   uint32_t hash = hash_var_name(name, len);
-  shader_var_t* var = shader_tab_find_var(
-    s->uniforms.vars,
-    s->uniforms.capacity,
-    name, len, hash);
+  shader_var_t* var = shader_tab_find_var(&s->uniforms, name, len, hash);
 
   if (var == NULL || var->name == NULL) {
     int loc = glGetUniformLocation(s->handle, name);

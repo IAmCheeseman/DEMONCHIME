@@ -31,12 +31,10 @@ typedef struct shader_s shader_t;
 
 shader_var_t* shader_tab_add_var(shader_tab_t* t, shader_var_t var);
 shader_var_t* shader_tab_find_var(
-  shader_var_t* vars, 
-  size_t capacity,
+  shader_tab_t* t,
   const char* name,
-  size_t name_len,
-  uint32_t name_hash
-);
+  size_t len,
+  uint32_t hash);
 void shader_tab_destroy(shader_tab_t* t);
 uint32_t hash_var_name(const char* name, size_t len);
 
@@ -44,13 +42,11 @@ shader_t* shader_load_from_files(
   renderer_t* r,
   vfs_t* vfs,
   const char* vert,
-  const char* frag
-);
+  const char* frag);
 shader_t* shader_load_from_src(
   renderer_t* r,
   const char* vert,
-  const char* frag
-);
+  const char* frag);
 void shader_send_int(renderer_t* r, shader_t* s, const char* name, int i);
 void shader_send_float(renderer_t* r, shader_t* s, const char* name, float f);
 void shader_send_vec2f(renderer_t* r, shader_t* s, const char* name, vec2f_t v);

@@ -4,7 +4,7 @@
 
 #include "mem.h"
 
-shader_var_t* shader_tab_find_var(
+static shader_var_t* find_var_in_arr(
   shader_var_t* vars, 
   size_t capacity,
   const char* name,
@@ -31,6 +31,15 @@ shader_var_t* shader_tab_find_var(
   }
 }
 
+shader_var_t* shader_tab_find_var(
+  shader_tab_t* t,
+  const char* name,
+  size_t len,
+  uint32_t hash)
+{
+  return find_var_in_arr(t->vars, t->capacity, name, len, hash);
+}
+
 static void grow_shader_tab(shader_tab_t* t)
 {
   size_t capacity = GrowCapacity(t->capacity);
@@ -45,7 +54,7 @@ static void grow_shader_tab(shader_tab_t* t)
     shader_var_t* var = &t->vars[i];
     if (var->name == NULL) continue; // empty
     
-    shader_var_t* new_position = shader_tab_find_var(
+    shader_var_t* new_position = find_var_in_arr(
       vars,
       capacity,
       var->name,
@@ -66,13 +75,7 @@ shader_var_t* shader_tab_add_var(shader_tab_t* t, shader_var_t var)
     grow_shader_tab(t);
   }
 
-  shader_var_t* ptr = shader_tab_find_var(
-    t->vars,
-    t->capacity,
-    var.name,
-    var.len,
-    var.hash
-  );
+  shader_var_t* ptr = shader_tab_find_var(t, var.name, var.len, var.hash);
   *ptr = var;
   t->count++;
 
