@@ -127,7 +127,7 @@ bool is_engine_init(engine_t* engine)
   return engine->window_handle != NULL;
 }
 
-static bool call_lua(engine_t* engine, const char* fn_name)
+static bool call_lua_global(engine_t* engine, const char* fn_name)
 {
   if (engine->L == NULL) return true;
   lua_getglobal(engine->L, fn_name);
@@ -146,11 +146,11 @@ void engine_update(engine_t* engine)
 {
   glfwPollEvents();
 
-  timer_step(&engine->timer);
+  timer_update(&engine->timer);
 
   while (timer_should_tick(&engine->timer)) {
     timer_start_tick(&engine->timer);
-    if (!call_lua(engine, "step")) {
+    if (!call_lua_global(engine, "step")) {
       engine_close(engine);
       return;
     }
@@ -169,7 +169,7 @@ void engine_draw(engine_t* engine)
 
   clear_bg(engine->renderer, 0.2, 0.2, 0.2);
 
-  if (!call_lua(engine, "draw")) {
+  if (!call_lua_global(engine, "draw")) {
     engine_close(engine);
     return;
   }

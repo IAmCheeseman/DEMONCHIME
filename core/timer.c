@@ -28,7 +28,7 @@ void timer_start_tick(timer_t* t)
   t->ticks_ticked++;
 }
 
-void timer_step(timer_t* t)
+void timer_update(timer_t* t)
 {
   double current_time = glfwGetTime();
   double dt = current_time - t->prev_time;

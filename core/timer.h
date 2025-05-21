@@ -21,7 +21,7 @@ typedef struct timer_s
 timer_t timer_create();
 bool timer_should_tick(const timer_t* t);
 void timer_start_tick(timer_t* t);
-void timer_step(timer_t* t);
+void timer_update(timer_t* t);
 void timer_end_rendering(timer_t* t);
 
 #endif
