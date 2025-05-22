@@ -29,7 +29,15 @@ local cubet = {
 }
 
 local prng = core.create_prng()
-for _=1, 1000 do
+local t = 0
+
+event.on("@tick", function()
+  t = t + 1
+
+  if t < 5 then
+    return
+  end
+
   cubet.x = prng:rangef(-15, 15)
   cubet.y = prng:rangef(-2, 2)
   cubet.z = prng:rangef(-15, 15)
@@ -41,7 +49,7 @@ for _=1, 1000 do
   cube_ent.model = cube
   cube_ent.trans_mat = core.mat4_from_trans(cubet)
   ecs.add_ent(cube_ent)
-end
+end)
 
 event.on("@tick", function()
   if core.is_key_down(core.key.ESCAPE) then

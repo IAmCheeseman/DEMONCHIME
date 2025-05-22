@@ -18,8 +18,10 @@ void main()
 {
   gl_Position = p * v * m * vec4(v_pos, 1.0);
 
+  mat3 normal_m = transpose(inverse(mat3(m)));
+
   f_pos = v_pos;
-  f_normal = normalize((m * vec4(v_normal, 1.0)).xyz);
+  f_normal = normalize(normal_m * v_normal);
   f_uv = v_uv;
   f_color = v_color;
 }
