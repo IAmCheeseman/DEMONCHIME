@@ -1,6 +1,9 @@
 #ifndef __engine_gfx_gfx__
 #define __engine_gfx_gfx__
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include "engine.h"
 #include "math/vec2f.h"
 #include "math/vec3f.h"
@@ -15,6 +18,7 @@ typedef enum gfx_backend_type_e
 // might put more stuff here later
 typedef struct renderer_s
 {
+  FT_Library freetype;
   gfx_backend_t backend;
 } renderer_t;
 

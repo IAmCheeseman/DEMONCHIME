@@ -5,6 +5,7 @@
 
 #include "gfx/gfx.h"
 #include "gfx/framebuffer.h"
+#include "gfx/text.h"
 #include "math.h"
 #include "mem.h"
 #include "wrap/wrap.h"
@@ -31,6 +32,8 @@ void framebuf_resize_callback(GLFWwindow* window, int width, int height)
   engine->screen_size = screen_size;
   framebuf_resize(engine->renderer, engine->screen, screen_size);
 }
+
+font_t* metal_mania;
 
 void engine_init(engine_t* engine, engine_conf_t conf)
 {
@@ -68,6 +71,8 @@ void engine_init(engine_t* engine, engine_conf_t conf)
   engine->renderer = NULL;
   init_backend(engine, GFX_BACKEND_OPENGL);
 
+  init_freetype(engine->renderer, engine->core_vfs);
+
   engine->target_screen_size = conf.screen_size;
   engine->screen_size = conf.screen_size;
   engine->screen = framebuf_create(
@@ -77,8 +82,12 @@ void engine_init(engine_t* engine, engine_conf_t conf)
     FRAMEBUFFER_COLOR_BUF | FRAMEBUFFER_DEPTH_BUF | FRAMEBUFFER_DRAWABLE
   );
 
-
   engine->timer = timer_create();
+
+  metal_mania = font_create(
+    engine->renderer,
+    engine->vfs, "res/fonts/metal_mania.ttf",
+    48);
 }
 
 void engine_init_lua(engine_t* engine)
@@ -103,6 +112,8 @@ void engine_destroy(engine_t* engine)
   log_info("destroying engine...");
 
   lua_close(engine->L);
+
+  destroy_freetype(engine->renderer);
 
   framebuf_destroy(engine->renderer, engine->screen);
 
@@ -210,6 +221,8 @@ void engine_draw(engine_t* engine)
     engine->screen,
     (vec2i_t){-1, 1},
     (vec2i_t){2, -2});
+
+  font_draw(engine->renderer, metal_mania, (vec2f_t){0, 0}, "Hello, world!");
 
   timer_end_rendering(&engine->timer);
   //exit(1);

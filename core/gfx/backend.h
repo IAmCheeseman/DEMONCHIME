@@ -1,6 +1,9 @@
 #ifndef __engine_gfx_backend__
 #define __engine_gfx_backend__
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #include "include.h"
 
 #include "gfx_types.h"
@@ -13,6 +16,7 @@
 #include "math/mat4.h"
 
 struct engine_s;
+struct renderer_s;
 struct buf_obj_s;
 struct vert_arr_s;
 struct vert_fmt_s;
@@ -20,6 +24,7 @@ struct img_s;
 struct tex_s;
 struct shader_s;
 struct framebuf_s;
+struct font_s;
 struct vfs_s;
 
 typedef void (*clear_bg_fn)(float r, float g, float b);
@@ -139,6 +144,12 @@ typedef void (*tex_set_wrap_fn)(
 );
 typedef void (*tex_destroy_fn)(struct tex_s* tex);
 
+typedef void (*font_init_fn)(
+  struct renderer_s* r, struct font_s* font, FT_Face face);
+typedef void (*font_destroy_fn)(struct renderer_s* r, struct font_s* font);
+typedef void (*font_draw_fn)(
+  struct font_s* font, vec2f_t pos, const char* text, struct shader_s* shader);
+
 typedef struct gfx_backend_s
 {
   clear_bg_fn clear_background;
@@ -183,6 +194,10 @@ typedef struct gfx_backend_s
   tex_bind_fn texture_bind;
   tex_set_filter_fn texture_set_filter;
   tex_set_wrap_fn texture_set_wrap;
+
+  font_init_fn font_init;
+  font_destroy_fn font_destroy;
+  font_draw_fn font_draw;
 } gfx_backend_t;
 
 #endif

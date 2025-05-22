@@ -9,6 +9,7 @@
 #include "gl_shader.h"
 #include "gl_framebuffer.h"
 #include "gl_texture.h"
+#include "gl_text.h"
 #include "mem.h"
 
 static void msg_callback(
@@ -92,6 +93,9 @@ static void set_backend_ptrs(renderer_t* r)
   r->backend.texture_bind = gl_tex_bind;
   r->backend.texture_set_filter = gl_tex_set_filter;
   r->backend.texture_set_wrap = gl_tex_set_wrap;
+  r->backend.font_init = gl_font_init;
+  r->backend.font_destroy = gl_font_destroy;
+  r->backend.font_draw = gl_font_draw;
 }
 
 void gl_init_backend(engine_t* engine)

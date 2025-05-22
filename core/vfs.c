@@ -106,7 +106,7 @@ bool vfs_exists(vfs_t* vfs, const char* path)
   return false;
 }
 
-char* vfs_read(vfs_t* vfs, const char* path, size_t* size)
+uint8_t* vfs_read(vfs_t* vfs, const char* path, size_t* size)
 {
   if (!is_path_valid(path)) {
     log_warning("could not load '%s', because the path is invalid", path);
@@ -135,9 +135,9 @@ char* vfs_read(vfs_t* vfs, const char* path, size_t* size)
       size_t file_size = ftell(file);
       rewind(file);
 
-      char* dat = (char*)mem_alloc(sizeof(char) * (file_size + 1));
+      uint8_t* dat = (uint8_t*)mem_alloc(sizeof(uint8_t) * (file_size + 1));
 
-      size_t bytes_read = fread(dat, sizeof(char), file_size, file);
+      size_t bytes_read = fread(dat, sizeof(uint8_t), file_size, file);
       if (bytes_read < file_size) {
         log_warning("could not read file '%s'", full_path);
         mem_destroy(dat);
@@ -153,7 +153,7 @@ char* vfs_read(vfs_t* vfs, const char* path, size_t* size)
       return dat;
     } else if (mnt->type == VFS_ZIP) {
       size_t zdat_size;
-      char* zdat = mz_zip_reader_extract_file_to_heap(
+      uint8_t* zdat = mz_zip_reader_extract_file_to_heap(
         &mnt->zip, lpath, &zdat_size, 0);
       if (!zdat) {
         log_warning("could not load file '%s'", path);
@@ -162,7 +162,7 @@ char* vfs_read(vfs_t* vfs, const char* path, size_t* size)
 
       // miniz doesn't null terminate their stuff :(
 
-      char* dat = (char*)mem_alloc(sizeof(char) * (zdat_size + 1));
+      uint8_t* dat = (uint8_t*)mem_alloc(sizeof(uint8_t) * (zdat_size + 1));
       memcpy(dat, zdat, zdat_size);
 
       if (size) *size = zdat_size;
@@ -182,7 +182,7 @@ char* vfs_read(vfs_t* vfs, const char* path, size_t* size)
 char* vfs_read_txt(vfs_t* vfs, const char* path, size_t* size)
 {
   size_t size_;
-  char* dat = vfs_read(vfs, path, &size_);
+  char* dat = (char*)vfs_read(vfs, path, &size_);
   if (!dat) return dat;
   if (size) *size = size_;
   dat[size_] = '\0';

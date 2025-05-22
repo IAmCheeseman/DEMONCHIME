@@ -35,7 +35,7 @@ vfs_err_t vfs_mount(vfs_t** vfs, const char* path);
 void vfs_destroy(vfs_t* vfs);
 bool vfs_exists(vfs_t* vfs, const char* path);
 // read the entirity of a file
-char* vfs_read(vfs_t* vfs, const char* path, size_t* size);
+uint8_t* vfs_read(vfs_t* vfs, const char* path, size_t* size);
 // same as `vfs_read`, except it adds a null terminator
 char* vfs_read_txt(vfs_t* vfs, const char* path, size_t* size);
 

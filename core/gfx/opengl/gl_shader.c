@@ -195,7 +195,7 @@ void gl_shader_send_vec2i(shader_t* s, const char* name, vec2i_t v)
 void gl_shader_send_vec3f(shader_t* s, const char* name, vec3f_t v)
 {
   shader_var_t* ptr = get_uniform(s, name);
-  glUniform3i(ptr->loc, v.x, v.y, v.z);
+  glUniform3f(ptr->loc, v.x, v.y, v.z);
 }
 
 void gl_shader_send_vec3i(shader_t* s, const char* name, vec3i_t v)
@@ -207,7 +207,7 @@ void gl_shader_send_vec3i(shader_t* s, const char* name, vec3i_t v)
 void gl_shader_send_vec4f(shader_t* s, const char* name, vec4f_t v)
 {
   shader_var_t* ptr = get_uniform(s, name);
-  glUniform4i(ptr->loc, v.x, v.y, v.z, v.w);
+  glUniform4f(ptr->loc, v.x, v.y, v.z, v.w);
 }
 
 void gl_shader_send_vec4i(shader_t* s, const char* name, vec4i_t v)
