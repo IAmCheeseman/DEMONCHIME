@@ -8,6 +8,10 @@ function vec3.sqlen(x, y, z)
   return x*x + y*y + z*z
 end
 
+function vec3.mlen(x, y, z)
+  return math.abs(x) + math.abs(y) + math.abs(z)
+end
+
 function vec3.dot(x, y, z, xx, yy, zz)
   return x*xx + y*yy + z*zz
 end

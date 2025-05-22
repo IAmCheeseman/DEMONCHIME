@@ -8,6 +8,10 @@ function vec2.sqlen(x, y)
   return x*x + y*y
 end
 
+function vec2.mlen(x, y)
+  return math.abs(x) + math.abs(y)
+end
+
 function vec2.dot(x, y, xx, yy)
   return x*xx + y*yy
 end
