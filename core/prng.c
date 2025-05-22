@@ -34,7 +34,18 @@ uint64_t prng_next(Prng* p)
   return *p * 2685821657736338717ULL;
 }
 
-int prng_nextf(Prng* p)
+double prng_nextf(Prng* p)
+{
+  uint64_t r = prng_next(p);
+  union {
+    uint64_t uint64;
+    double d;
+  } n;
+  n.uint64 = ((0x3FFULL) << 52) | (r >> 12);;
+  return n.d - 1.0;
+}
+
+int prng_nexti(Prng* p)
 {
   union {
     uint64_t uint64;
@@ -44,24 +55,14 @@ int prng_nextf(Prng* p)
   return n.i;
 }
 
-double prng_nexti(Prng* p)
-{
-  union {
-    uint64_t uint64;
-    double d;
-  } n;
-  n.uint64 = ((uint64_t)0x3FF) << 52 | prng_next(p) >> 12;
-  return n.d - 1.0;
-}
-
 int prng_get_rangei(Prng* p, int min, int max)
 {
-  int i = prng_nextf(p);
+  int i = prng_nexti(p);
   return i % (max - min + 1) + min;
 }
 
 double prng_get_rangef(Prng* p, double min, double max)
 {
-  double d = prng_nexti(p);
+  double d = prng_nextf(p);
   return d * (max - min) + min;
 }
