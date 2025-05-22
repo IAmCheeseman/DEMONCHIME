@@ -222,7 +222,11 @@ void engine_draw(engine_t* engine)
     (vec2i_t){-1, 1},
     (vec2i_t){2, -2});
 
-  font_draw(engine->renderer, metal_mania, (vec2f_t){0, 0}, "Hello, world!");
+  int len = snprintf(NULL, 0, "FPS: %d", engine->timer.fps);
+  char* fps_counter = (char*)mem_alloc(sizeof(char) * (len + 1));
+  snprintf(fps_counter, len + 1, "FPS: %d", engine->timer.fps);
+  font_draw(engine->renderer, metal_mania, (vec2f_t){0, 0}, fps_counter);
+  mem_destroy(fps_counter);
 
   timer_end_rendering(&engine->timer);
   //exit(1);

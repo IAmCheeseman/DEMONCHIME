@@ -38,6 +38,8 @@ event.on("@tick", function()
     return
   end
 
+  t = 0
+
   cubet.x = prng:rangef(-15, 15)
   cubet.y = prng:rangef(-2, 2)
   cubet.z = prng:rangef(-15, 15)
