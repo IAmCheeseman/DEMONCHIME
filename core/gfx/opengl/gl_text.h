@@ -8,6 +8,10 @@
 void gl_font_init(renderer_t* r, font_t* font, FT_Face face);
 void gl_font_destroy(renderer_t* r, font_t* font);
 void gl_font_draw(
-  font_t* font, vec2f_t pos, const char* text, shader_t* shader);
+  font_t* font,
+  vec2f_t pos,
+  const char* text,
+  color_t color,
+  shader_t* shader);
 
 #endif

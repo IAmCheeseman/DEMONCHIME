@@ -21,7 +21,7 @@ void destroy_freetype(renderer_t* r)
   shader_destroy(r, text_shader);
 }
 
-font_t* font_create(renderer_t* r, vfs_t* vfs, const char* ttf, int size)
+font_t* font_load(renderer_t* r, vfs_t* vfs, const char* ttf, int size)
 {
   if (!text_shader)
     log_fatal(1, "can't load '%s' because freetype is not init", ttf);
@@ -52,5 +52,23 @@ void font_destroy(renderer_t* r, font_t* font)
 
 void font_draw(renderer_t* r, font_t* font, vec2f_t pos, const char* text)
 {
-  r->backend.font_draw(font, pos, text, text_shader);
+  r->backend.font_draw(font, pos, text, (color_t){1, 1, 1, 1}, text_shader);
+}
+
+void font_draw_colored(
+  renderer_t* r, font_t* font, vec2f_t pos, color_t color, const char* text)
+{
+  r->backend.font_draw(font, pos, text, color, text_shader);
+}
+
+void font_draw_custom(
+  renderer_t* r,
+  font_t* font,
+  vec2f_t pos,
+  color_t color,
+  const char* text,
+  shader_t* shader)
+{
+  r->backend.font_draw(font, pos, text, color, shader);
+  mem_destroy(font);
 }

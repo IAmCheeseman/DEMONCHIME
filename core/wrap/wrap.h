@@ -18,6 +18,7 @@ typedef enum ldata_type_e
   LUA_TYPE_MESH,
   LUA_TYPE_VERT_FMT,
   LUA_TYPE_SHADER,
+  LUA_TYPE_FONT,
   LUA_TYPE_MAT4,
   LUA_TYPE_PRNG,
 } ldata_type_t;
@@ -31,6 +32,7 @@ typedef enum ldata_type_e
 #define VERT_FMT_MT_NAME "__VERT_FMT_MT__"
 #define SHADER_MT_NAME "__SHADER_MT__"
 #define MAT4_MT_NAME "__MAT4_MT__"
+#define FONT_MT_NAME "__FONT_MT__"
 #define PRNG_MT_NAME "__PRNG_MT__"
 
 typedef struct lmat4_s
@@ -61,6 +63,7 @@ void wrap_shader(lua_State* L);
 void wrap_vert_fmt(lua_State* L);
 void wrap_mesh(lua_State* L);
 void wrap_mat4(lua_State* L);
+void wrap_font(lua_State* L);
 void wrap_prng(lua_State* L);
 
 #endif

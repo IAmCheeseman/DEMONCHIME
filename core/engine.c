@@ -33,8 +33,6 @@ void framebuf_resize_callback(GLFWwindow* window, int width, int height)
   framebuf_resize(engine->renderer, engine->screen, screen_size);
 }
 
-font_t* metal_mania;
-
 void engine_init(engine_t* engine, engine_conf_t conf)
 {
   log_info("initializing engine...");
@@ -83,11 +81,6 @@ void engine_init(engine_t* engine, engine_conf_t conf)
   );
 
   engine->timer = timer_create();
-
-  metal_mania = font_create(
-    engine->renderer,
-    engine->vfs, "res/fonts/metal_mania.ttf",
-    48);
 }
 
 void engine_init_lua(engine_t* engine)
@@ -113,7 +106,6 @@ void engine_destroy(engine_t* engine)
 
   lua_close(engine->L);
 
-  font_destroy(engine->renderer, metal_mania);
   destroy_freetype(engine->renderer);
 
   framebuf_destroy(engine->renderer, engine->screen);
@@ -223,11 +215,10 @@ void engine_draw(engine_t* engine)
     (vec2i_t){-1, 1},
     (vec2i_t){2, -2});
 
-  int len = snprintf(NULL, 0, "FPS: %d", engine->timer.fps);
-  char* fps_counter = (char*)mem_alloc(sizeof(char) * (len + 1));
-  snprintf(fps_counter, len + 1, "FPS: %d", engine->timer.fps);
-  font_draw(engine->renderer, metal_mania, (vec2f_t){0, 0}, fps_counter);
-  mem_destroy(fps_counter);
+  if (!call_lua_global(engine, "uidraw")) {
+    engine_close(engine);
+    return;
+  }
 
   timer_end_rendering(&engine->timer);
   //exit(1);

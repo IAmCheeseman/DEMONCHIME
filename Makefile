@@ -20,6 +20,7 @@ OBJ = \
 	core/wrap/wrap_log.o core/wrap/wrap_mat4.o core/wrap/wrap_mesh.o \
 	core/wrap/wrap_vertex_format.o core/wrap/wrap_shader.o \
 	core/wrap/wrap_texture.o core/wrap/wrap_prng.o core/gfx/buffer_object.o \
+	core/wrap/wrap_font.o \
 	\
 	core/gfx/framebuffer.o core/gfx/gfx.o core/gfx/gfx_types.o core/gfx/mesh.o \
 	core/gfx/shader.o core/gfx/texture.o core/gfx/vertex_array.o \

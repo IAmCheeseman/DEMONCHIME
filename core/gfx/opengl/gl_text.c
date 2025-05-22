@@ -4,6 +4,7 @@
 
 #include "math/vec2i.h"
 #include "mem.h"
+#include "color.h"
 
 #define glyph_count 128
 
@@ -107,7 +108,11 @@ void gl_font_destroy(renderer_t* r, font_t* font)
 }
 
 void gl_font_draw(
-  font_t* font, vec2f_t pos, const char* text, shader_t* shader)
+  font_t* font,
+  vec2f_t pos,
+  const char* text,
+  color_t color,
+  shader_t* shader)
 {
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -118,7 +123,7 @@ void gl_font_draw(
   Mat4Ortho(p, 0, 320 * 5, 180 * 5, 0, 0, 100);
 
   gl_shader_bind(shader);
-  gl_shader_send_vec4f(shader, "text_color", (vec4f_t){1, 1, 1, 1});
+  gl_shader_send_vec4f(shader, "text_color", *(vec4f_t*)&color);
   gl_shader_send_mat4(shader, "p", p);
   gl_shader_send_int(shader, "fontmap", 0);
 

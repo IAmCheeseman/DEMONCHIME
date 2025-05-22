@@ -26,6 +26,7 @@ struct shader_s;
 struct framebuf_s;
 struct font_s;
 struct vfs_s;
+struct color_s;
 
 typedef void (*clear_bg_fn)(float r, float g, float b);
 typedef void (*adjust_viewport_fn)(vec2f_t size);
@@ -148,7 +149,11 @@ typedef void (*font_init_fn)(
   struct renderer_s* r, struct font_s* font, FT_Face face);
 typedef void (*font_destroy_fn)(struct renderer_s* r, struct font_s* font);
 typedef void (*font_draw_fn)(
-  struct font_s* font, vec2f_t pos, const char* text, struct shader_s* shader);
+  struct font_s* font,
+  vec2f_t pos,
+  const char* text,
+  struct color_s color, 
+  struct shader_s* shader);
 
 typedef struct gfx_backend_s
 {

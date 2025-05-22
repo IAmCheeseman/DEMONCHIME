@@ -16,3 +16,7 @@ end
 function draw()
   event.call("@draw")
 end
+
+function uidraw()
+  event.call("@uidraw")
+end

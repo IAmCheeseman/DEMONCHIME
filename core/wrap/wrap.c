@@ -162,6 +162,7 @@ void wrap(lua_State* L, engine_t* engine)
   wrap_vert_fmt(L);
   wrap_mesh(L);
   wrap_mat4(L);
+  wrap_font(L);
   wrap_prng(L);
 
   luaL_newmetatable(L, ENGINE_MT_NAME);

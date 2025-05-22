@@ -7,6 +7,8 @@
 #include "include.h"
 #include "buffer_object.h"
 #include "vertex_array.h"
+#include "shader.h"
+#include "color.h"
 
 #include "gfx.h"
 
@@ -19,8 +21,17 @@ typedef struct font_s
 void init_freetype(renderer_t* r, vfs_t* core_vfs);
 void destroy_freetype(renderer_t* r);
 
-font_t* font_create(renderer_t* r, vfs_t* vfs, const char* ttf, int size);
+font_t* font_load(renderer_t* r, vfs_t* vfs, const char* ttf, int size);
 void font_destroy(renderer_t* r, font_t* font);
 void font_draw(renderer_t* r, font_t* font, vec2f_t pos, const char* text);
+void font_draw_colored(
+  renderer_t* r, font_t* font, vec2f_t pos, color_t color, const char* text);
+void font_draw_custom(
+  renderer_t* r,
+  font_t* font,
+  vec2f_t pos,
+  color_t color,
+  const char* text,
+  shader_t* shader);
 
 #endif
