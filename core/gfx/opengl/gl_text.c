@@ -81,6 +81,10 @@ void gl_font_init(renderer_t* r, font_t* font, FT_Face face)
   glEnableVertexAttribArray(1);
   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
+  log_debug(
+    "loaded font (vao %d, vbo %d, textures %d-%d)",
+    handle->vao, handle->vbo, tex_handles[0], tex_handles[glyph_count-1]);
+
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }
@@ -98,6 +102,8 @@ void gl_font_destroy(renderer_t* r, font_t* font)
 
   mem_destroy(font->handle);
   mem_destroy(font->glyphs);
+
+  log_debug("destroyed font");
 }
 
 void gl_font_draw(

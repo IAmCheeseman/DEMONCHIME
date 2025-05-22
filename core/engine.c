@@ -113,6 +113,7 @@ void engine_destroy(engine_t* engine)
 
   lua_close(engine->L);
 
+  font_destroy(engine->renderer, metal_mania);
   destroy_freetype(engine->renderer);
 
   framebuf_destroy(engine->renderer, engine->screen);
