@@ -1,6 +1,6 @@
 #include "mat4.h"
 
-void Mat4Identity(mat4_t mat)
+void mat4_identity(mat4_t mat)
 {
   memset(mat, 0, sizeof(mat4_t));
   mat[0] = 1;
@@ -10,7 +10,7 @@ void Mat4Identity(mat4_t mat)
 }
 
 // TODO: make dis use simd (SCARY)
-void Mat4Multiply(mat4_t out, mat4_t a, mat4_t b)
+void mat4_mult(mat4_t out, mat4_t a, mat4_t b)
 {
   for (int row = 0; row < 4; row++) {
     for (int col = 0; col < 4; col++) {
@@ -22,24 +22,24 @@ void Mat4Multiply(mat4_t out, mat4_t a, mat4_t b)
   }
 }
 
-void Mat4Translate(mat4_t mat, vec3f_t trans)
+void mat4_translate(mat4_t mat, vec3f_t trans)
 {
-  Mat4Identity(mat);
+  mat4_identity(mat);
   mat[12] = trans.x;
   mat[13] = trans.y;
   mat[14] = trans.z;
 }
 
-void Mat4Scale(mat4_t mat, vec3f_t scale)
+void mat4_scale(mat4_t mat, vec3f_t scale)
 {
-  Mat4Identity(mat);
+  mat4_identity(mat);
   mat[0] = scale.x;
   mat[5] = scale.y;
   mat[10] = scale.z;
 }
 
 // TODO: maybe make this rotate about an axis?
-void Mat4Rotate(mat4_t mat, vec3f_t rotation)
+void mat4_rotate(mat4_t mat, vec3f_t rotation)
 {
   float cosx = cosf(rotation.x);
   float sinx = sinf(rotation.x);
@@ -68,7 +68,7 @@ void Mat4Rotate(mat4_t mat, vec3f_t rotation)
   mat[15] = 1;
 }
 
-void Mat4Perspective(mat4_t mat, float yfov, float a, float n, float f)
+void mat4_perspective(mat4_t mat, float yfov, float a, float n, float f)
 {
   // thank you love2d for letting me continue to not understand how this works
   // https://github.com/love2d/love/blob/main/src/common/Matrix.cpp#L459
@@ -82,10 +82,14 @@ void Mat4Perspective(mat4_t mat, float yfov, float a, float n, float f)
 	mat[14] = 2.0 * n * f / (n - f);
 }
 
-void Mat4Ortho(mat4_t mat, float l, float r, float b, float t, float n, float f)
+void mat4_ortho(
+  mat4_t mat,
+  float l, float r,
+  float b, float t,
+  float n, float f)
 {
   // https://github.com/love2d/love/blob/main/src/common/Matrix.cpp#L444
-  Mat4Identity(mat);
+  mat4_identity(mat);
 
   mat[0] = 2.0 / (r - l);
 	mat[5] = 2.0 / (t - b);

@@ -2,21 +2,21 @@
 
 #include "mat4.h"
 
-void TransformToMatrix(transform_t trans, mat4_t mat)
+void transform_to_matrix(transform_t trans, mat4_t mat)
 {
   mat4_t translation;
-  Mat4Translate(translation, trans.pos);
+  mat4_translate(translation, trans.pos);
 
   mat4_t rotation;
-  Mat4Rotate(rotation, trans.rot);
+  mat4_rotate(rotation, trans.rot);
 
   mat4_t scale;
-  Mat4Scale(scale, trans.scale);
+  mat4_scale(scale, trans.scale);
 
   mat4_t inter;
   // mat4Multiply(inter, translation, rotation);
 
   // translation * rotation * scale
-  Mat4Multiply(inter, rotation, scale);
-  Mat4Multiply(mat, translation, inter);
+  mat4_mult(inter, rotation, scale);
+  mat4_mult(mat, translation, inter);
 }

@@ -8,7 +8,7 @@
 static int L_mat4_identity(lua_State* L)
 {
   lmat4_t* m = (lmat4_t*)mem_alloc(sizeof(lmat4_t));
-  Mat4Identity(m->m);
+  mat4_identity(m->m);
   create_ldata(L, m, mat4_mt_name, lua_type_mat4);
   return 1;
 }
@@ -53,7 +53,7 @@ static int L_mat4_from_trans(lua_State* L)
   trans.scale = (vec3f_t){sx, sy, sz};
 
   lmat4_t* m = (lmat4_t*)mem_alloc(sizeof(lmat4_t));
-  TransformToMatrix(trans, m->m);
+  transform_to_matrix(trans, m->m);
   create_ldata(L, m, mat4_mt_name, lua_type_mat4);
   return 1;
 }
@@ -70,7 +70,7 @@ static int L_Mat4Mt_mult(lua_State* L)
   lmat4_t* m1 = (lmat4_t*)read_ldata(L, 2, lua_type_mat4);
   
   lmat4_t* mout = (lmat4_t*)mem_alloc(sizeof(lmat4_t));
-  Mat4Multiply(mout->m, m0->m, m1->m);
+  mat4_mult(mout->m, m0->m, m1->m);
   create_ldata(L, mout, mat4_mt_name, lua_type_mat4);
   return 1;
 }
@@ -83,7 +83,7 @@ static int L_Mat4Mt_translate(lua_State* L)
   float y = luaL_checknumber(L, 3);
   float z = luaL_checknumber(L, 4);
 
-  Mat4Translate(m->m, (vec3f_t){x, y, z});
+  mat4_translate(m->m, (vec3f_t){x, y, z});
 
   return 0;
 }
@@ -96,7 +96,7 @@ static int L_Mat4Mt_scale(lua_State* L)
   float y = luaL_checknumber(L, 3);
   float z = luaL_checknumber(L, 4);
 
-  Mat4Scale(m->m, (vec3f_t){x, y, z});
+  mat4_scale(m->m, (vec3f_t){x, y, z});
 
   return 0;
 }
@@ -109,7 +109,7 @@ static int L_Mat4Mt_rotate(lua_State* L)
   float y = luaL_checknumber(L, 3);
   float z = luaL_checknumber(L, 4);
 
-  Mat4Rotate(m->m, (vec3f_t){x, y, z});
+  mat4_rotate(m->m, (vec3f_t){x, y, z});
 
   return 0;
 }
@@ -123,7 +123,7 @@ static int L_Mat4Mt_perspective(lua_State* L)
   float n = luaL_checknumber(L, 4);
   float f = luaL_checknumber(L, 5);
 
-  Mat4Perspective(m->m, yfov, a, n, f);
+  mat4_perspective(m->m, yfov, a, n, f);
 
   return 0;
 }
@@ -139,7 +139,7 @@ static int L_Mat4Mt_ortho(lua_State* L)
   float n = luaL_checknumber(L, 7);
   float f = luaL_checknumber(L, 8);
 
-  Mat4Ortho(m->m, l, r, b, t, n, f);
+  mat4_ortho(m->m, l, r, b, t, n, f);
 
   return 0;
 }

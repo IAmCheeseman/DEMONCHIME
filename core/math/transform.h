@@ -11,6 +11,6 @@ typedef struct transform_s
   vec3f_t scale;
 } transform_t;
 
-void TransformToMatrix(transform_t trans, mat4_t mat);
+void transform_to_matrix(transform_t trans, mat4_t mat);
 
 #endif

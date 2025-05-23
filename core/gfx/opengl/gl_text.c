@@ -117,7 +117,7 @@ void gl_font_draw(
   font_handle_t* handle = (font_handle_t*)font->handle;
 
   mat4_t p;
-  Mat4Ortho(p, 0, 320 * 5, 180 * 5, 0, 0, 100);
+  mat4_ortho(p, 0, 320 * 5, 180 * 5, 0, 0, 100);
 
   gl_shader_bind(shader);
   gl_shader_send_vec4f(shader, "text_color", (vec4f_t){
