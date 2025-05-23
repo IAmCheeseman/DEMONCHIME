@@ -23,8 +23,8 @@ typedef struct renderer_s
 } renderer_t;
 
 void init_backend(engine_t* engine, gfx_backend_type_t backend);
-void clear_bg(renderer_t* renderer, float r, float g, float b);
-void adjust_viewport(renderer_t* r, vec2f_t size);
-void set_depth_test(renderer_t* r, bool test);
+void clear_bg(const renderer_t* renderer, float r, float g, float b);
+void adjust_viewport(const renderer_t* r, vec2f_t size);
+void set_depth_test(const renderer_t* r, bool test);
 
 #endif

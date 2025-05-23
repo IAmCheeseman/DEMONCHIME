@@ -39,21 +39,21 @@ typedef struct engine_conf_s
 void engine_init(engine_t* engine, engine_conf_t conf);
 void engine_init_lua(engine_t* engine);
 void engine_destroy(engine_t* engine);
-bool is_engine_init(engine_t* engine);
+bool is_engine_init(const engine_t* engine);
 
 void engine_update(engine_t* engine);
 void engine_draw(engine_t* engine);
 
-void engine_swap_buffers(engine_t* engine);
-void engine_close(engine_t* engine);
-bool is_engine_closed(engine_t* engine);
+void engine_swap_buffers(const engine_t* engine);
+void engine_close(const engine_t* engine);
+bool is_engine_closed(const engine_t* engine);
 
-vec2i_t engine_get_window_size(engine_t* engine);
-vec2i_t engine_get_screen_size(engine_t* engine);
+vec2i_t engine_get_window_size(const engine_t* engine);
+vec2i_t engine_get_screen_size(const engine_t* engine);
 
-bool is_key_down(engine_t* engine, key_t key);
-bool is_mouse_down(engine_t* engine, int btn);
+bool is_key_down(const engine_t* engine, key_t key);
+bool is_mouse_down(const engine_t* engine, int btn);
 
-vec2f_t get_mouse_pos(engine_t* engine);
+vec2f_t get_mouse_pos(const engine_t* engine);
 
 #endif

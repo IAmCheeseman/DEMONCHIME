@@ -25,7 +25,7 @@ static int L_MeshMt_set_vertices(lua_State* L)
   mesh_t* mesh = (mesh_t*)read_ldata(L, 1, LUA_TYPE_MESH);
   luaL_checktype(L, 2, LUA_TTABLE);
 
-  vert_fmt_t* fmt = mesh->fmt;
+  const vert_fmt_t* fmt = mesh->fmt;
 
   size_t vertex_count = lua_objlen(L, 2);
 

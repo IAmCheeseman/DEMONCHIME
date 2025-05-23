@@ -27,25 +27,25 @@ void vert_fmt_update(
 }
 
 vert_arr_t* vert_arr_create(
-  renderer_t* r,
+  const renderer_t* r,
   const vert_fmt_t* fmt)
 {
   return r->backend.vert_arr_create(fmt);
 }
 
-void vert_arr_destroy(renderer_t* r, vert_arr_t* varr)
+void vert_arr_destroy(const renderer_t* r, vert_arr_t* varr)
 {
   return r->backend.vert_arr_destroy(varr);
 }
 
-void vert_arr_bind(renderer_t* r, vert_arr_t* varr)
+void vert_arr_bind(const renderer_t* r, const vert_arr_t* varr)
 {
   return r->backend.vert_arr_bind(varr);
 }
 
 void vert_arr_draw(
-  renderer_t* r,
-  vert_arr_t* varr,
+  const renderer_t* r,
+  const vert_arr_t* varr,
   size_t start,
   size_t count,
   idx_mode_t index_mode)
@@ -54,18 +54,15 @@ void vert_arr_draw(
 }
 
 void vert_arr_draw_idx(
-  renderer_t* r,
-  vert_arr_t* varr,
-  buf_obj_t* ebo,
+  const renderer_t* r,
+  const vert_arr_t* varr,
+  const buf_obj_t* ebo,
   size_t count,
   data_type_t type,
   idx_mode_t index_mode)
 {
   return r->backend.vert_arr_draw_idx(
-    varr,
-    ebo,
-    count,
-    type,
-    index_mode
-  );
+    varr, ebo,
+    count, type,
+    index_mode);
 }

@@ -1,6 +1,6 @@
 #include "mesh.h"
 
-mesh_t mesh_create(vert_fmt_t* fmt)
+mesh_t mesh_create(const vert_fmt_t* fmt)
 {
   mesh_t m;
   m.vertices = NULL;
@@ -14,7 +14,7 @@ mesh_t mesh_create(vert_fmt_t* fmt)
   return m;
 }
 
-void mesh_destroy(renderer_t* r, mesh_t* m)
+void mesh_destroy(const renderer_t* r, mesh_t* m)
 {
   m->vertices = NULL;
   m->vertex_count = 0;
@@ -35,7 +35,7 @@ void mesh_destroy(renderer_t* r, mesh_t* m)
   }
 }
 
-void mesh_finalize(renderer_t* r, mesh_t* m, bool is_static)
+void mesh_finalize(const renderer_t* r, mesh_t* m, bool is_static)
 {
   draw_mode_t mode = is_static ? DRAW_STATIC : DRAW_DYNAMIC;
 
@@ -59,7 +59,7 @@ void mesh_finalize(renderer_t* r, mesh_t* m, bool is_static)
   }
 }
 
-void mesh_draw(renderer_t* r, mesh_t* m)
+void mesh_draw(const renderer_t* r, const mesh_t* m)
 {
   if (m->vao == NULL || m->vbo == NULL) {
     log_error("attempt to draw unfinalized mesh");

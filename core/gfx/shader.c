@@ -106,7 +106,7 @@ uint32_t hash_var_name(const char* str, size_t len)
 }
 
 shader_t* shader_load_from_files(
-  renderer_t* r,
+  const renderer_t* r,
   vfs_t* vfs,
   const char* vert,
   const char* frag)
@@ -115,7 +115,7 @@ shader_t* shader_load_from_files(
 }
 
 shader_t* shader_load_from_src(
-  renderer_t* r,
+  const renderer_t* r,
   const char* vert,
   const char* frag)
 {
@@ -123,7 +123,7 @@ shader_t* shader_load_from_src(
 }
 
 void shader_send_int(
-  renderer_t* r,
+  const renderer_t* r,
   shader_t* s,
   const char* name,
   int i)
@@ -132,7 +132,7 @@ void shader_send_int(
 }
 
 void shader_send_float(
-  renderer_t* r,
+  const renderer_t* r,
   shader_t* s,
   const char* name,
   float f)
@@ -141,7 +141,7 @@ void shader_send_float(
 }
 
 void shader_send_vec2f(
-  renderer_t* r,
+  const renderer_t* r,
   shader_t* s,
   const char* name,
   vec2f_t v)
@@ -150,7 +150,7 @@ void shader_send_vec2f(
 }
 
 void shader_send_vec2i(
-  renderer_t* r,
+  const renderer_t* r,
   shader_t* s,
   const char* name,
   vec2i_t v)
@@ -159,7 +159,7 @@ void shader_send_vec2i(
 }
 
 void shader_send_vec3f(
-  renderer_t* r,
+  const renderer_t* r,
   shader_t* s,
   const char* name,
   vec3f_t v)
@@ -168,7 +168,7 @@ void shader_send_vec3f(
 }
 
 void shader_send_vec3i(
-  renderer_t* r,
+  const renderer_t* r,
   shader_t* s,
   const char* name,
   vec3i_t v)
@@ -177,7 +177,7 @@ void shader_send_vec3i(
 }
 
 void shader_send_vec4f(
-  renderer_t* r,
+  const renderer_t* r,
   shader_t* s,
   const char* name,
   vec4f_t v)
@@ -186,7 +186,7 @@ void shader_send_vec4f(
 }
 
 void shader_send_vec4i(
-  renderer_t* r,
+  const renderer_t* r,
   shader_t* s,
   const char* name,
   vec4i_t v)
@@ -195,7 +195,7 @@ void shader_send_vec4i(
 }
 
 void shader_send_mat4(
-  renderer_t* r,
+  const renderer_t* r,
   shader_t* s,
   const char* name,
   mat4_t m)
@@ -203,12 +203,12 @@ void shader_send_mat4(
   return r->backend.shader_send_mat4(s, name, m);
 }
 
-void shader_bind(renderer_t* r, shader_t* s)
+void shader_bind(const renderer_t* r, const shader_t* s)
 {
   return r->backend.shader_bind(s);
 }
 
-void shader_destroy(renderer_t* r, shader_t* s)
+void shader_destroy(const renderer_t* r, shader_t* s)
 {
   return r->backend.shader_destroy(s);
 }

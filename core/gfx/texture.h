@@ -19,18 +19,18 @@ typedef struct tex_s
   tex_wrap_t y_wrap;
 } tex_t;
 
-tex_t tex_load(renderer_t* r, vfs_t* vfs, const char* path);
-tex_t tex_load_from_img(renderer_t* r, img_t* img);
-void tex_destroy(renderer_t* r, tex_t* tex);
-void tex_gen_mipmap(renderer_t* r, tex_t* tex);
-void tex_bind(renderer_t* r, tex_t* tex, uint8_t slot);
+tex_t tex_load(const renderer_t* r, vfs_t* vfs, const char* path);
+tex_t tex_load_from_img(const renderer_t* r, const img_t* img);
+void tex_destroy(const renderer_t* r, tex_t* tex);
+void tex_gen_mipmap(const renderer_t* r, tex_t* tex);
+void tex_bind(const renderer_t* r, const tex_t* tex, uint8_t slot);
 void tex_set_filter(
-  renderer_t* r,
+  const renderer_t* r,
   tex_t* tex,
   tex_filter_t min,
   tex_filter_t mag);
 void tex_set_wrap(
-  renderer_t* r,
+  const renderer_t* r,
   tex_t* tex,
   tex_wrap_t x_wrap,
   tex_wrap_t y_wrap);

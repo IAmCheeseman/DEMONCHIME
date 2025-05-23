@@ -25,7 +25,7 @@ void gl_shader_send_vec3i(shader_t* s, const char* name, vec3i_t v);
 void gl_shader_send_vec4f(shader_t* s, const char* name, vec4f_t v);
 void gl_shader_send_vec4i(shader_t* s, const char* name, vec4i_t v);
 void gl_shader_send_mat4(shader_t* s, const char* name, mat4_t m);
-void gl_shader_bind(shader_t* s);
+void gl_shader_bind(const shader_t* s);
 void gl_shader_destroy(shader_t* s);
 
 #endif

@@ -6,7 +6,7 @@
 #include "mem.h"
 #include "gl_texture.h"
 
-tex_t gl_tex_load_from_img(img_t* img)
+tex_t gl_tex_load_from_img(const img_t* img)
 {
   tex_t tex;
 
@@ -45,7 +45,7 @@ void gl_tex_destroy(tex_t* tex)
   mem_destroy(tex->handle);
 }
 
-void gl_tex_bind(tex_t* tex, uint8_t slot)
+void gl_tex_bind(const tex_t* tex, uint8_t slot)
 {
   uint32_t handle = 0;
   if (tex != NULL) handle = *((uint32_t*)tex->handle);

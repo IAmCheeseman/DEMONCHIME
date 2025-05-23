@@ -26,7 +26,7 @@ framebuf_t* gl_framebuf_create(
   uint8_t flags
 );
 void gl_framebuf_destroy(framebuf_t* fb);
-void gl_framebuf_bind(framebuf_t* fb);
+void gl_framebuf_bind(const framebuf_t* fb);
 void gl_framebuf_resize(framebuf_t* fb, vec2i_t size);
 void gl_framebuf_draw(framebuf_t* fb, vec2i_t start, vec2i_t end);
 

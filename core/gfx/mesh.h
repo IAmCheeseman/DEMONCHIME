@@ -12,16 +12,16 @@ typedef struct mesh_s
   uint16_t* indices;
   size_t index_count;
 
-  vert_fmt_t* fmt;
+  const vert_fmt_t* fmt;
 
   vert_arr_t* vao;
   buf_obj_t* vbo;
   buf_obj_t* ebo;
 } mesh_t;
 
-mesh_t mesh_create(vert_fmt_t* fmt);
-void mesh_destroy(renderer_t* r, mesh_t* m);
-void mesh_finalize(renderer_t* r, mesh_t* m, bool is_static);
-void mesh_draw(renderer_t* r, mesh_t* m);
+mesh_t mesh_create(const vert_fmt_t* fmt);
+void mesh_destroy(const renderer_t* r, mesh_t* m);
+void mesh_finalize(const renderer_t* r, mesh_t* m, bool is_static);
+void mesh_draw(const renderer_t* r, const mesh_t* m);
 
 #endif

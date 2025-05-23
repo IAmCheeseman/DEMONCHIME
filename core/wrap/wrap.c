@@ -40,6 +40,7 @@ static const char* ldata_type_to_str(ldata_type_t type)
     case LUA_TYPE_VERT_FMT: return "VertexFormat";
     case LUA_TYPE_SHADER: return "Shader";
     case LUA_TYPE_MAT4: return "Mat4";
+    case LUA_TYPE_FONT: return "Font";
     case LUA_TYPE_PRNG: return "Prng";
   }
   return "Invalid";

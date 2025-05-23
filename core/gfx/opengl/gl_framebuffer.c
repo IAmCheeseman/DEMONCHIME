@@ -146,7 +146,7 @@ void gl_framebuf_destroy(framebuf_t* fb)
   mem_destroy(fb);
 }
 
-void gl_framebuf_bind(framebuf_t* fb)
+void gl_framebuf_bind(const framebuf_t* fb)
 {
   uint32_t handle = 0;
   if (fb != NULL) handle = fb->fb_handle;

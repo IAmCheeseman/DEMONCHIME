@@ -126,12 +126,12 @@ void engine_destroy(engine_t* engine)
   engine->window_handle = NULL;
 }
 
-bool is_engine_init(engine_t* engine)
+bool is_engine_init(const engine_t* engine)
 {
   return engine->window_handle != NULL;
 }
 
-static bool call_lua_global(engine_t* engine, const char* fn_name)
+static bool call_lua_global(const engine_t* engine, const char* fn_name)
 {
   if (engine->L == NULL) return true;
   lua_getglobal(engine->L, fn_name);
@@ -146,7 +146,7 @@ static bool call_lua_global(engine_t* engine, const char* fn_name)
   return true;
 }
 
-static bool call_lua_update(engine_t* engine, const char* fn_name)
+static bool call_lua_update(const engine_t* engine, const char* fn_name)
 {
   if (engine->L == NULL) return true;
   lua_getglobal(engine->L, fn_name);
@@ -224,44 +224,44 @@ void engine_draw(engine_t* engine)
   //exit(1);
 }
 
-void engine_swap_buffers(engine_t* engine)
+void engine_swap_buffers(const engine_t* engine)
 {
   glfwSwapBuffers(engine->window_handle);
 }
 
-void engine_close(engine_t* engine)
+void engine_close(const engine_t* engine)
 {
   glfwSetWindowShouldClose(engine->window_handle, GLFW_TRUE);
 }
 
-bool is_engine_closed(engine_t* engine)
+bool is_engine_closed(const engine_t* engine)
 {
   return glfwWindowShouldClose(engine->window_handle);
 }
 
-vec2i_t engine_get_window_size(engine_t* engine)
+vec2i_t engine_get_window_size(const engine_t* engine)
 {
   vec2i_t size;
   glfwGetWindowSize(engine->window_handle, &size.x, &size.y);
   return size;
 }
 
-vec2i_t engine_get_screen_size(engine_t* engine)
+vec2i_t engine_get_screen_size(const engine_t* engine)
 {
   return engine->screen_size;
 }
 
-bool is_key_down(engine_t* engine, key_t key)
+bool is_key_down(const engine_t* engine, key_t key)
 {
   return glfwGetKey(engine->window_handle, key) == GLFW_PRESS;
 }
 
-bool is_mouse_down(engine_t* engine, int btn)
+bool is_mouse_down(const engine_t* engine, int btn)
 {
   return glfwGetMouseButton(engine->window_handle, btn - 1) == GLFW_PRESS;
 }
 
-vec2f_t get_mouse_pos(engine_t* engine)
+vec2f_t get_mouse_pos(const engine_t* engine)
 {
   double x, y;
   glfwGetCursorPos(engine->window_handle, &x, &y);

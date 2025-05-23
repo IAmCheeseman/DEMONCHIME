@@ -22,12 +22,9 @@ typedef struct font_handle_s
   uint32_t vbo;
 } font_handle_t;
 
-void gl_font_init(renderer_t* r, font_t* font, FT_Face face)
+void gl_font_init(font_t* font, FT_Face face)
 {
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-
-  uint32_t tex_handles[glyph_count];
-  glGenTextures(glyph_count, tex_handles);
 
   glyph_t* glyphs = 
     (glyph_t*)mem_alloc(sizeof(glyph_t) * glyph_count);
@@ -40,7 +37,8 @@ void gl_font_init(renderer_t* r, font_t* font, FT_Face face)
       continue;
     }
 
-    uint32_t tex = tex_handles[c];
+    uint32_t tex;
+    glGenTextures(1, &tex);
     glBindTexture(GL_TEXTURE_2D, tex);
     glTexImage2D(
       GL_TEXTURE_2D,
@@ -83,14 +81,13 @@ void gl_font_init(renderer_t* r, font_t* font, FT_Face face)
   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
   log_debug(
-    "loaded font (vao %d, vbo %d, textures %d-%d)",
-    handle->vao, handle->vbo, tex_handles[0], tex_handles[glyph_count-1]);
+    "loaded font (vao %d, vbo %d)", handle->vao, handle->vbo);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }
 
-void gl_font_destroy(renderer_t* r, font_t* font)
+void gl_font_destroy(font_t* font)
 {
   for (int i = 0; i < glyph_count; i++) {
     glDeleteTextures(1, &font->glyphs[i].tex_handle);
@@ -123,7 +120,9 @@ void gl_font_draw(
   Mat4Ortho(p, 0, 320 * 5, 180 * 5, 0, 0, 100);
 
   gl_shader_bind(shader);
-  gl_shader_send_vec4f(shader, "text_color", *(vec4f_t*)&color);
+  gl_shader_send_vec4f(shader, "text_color", (vec4f_t){
+    color.r, color.g, color.b, color.a
+  });
   gl_shader_send_mat4(shader, "p", p);
   gl_shader_send_int(shader, "fontmap", 0);
 

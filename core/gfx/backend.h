@@ -35,7 +35,7 @@ typedef void (*set_depth_test_fn)(bool do_test);
 typedef struct buf_obj_s* (*buf_obj_create_fn)(
   buf_obj_type_t type
 );
-typedef void (*buf_obj_bind_fn)(struct buf_obj_s* buf);
+typedef void (*buf_obj_bind_fn)(const struct buf_obj_s* buf);
 typedef void (*buf_obj_unbind_fn)(buf_obj_type_t type);
 typedef void (*buf_obj_set_dat_fn)(
   struct buf_obj_s* buf,
@@ -48,16 +48,16 @@ typedef void (*buf_obj_destroy_fn)(struct buf_obj_s* buf);
 typedef struct vert_arr_s* (*vert_arr_create_fn)(
   const struct vert_fmt_s* fmt);
 typedef void (*vert_arr_destroy_fn)(struct vert_arr_s* varr);
-typedef void (*vert_arr_bind_fn)(struct vert_arr_s* varr);
+typedef void (*vert_arr_bind_fn)(const struct vert_arr_s* varr);
 typedef void (*vert_arr_draw_fn)(
-  struct vert_arr_s* varr,
+  const struct vert_arr_s* varr,
   size_t start,
   size_t count,
   idx_mode_t index_mode
 );
 typedef void (*vert_arr_draw_idx_fn)(
-  struct vert_arr_s* varr,
-  struct buf_obj_s* ebo,
+  const struct vert_arr_s* varr,
+  const struct buf_obj_s* ebo,
   size_t count,
   data_type_t type,
   idx_mode_t index_mode
@@ -69,7 +69,7 @@ typedef struct framebuf_s* (*framebuf_create_fn)(
   uint8_t flags
 );
 typedef void (*framebuf_destroy_fn)(struct framebuf_s* fb);
-typedef void (*framebuf_bind_fn)(struct framebuf_s* fb);
+typedef void (*framebuf_bind_fn)(const struct framebuf_s* fb);
 typedef void (*framebuf_resize_fn)(struct framebuf_s* fb, vec2i_t size);
 typedef void (*framebuf_draw_fn)(
   struct framebuf_s* fb,
@@ -126,13 +126,14 @@ typedef void (*shader_send_vec4i_fn)(
   const char* name,
   vec4i_t v
 );
-typedef void (*shader_send_mat4_fn)(struct shader_s* s, const char* name, mat4_t m);
-typedef void (*shader_bind_fn)(struct shader_s* s);
+typedef void (*shader_send_mat4_fn)(
+  struct shader_s* s, const char* name, mat4_t m);
+typedef void (*shader_bind_fn)(const struct shader_s* s);
 typedef void (*shader_destroy_fn)(struct shader_s* s);
 
-typedef struct tex_s (*tex_load_from_img_fn)(struct img_s* img);
+typedef struct tex_s (*tex_load_from_img_fn)(const struct img_s* img);
 typedef void (*tex_gen_mipmap_fn)(struct tex_s* tex);
-typedef void (*tex_bind_fn)(struct tex_s* tex, uint8_t slot);
+typedef void (*tex_bind_fn)(const struct tex_s* tex, uint8_t slot);
 typedef void (*tex_set_filter_fn)(
   struct tex_s* tex,
   tex_filter_t min,
@@ -146,8 +147,8 @@ typedef void (*tex_set_wrap_fn)(
 typedef void (*tex_destroy_fn)(struct tex_s* tex);
 
 typedef void (*font_init_fn)(
-  struct renderer_s* r, struct font_s* font, FT_Face face);
-typedef void (*font_destroy_fn)(struct renderer_s* r, struct font_s* font);
+  struct font_s* font, FT_Face face);
+typedef void (*font_destroy_fn)(struct font_s* font);
 typedef void (*font_draw_fn)(
   struct font_s* font,
   vec2f_t pos,

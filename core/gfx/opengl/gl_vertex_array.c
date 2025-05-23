@@ -38,7 +38,7 @@ vert_arr_t* gl_vert_arr_create(const vert_fmt_t* fmt)
   return varr;
 }
 
-void gl_vert_arr_bind(vert_arr_t* varr)
+void gl_vert_arr_bind(const vert_arr_t* varr)
 {
   uint32_t handle = 0;
   if (varr != NULL) handle = varr->handle;
@@ -53,7 +53,7 @@ void gl_vert_arr_destroy(vert_arr_t* varr)
 }
 
 void gl_vert_arr_draw(
-  vert_arr_t* varr,
+  const vert_arr_t* varr,
   size_t start,
   size_t count,
   idx_mode_t index_mode)
@@ -64,8 +64,8 @@ void gl_vert_arr_draw(
 }
 
 void gl_vert_arr_draw_idx(
-  vert_arr_t* varr,
-  buf_obj_t* ebo,
+  const vert_arr_t* varr,
+  const buf_obj_t* ebo,
   size_t count,
   data_type_t type,
   idx_mode_t index_mode)

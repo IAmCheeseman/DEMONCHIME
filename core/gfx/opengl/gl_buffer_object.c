@@ -22,7 +22,7 @@ void gl_buf_obj_destroy(buf_obj_t* buf)
   mem_destroy(buf);
 }
 
-void gl_buf_obj_bind(buf_obj_t* buf)
+void gl_buf_obj_bind(const buf_obj_t* buf)
 {
   glBindBuffer(buf_obj_type_to_gl(buf->type), buf->handle);
 }

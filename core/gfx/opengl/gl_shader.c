@@ -80,7 +80,8 @@ static shader_t* shader_create(uint32_t vert, uint32_t frag)
   if (!status) {
     char msg[512];
     glGetProgramInfoLog(handle, 512, NULL, msg);
-    log_fatal(1, "[" TEXT_DARK_GRAY "shader" TEXT_NORMAL "] link error: %s", msg);
+    log_fatal(
+      1, "[" TEXT_DARK_GRAY "shader" TEXT_NORMAL "] link error: %s", msg);
   }
 
   s->uniforms.vars = NULL;
@@ -222,7 +223,7 @@ void gl_shader_send_mat4(shader_t* s, const char* name, mat4_t m)
   glUniformMatrix4fv(ptr->loc, 1, GL_FALSE, m);
 }
 
-void gl_shader_bind(shader_t* s)
+void gl_shader_bind(const shader_t* s)
 {
   uint32_t handle = 0;
   if (s != NULL) handle = s->handle;
