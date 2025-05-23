@@ -5,9 +5,9 @@
 
 static int L_create_prng(lua_State* L)
 {
-  Prng* p = (Prng*)mem_alloc(sizeof(Prng));
+  prng_t* p = (prng_t*)mem_alloc(sizeof(prng_t));
   *p = prng_create(luaL_optinteger(L, 1, 0));
-  create_ldata(L, p, PRNG_MT_NAME, LUA_TYPE_PRNG);
+  create_ldata(L, p, prng_mt_name, lua_type_prng);
   return 1;
 }
 
@@ -18,21 +18,21 @@ luaL_Reg prng_funcs[] = {
 
 static int L_PrngMt__index(lua_State* L)
 {
-  luaL_getmetatable(L, PRNG_MT_NAME);
+  luaL_getmetatable(L, prng_mt_name);
   lua_getfield(L, -1, luaL_checkstring(L, 2));
   return 1;
 }
 
 static int L_PrngMt_nexti(lua_State* L)
 {
-  Prng* p = (Prng*)read_ldata(L, 1, LUA_TYPE_PRNG);
+  prng_t* p = (prng_t*)read_ldata(L, 1, lua_type_prng);
   lua_pushinteger(L, prng_nexti(p));
   return 1;
 }
 
 static int L_PrngMt_nextf(lua_State* L)
 {
-  Prng* p = (Prng*)read_ldata(L, 1, LUA_TYPE_PRNG);
+  prng_t* p = (prng_t*)read_ldata(L, 1, lua_type_prng);
   lua_pushnumber(L, prng_nextf(p));
   return 1;
 }
@@ -52,7 +52,7 @@ static int L_PrngMt_rangei(lua_State* L)
     upper = luaL_checkinteger(L, 3);
   }
 
-  Prng* p = (Prng*)read_ldata(L, 1, LUA_TYPE_PRNG);
+  prng_t* p = (prng_t*)read_ldata(L, 1, lua_type_prng);
   lua_pushinteger(L, prng_get_rangei(p, lower, upper));
   return 1;
 }
@@ -72,14 +72,14 @@ static int L_PrngMt_rangef(lua_State* L)
     upper = luaL_checknumber(L, 3);
   }
 
-  Prng* p = (Prng*)read_ldata(L, 1, LUA_TYPE_PRNG);
+  prng_t* p = (prng_t*)read_ldata(L, 1, lua_type_prng);
   lua_pushinteger(L, prng_get_rangef(p, lower, upper));
   return 1;
 }
 
 static int L_PrngMt__gc(lua_State* L)
 {
-  Prng* p = (Prng*)read_ldata(L, 1, LUA_TYPE_PRNG);
+  prng_t* p = (prng_t*)read_ldata(L, 1, lua_type_prng);
   mem_destroy(p);
   return 0;
 }
@@ -96,10 +96,10 @@ luaL_Reg prng_mt[] = {
 
 void wrap_prng(lua_State* L)
 {
-  lua_getglobal(L, CORE_NAME);
+  lua_getglobal(L, core_name);
   reg_funcs(L, prng_funcs);
 
-  luaL_newmetatable(L, PRNG_MT_NAME);
+  luaL_newmetatable(L, prng_mt_name);
   reg_funcs(L, prng_mt);
 
   lua_pop(L, 2);

@@ -32,7 +32,7 @@ static void msg_callback(
       // log_debug("[" TEXT_DARK_GRAY "OpenGL" TEXT_NORMAL "] %s", message);
       return;
     default:
-      log_warning("[" TEXT_DARK_GRAY "OpenGL" TEXT_NORMAL "] %s", msg);
+      log_warning("[" text_dark_gray "OpenGL" text_normal "] %s", msg);
       return;
   }
 }

@@ -48,7 +48,7 @@ static void gen_tex(
 
 static void gen_texs(framebuf_t* fb)
 {
-  if (fb->flags & FRAMEBUFFER_COLOR_BUF) {
+  if (fb->flags & framebuffer_color_buf) {
     gen_tex(
       fb,
       &fb->color_handle,
@@ -61,7 +61,7 @@ static void gen_texs(framebuf_t* fb)
 
   // TODO: maybe make depth/stencil use renderbuffers? they're faster when not 
   // being read and i doubt i'll be doing much reading from these
-  if (fb->flags & FRAMEBUFFER_DEPTH_MASK_BUF) {
+  if (fb->flags & framebuffer_depth_mask_buf) {
     gen_tex(
       fb,
       &fb->z_mask_handle,
@@ -70,7 +70,7 @@ static void gen_texs(framebuf_t* fb)
       GL_DEPTH_STENCIL,
       GL_UNSIGNED_INT_24_8
     );
-  } else if (fb->flags & FRAMEBUFFER_DEPTH_BUF) {
+  } else if (fb->flags & framebuffer_depth_buf) {
     gen_tex(
       fb,
       &fb->z_mask_handle,
@@ -103,14 +103,14 @@ framebuf_t* gl_framebuf_create(
 
   gen_texs(fb);
 
-  if (flags & FRAMEBUFFER_DRAWABLE) {
+  if (flags & framebuffer_drawable) {
     vert_attr_t attribs[] = {
-      {TYPE_FLOAT, 2}, // position
-      {TYPE_FLOAT, 2}, // UV
+      {type_float, 2}, // position
+      {type_float, 2}, // UV
     };
     vert_fmt_t format = vert_fmt_create(attribs, 2);
-    fb->vbo = gl_buf_obj_create(BUFFER_ARRAY);
-    gl_buf_obj_set_dat(fb->vbo, NULL, 0, DRAW_DYNAMIC);
+    fb->vbo = gl_buf_obj_create(buf_arr);
+    gl_buf_obj_set_dat(fb->vbo, NULL, 0, draw_dynamic);
     gl_buf_obj_bind(fb->vbo);
     fb->vao = gl_vert_arr_create(&format);
 
@@ -193,12 +193,12 @@ void gl_framebuf_draw(framebuf_t* fb, vec2i_t start, vec2i_t end)
   };
 
   gl_vert_arr_bind(fb->vao);
-  gl_buf_obj_set_dat(fb->vbo, vertices, sizeof(vertices), DRAW_DYNAMIC);
+  gl_buf_obj_set_dat(fb->vbo, vertices, sizeof(vertices), draw_dynamic);
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, fb->color_handle);
 
   gl_shader_bind(framebuffer_draw_shader);
   gl_shader_send_int(framebuffer_draw_shader, "tex0", 0);
-  gl_vert_arr_draw(fb->vao, 0, 6, INDEX_TRIANGLES);
+  gl_vert_arr_draw(fb->vao, 0, 6, idx_triangles);
 }

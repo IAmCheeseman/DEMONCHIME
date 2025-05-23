@@ -42,7 +42,7 @@ shader_var_t* shader_tab_find_var(
 
 static void grow_shader_tab(shader_tab_t* t)
 {
-  size_t capacity = GrowCapacity(t->capacity);
+  size_t capacity = grow_capacity(t->capacity);
 
   shader_var_t* vars =
     (shader_var_t*)mem_alloc(sizeof(shader_var_t) * capacity);

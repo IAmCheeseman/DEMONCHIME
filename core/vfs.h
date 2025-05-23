@@ -7,20 +7,20 @@
 
 typedef enum vfs_err_e
 {
-  VFS_OK = 0,
-  VFS_COULD_NOT_MOUNT,
-  VFS_FILE_NOT_FOUND,
-  VFS_OUT_OF_MEM,
-  VFS_MALFORMED_PATH,
-  VFS_CANNOT_OPEN,
-  VFS_CANNOT_WRITE,
-  VFS_CANNOT_READ,
+  vfs_ok = 0,
+  vfs_cannot_mnt,
+  vfs_file_not_found,
+  vfs_no_mem,
+  vfs_malformed_path,
+  vfs_cannot_open,
+  vfs_cannot_write,
+  vfs_cannot_read,
 } vfs_err_t;
 
 typedef enum vfs_type_e
 {
-  VFS_DIR,
-  VFS_ZIP,
+  vfs_dir,
+  vfs_zip,
 } vfs_type_t;
 
 typedef struct vfs_s

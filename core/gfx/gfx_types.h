@@ -5,77 +5,77 @@
 
 typedef enum buf_obj_type_e
 {
-  BUFFER_ARRAY,
-  BUFFER_INDEX,
+  buf_arr,
+  buf_idx,
 } buf_obj_type_t;
 
 typedef enum draw_mode_e
 {
-  DRAW_STATIC,
-  DRAW_DYNAMIC,
-  DRAW_STREAM,
+  draw_static,
+  draw_dynamic,
+  draw_stream,
 } draw_mode_t;
 
 typedef enum idx_mode_e
 {
-  INDEX_TRIANGLES,
-  INDEX_TRIANGLE_STRIP,
-  INDEX_TRIANGLE_FAN,
-  INDEX_LINES,
-  INDEX_LINE_STRIP,
-  INDEX_LINE_LOOP,
-  INDEX_POINTS,
+  idx_triangles,
+  idx_triangle_strip,
+  idx_triangle_fan,
+  idx_lines,
+  idx_line_strip,
+  idx_line_loop,
+  idx_points,
 } idx_mode_t;
 
 typedef enum data_type_e
 {
-  TYPE_UNKNOWN = 0,
+  type_unknown = 0,
 
-  TYPE_HALF,
-  TYPE_FLOAT,
-  TYPE_DOUBLE,
+  type_half,
+  type_float,
+  type_double,
 
-  TYPE_UCHAR,
-  TYPE_CHAR,
+  type_uchar,
+  type_char,
 
-  TYPE_USHORT,
-  TYPE_SHORT,
+  type_ushort,
+  type_short,
 
-  TYPE_UINT,
-  TYPE_INT,
+  type_uint,
+  type_int,
 } data_type_t;
 
 typedef enum img_fmt_e
 {
-  IMAGE_FORMAT_INVALID = 0,
-  IMAGE_FORMAT_R8,
-  IMAGE_FORMAT_RA8,
-  IMAGE_FORMAT_RGB8,
-  IMAGE_FORMAT_RGBA8,
+  img_fmt_invalid = 0,
+  img_fmt_r8,
+  img_fmt_ra8,
+  img_fmt_rgb8,
+  img_fmt_rgba8,
 } img_fmt_t;
 
 typedef enum tex_filter_e
 {
-  TEXTURE_FILTER_NEAREST,
-  TEXTURE_FILTER_NEAREST_MIPMAP,
-  TEXTURE_FILTER_NEAREST_MIPMAP_NEAREST,
-  TEXTURE_FILTER_LINEAR,
-  TEXTURE_FILTER_LINEAR_MIPMAP,
-  TEXTURE_FILTER_LINEAR_MIPMAP_NEAREST,
+  tex_filter_nearest,
+  tex_filter_nearest_mipmap,
+  tex_filter_nearest_mipmap_nearest,
+  tex_filter_linear,
+  tex_filter_linear_mipmap,
+  tex_filter_linear_mipmap_nearest,
 } tex_filter_t;
 
 typedef enum tex_wrap_e
 {
-  TEXTURE_WRAP_REPEAT,
-  TEXTURE_WRAP_MIRRORED_REPEAT,
-  TEXTURE_WRAP_CLAMP_EDGE,
-  TEXTURE_WRAP_CLAMP_BORDER,
+  tex_wrap_rep,
+  tex_wrap_mirror_rep,
+  tex_wrap_clamp_edge,
+  tex_wrap_clamp_border,
 } tex_wrap_t;
 
-#define FRAMEBUFFER_COLOR_BUF (1 << 0)
-#define FRAMEBUFFER_DEPTH_BUF (1 << 1)
-#define FRAMEBUFFER_DEPTH_MASK_BUF (1 << 2)
-#define FRAMEBUFFER_DRAWABLE (1 << 3)
+#define framebuffer_color_buf (1 << 0)
+#define framebuffer_depth_buf (1 << 1)
+#define framebuffer_depth_mask_buf (1 << 2)
+#define framebuffer_drawable (1 << 3)
 
 size_t get_data_type_size(data_type_t type);
 data_type_t str_to_data_type(const char* str, size_t len);

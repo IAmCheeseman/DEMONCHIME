@@ -10,7 +10,7 @@ static int L_load_font(lua_State* L)
   int size = luaL_optinteger(L, 2, 28);
 
   font_t* font = font_load(engine->renderer, engine->vfs, path, size);
-  create_ldata(L, font, FONT_MT_NAME, LUA_TYPE_FONT);
+  create_ldata(L, font, font_mt_name, lua_type_font);
   return 1;
 }
 
@@ -21,7 +21,7 @@ luaL_Reg font_funcs[] = {
 
 static int L_FontMt_draw(lua_State* L)
 {
-  font_t* font = (font_t*)read_ldata(L, 1, LUA_TYPE_FONT);
+  font_t* font = (font_t*)read_ldata(L, 1, lua_type_font);
 
   vec2f_t pos;
   pos.x = luaL_checknumber(L, 2);
@@ -40,7 +40,7 @@ static int L_FontMt_draw(lua_State* L)
 
 static int L_FontMt__index(lua_State* L)
 {
-  luaL_getmetatable(L, FONT_MT_NAME);
+  luaL_getmetatable(L, font_mt_name);
   lua_getfield(L, -1, luaL_checkstring(L, 2));
   return 1;
 }
@@ -48,7 +48,7 @@ static int L_FontMt__index(lua_State* L)
 static int L_FontMt__gc(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
-  font_t* font = (font_t*)read_ldata(L, 1, LUA_TYPE_FONT);
+  font_t* font = (font_t*)read_ldata(L, 1, lua_type_font);
   font_destroy(r, font);
   return 0;
 }
@@ -62,10 +62,10 @@ luaL_Reg font_mt[] = {
 
 void wrap_font(lua_State* L)
 {
-  lua_getglobal(L, CORE_NAME);
+  lua_getglobal(L, core_name);
   reg_funcs(L, font_funcs);
 
-  luaL_newmetatable(L, FONT_MT_NAME);
+  luaL_newmetatable(L, font_mt_name);
   reg_funcs(L, font_mt);
 
   lua_pop(L, 2);

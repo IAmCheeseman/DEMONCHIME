@@ -3,11 +3,11 @@
 
 #include "include.h"
 
-typedef enum key_e
+typedef enum keys_e
 {
-#define KEY_DEF(name, val) KEY_##name = (val),
+#define key_def(name, val) key_##name = (val),
 #include "key_def.h"
-#undef KEY_DEF
-} key_t;
+#undef key_def
+} keys_t;
 
 #endif

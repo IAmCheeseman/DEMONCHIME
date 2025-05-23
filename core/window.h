@@ -11,9 +11,9 @@ struct engine_conf_s;
 
 typedef enum fullscreen_e
 {
-  FULLSCREEN_NONE,
-  FULLSCREEN_EXCLUSIVE,
-  FULLSCREEN_BORDERLESS,
+  fullscreen_none,
+  fullscreen_exclusive,
+  fullscreen_borderless,
 } fullscreen_t;
 
 typedef struct window_s

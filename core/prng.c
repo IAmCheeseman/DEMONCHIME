@@ -18,7 +18,7 @@ static uint64_t wang_hash_64(uint64_t key)
 	return key;
 }
 
-Prng prng_create(uint32_t seed)
+prng_t prng_create(uint32_t seed)
 {
   if (seed == 0) {
     seed = time(NULL);
@@ -26,7 +26,7 @@ Prng prng_create(uint32_t seed)
   return wang_hash_64(seed);
 }
 
-uint64_t prng_next(Prng* p)
+uint64_t prng_next(prng_t* p)
 {
   *p ^= (*p >> 12);
 	*p ^= (*p << 25);
@@ -34,7 +34,7 @@ uint64_t prng_next(Prng* p)
   return *p * 2685821657736338717ULL;
 }
 
-double prng_nextf(Prng* p)
+double prng_nextf(prng_t* p)
 {
   uint64_t r = prng_next(p);
   union {
@@ -45,7 +45,7 @@ double prng_nextf(Prng* p)
   return n.d - 1.0;
 }
 
-int prng_nexti(Prng* p)
+int prng_nexti(prng_t* p)
 {
   union {
     uint64_t uint64;
@@ -55,13 +55,13 @@ int prng_nexti(Prng* p)
   return n.i;
 }
 
-int prng_get_rangei(Prng* p, int min, int max)
+int prng_get_rangei(prng_t* p, int min, int max)
 {
   int i = prng_nexti(p);
   return i % (max - min + 1) + min;
 }
 
-double prng_get_rangef(Prng* p, double min, double max)
+double prng_get_rangef(prng_t* p, double min, double max)
 {
   double d = prng_nextf(p);
   return d * (max - min) + min;

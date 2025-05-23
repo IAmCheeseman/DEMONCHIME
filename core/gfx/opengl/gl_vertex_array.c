@@ -70,8 +70,10 @@ void gl_vert_arr_draw_idx(
   data_type_t type,
   idx_mode_t index_mode)
 {
-  if (ebo->type != BUFFER_INDEX)
-    log_fatal(1, "expected index buffer for index drawing");
+  if (ebo->type != buf_idx)
+    log_warning(
+      "expected index buffer for index drawing (VAO %d, BO %d)",
+      varr->handle, ebo->handle);
 
   glBindVertexArray(varr->handle);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo->handle);

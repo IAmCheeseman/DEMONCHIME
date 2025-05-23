@@ -51,7 +51,7 @@ bool is_engine_closed(const engine_t* engine);
 
 vec2i_t engine_get_screen_size(const engine_t* engine);
 
-bool is_key_down(const engine_t* engine, key_t key);
+bool is_key_down(const engine_t* engine, keys_t key);
 bool is_mouse_down(const engine_t* engine, int btn);
 
 vec2f_t get_mouse_pos(const engine_t* engine);

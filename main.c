@@ -12,7 +12,7 @@ int main(int argc, const char* args[])
 #ifdef bse_release
     .fullscreen = FULLSCREEN_FULL,
 #else
-    .fullscreen = FULLSCREEN_NONE,
+    .fullscreen = fullscreen_none,
 #endif
     .window_size = (vec2i_t){320 * 3, 180 * 3},
     .screen_size = (vec2i_t){320, 180},
@@ -25,7 +25,7 @@ int main(int argc, const char* args[])
   if (argc > 1) {
     for (int i = 1; i < argc; i++) {
       vfs_err_t err = vfs_mount(&engine.vfs, args[i]);
-      if (err != VFS_OK) {
+      if (err != vfs_ok) {
         log_fatal(1, "could not load '%s'", args[i]);
       }
     }

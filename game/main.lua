@@ -54,7 +54,7 @@ event.on("@tick", function()
 end)
 
 event.on("@tick", function()
-  if core.is_key_down(core.key.ESCAPE) then
+  if core.is_key_down(core.key.escape) then
     core.close_engine()
   end
 end)
@@ -77,17 +77,17 @@ event.on("@uidraw", function()
     1, 0.2, 1)
 end)
 
-local fullscreen = core.fullscreen.NONE
+local fullscreen = "none"
 
 event.on("@keydown", function(key, is_repeated)
-  if key ~= core.key.F11 or is_repeated then
+  if key ~= core.key.f11 or is_repeated then
     return
   end
 
-  if fullscreen == core.fullscreen.NONE then
-    fullscreen = core.fullscreen.BORDERLESS
+  if fullscreen == "none" then
+    fullscreen = "borderless"
   else
-    fullscreen = core.fullscreen.NONE
+    fullscreen = "none"
   end
   core.set_fullscreen(fullscreen)
 end)

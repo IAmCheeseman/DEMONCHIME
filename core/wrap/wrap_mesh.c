@@ -7,11 +7,11 @@
 static int L_create_mesh(lua_State* L)
 {
   lvertex_format_t* lua_fmt = 
-    (lvertex_format_t*)read_ldata(L, 1, LUA_TYPE_VERT_FMT);
+    (lvertex_format_t*)read_ldata(L, 1, lua_type_vert_fmt);
 
   mesh_t* mesh = (mesh_t*)mem_alloc(sizeof(mesh_t));
   *mesh = mesh_create(&lua_fmt->fmt);
-  create_ldata(L, mesh, MESH_MT_NAME, LUA_TYPE_MESH);
+  create_ldata(L, mesh, mesh_mt_name, lua_type_mesh);
   return 1;
 }
 
@@ -22,7 +22,7 @@ luaL_Reg mesh_funcs[] = {
 
 static int L_MeshMt_set_vertices(lua_State* L)
 {
-  mesh_t* mesh = (mesh_t*)read_ldata(L, 1, LUA_TYPE_MESH);
+  mesh_t* mesh = (mesh_t*)read_ldata(L, 1, lua_type_mesh);
   luaL_checktype(L, 2, LUA_TTABLE);
 
   const vert_fmt_t* fmt = mesh->fmt;
@@ -61,18 +61,18 @@ static int L_MeshMt_set_vertices(lua_State* L)
   } while (false)
 
         switch (attrib->type) {
-          case TYPE_UNKNOWN: luaL_error(L, "unknown type"); break;
-          case TYPE_HALF: luaL_error(L, "type 'half' not supported"); break;
-          case TYPE_FLOAT: AddAttrib(float, luaL_checknumber); break; 
-          case TYPE_DOUBLE: AddAttrib(double, luaL_checknumber); break;
-          case TYPE_UCHAR: AddAttrib(unsigned char, luaL_checkinteger); break;
-          case TYPE_CHAR: AddAttrib(signed char, luaL_checkinteger); break;
-          case TYPE_USHORT:
+          case type_unknown: luaL_error(L, "unknown type"); break;
+          case type_half: luaL_error(L, "type 'half' not supported"); break;
+          case type_float: AddAttrib(float, luaL_checknumber); break; 
+          case type_double: AddAttrib(double, luaL_checknumber); break;
+          case type_uchar: AddAttrib(unsigned char, luaL_checkinteger); break;
+          case type_char: AddAttrib(signed char, luaL_checkinteger); break;
+          case type_ushort:
             AddAttrib(unsigned short, luaL_checkinteger);
             break;
-          case TYPE_SHORT: AddAttrib(short, luaL_checkinteger); break;
-          case TYPE_UINT: AddAttrib(unsigned int, luaL_checkinteger); break;
-          case TYPE_INT: AddAttrib(int, luaL_checkinteger); break;
+          case type_short: AddAttrib(short, luaL_checkinteger); break;
+          case type_uint: AddAttrib(unsigned int, luaL_checkinteger); break;
+          case type_int: AddAttrib(int, luaL_checkinteger); break;
         }
 
 #undef AddAttrib
@@ -90,7 +90,7 @@ static int L_MeshMt_set_vertices(lua_State* L)
 static int L_MeshMt_finalize(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
-  mesh_t* mesh = (mesh_t*)read_ldata(L, 1, LUA_TYPE_MESH);
+  mesh_t* mesh = (mesh_t*)read_ldata(L, 1, lua_type_mesh);
   mesh_finalize(r, mesh, lua_toboolean(L, 2));
   return 0;
 }
@@ -98,14 +98,14 @@ static int L_MeshMt_finalize(lua_State* L)
 static int L_MeshMt_draw(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
-  mesh_t* mesh = (mesh_t*)read_ldata(L, 1, LUA_TYPE_MESH);
+  mesh_t* mesh = (mesh_t*)read_ldata(L, 1, lua_type_mesh);
   mesh_draw(r, mesh);
   return 0;
 }
 
 static int L_MeshMt__index(lua_State* L)
 {
-  luaL_getmetatable(L, MESH_MT_NAME);
+  luaL_getmetatable(L, mesh_mt_name);
   lua_getfield(L, -1, luaL_checkstring(L, 2));
   return 1;
 }
@@ -113,7 +113,7 @@ static int L_MeshMt__index(lua_State* L)
 static int L_MeshMt__gc(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
-  mesh_t* mesh = (mesh_t*)read_ldata(L, 1, LUA_TYPE_MESH);
+  mesh_t* mesh = (mesh_t*)read_ldata(L, 1, lua_type_mesh);
   if (mesh->vertex_count != 0) {
     mem_destroy(mesh->vertices);
     mesh->vertex_count = 0;
@@ -138,10 +138,10 @@ luaL_Reg mesh_mt[] = {
 
 void wrap_mesh(lua_State* L)
 {
-  lua_getglobal(L, CORE_NAME);
+  lua_getglobal(L, core_name);
   reg_funcs(L, mesh_funcs);
 
-  luaL_newmetatable(L, MESH_MT_NAME);
+  luaL_newmetatable(L, mesh_mt_name);
   reg_funcs(L, mesh_mt);
 
   lua_pop(L, 2);

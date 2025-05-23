@@ -3,7 +3,7 @@
 
 #include "include.h"
 
-#define GrowCapacity(cap) ((cap) == 0 ? 8 : (cap) * 2)
+#define grow_capacity(cap) ((cap) == 0 ? 8 : (cap) * 2)
 
 #ifdef bse_use_c_alloc
 #define mem_alloc(size) malloc(size)

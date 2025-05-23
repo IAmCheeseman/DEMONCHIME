@@ -63,29 +63,29 @@ vfs_err_t vfs_mount(vfs_t** vfs, const char* path)
   if (!is_dir && !mz_zip_reader_init_file(&mnt->zip, owned_path, 0)) {
     mem_destroy(mnt);
     mem_destroy(owned_path);
-    return VFS_COULD_NOT_MOUNT;
+    return vfs_cannot_mnt;
   }
 
   mnt->path = owned_path;
-  mnt->type = is_dir ? VFS_DIR : VFS_ZIP;
+  mnt->type = is_dir ? vfs_dir : vfs_zip;
   mnt->next = *vfs;
   *vfs = mnt;
 
   log_info("mounted vfs at '%s'", path);
   
-  return VFS_OK;
+  return vfs_ok;
 }
 
 static bool does_file_exist_in_mount(vfs_t* vfs, const char* path)
 {
-  if (vfs->type == VFS_DIR) {
+  if (vfs->type == vfs_dir) {
     struct stat stats;
     char* full_path = concat(vfs->path, "/", path, NULL);
     if (!full_path) return false;
     int res = stat(full_path, &stats);
     mem_destroy(full_path);
     return res == 0;
-  } else if (vfs->type == VFS_ZIP) {
+  } else if (vfs->type == vfs_zip) {
     int index = mz_zip_reader_locate_file(&vfs->zip, path, NULL, 0);
     return index != -1;
   }
@@ -122,7 +122,7 @@ uint8_t* vfs_read(vfs_t* vfs, const char* path, size_t* size)
       continue;
     }
 
-    if (mnt->type == VFS_DIR) {
+    if (mnt->type == vfs_dir) {
       char* full_path = concat(mnt->path, "/", lpath, NULL);
       FILE* file = fopen(full_path, "rb");
       if (file == NULL) {
@@ -151,7 +151,7 @@ uint8_t* vfs_read(vfs_t* vfs, const char* path, size_t* size)
       log_debug("loaded file '%s'", full_path);
       mem_destroy(full_path);
       return dat;
-    } else if (mnt->type == VFS_ZIP) {
+    } else if (mnt->type == vfs_zip) {
       size_t zdat_size;
       uint8_t* zdat = mz_zip_reader_extract_file_to_heap(
         &mnt->zip, lpath, &zdat_size, 0);
@@ -195,7 +195,7 @@ void vfs_destroy(vfs_t* vfs)
 
   while (mnt) {
     vfs_t* next = mnt->next;
-    if (mnt->type == VFS_ZIP) mz_zip_reader_end(&mnt->zip);
+    if (mnt->type == vfs_zip) mz_zip_reader_end(&mnt->zip);
     mem_destroy(mnt->path);
     mem_destroy(mnt);
     mnt = next;

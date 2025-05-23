@@ -93,14 +93,14 @@ void window_set_fullscreen(window_t* window, fullscreen_t fullscreen)
 {
   log_info("fullscreen: %d", fullscreen);
   switch (fullscreen) {
-    case FULLSCREEN_NONE:
+    case fullscreen_none:
       glfwSetWindowMonitor(
         window->handle, NULL,
         window->original_pos.x, window->original_pos.y,
         window->original_size.x, window->original_size.y,
         GLFW_DONT_CARE);
       break;
-    case FULLSCREEN_EXCLUSIVE: {
+    case fullscreen_exclusive: {
       glfwGetWindowSize(
         window->handle,
         &window->original_size.x, &window->original_size.y);
@@ -116,7 +116,7 @@ void window_set_fullscreen(window_t* window, fullscreen_t fullscreen)
         GLFW_DONT_CARE);
       break;
     }
-    case FULLSCREEN_BORDERLESS:
+    case fullscreen_borderless:
       glfwGetWindowSize(
         window->handle,
         &window->original_size.x, &window->original_size.y);

@@ -31,8 +31,8 @@ tex_t gl_tex_load_from_img(const img_t* img)
 
   tex.handle = handle_ptr;
 
-  gl_tex_set_filter(&tex, TEXTURE_FILTER_NEAREST, TEXTURE_FILTER_NEAREST);
-  gl_tex_set_wrap(&tex, TEXTURE_WRAP_REPEAT, TEXTURE_WRAP_REPEAT);
+  gl_tex_set_filter(&tex, tex_filter_nearest, tex_filter_nearest);
+  gl_tex_set_wrap(&tex, tex_wrap_rep, tex_wrap_rep);
 
   return tex;
 }
@@ -55,17 +55,9 @@ void gl_tex_bind(const tex_t* tex, uint8_t slot)
 
 void gl_tex_gen_mipmap(tex_t* tex)
 {
-  switch (tex->min_filter) {
-    case TEXTURE_FILTER_NEAREST:
-    case TEXTURE_FILTER_LINEAR:
-      break;
-    default:
-      break;
-  }
-
   if (
-    tex->min_filter == TEXTURE_FILTER_NEAREST ||
-    tex->min_filter == TEXTURE_FILTER_LINEAR
+    tex->min_filter == tex_filter_nearest ||
+    tex->min_filter == tex_filter_linear
   ) {
     log_warning(
       "min texture filter for texture %d is not a mipmap filter; "
@@ -86,8 +78,8 @@ void gl_tex_set_filter(
   tex->mag_filter = mag;
 
   if (
-    mag != TEXTURE_FILTER_NEAREST &&
-    mag != TEXTURE_FILTER_LINEAR
+    mag != tex_filter_nearest &&
+    mag != tex_filter_linear
   ) {
     log_warning(
       "mag texture filter for texture %d is a mipmap filter and will not make "

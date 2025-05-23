@@ -102,7 +102,7 @@ static int L_is_key_down(lua_State* L)
 {
   engine_t* engine = get_engine(L);
   int key = luaL_checkinteger(L, 1);
-  lua_pushboolean(L, is_key_down(engine, (key_t)key));
+  lua_pushboolean(L, is_key_down(engine, (keys_t)key));
   return 1;
 }
 
@@ -236,7 +236,7 @@ static int L_loader(lua_State* L)
 
 void wrap_engine(lua_State* L)
 {
-  lua_getglobal(L, CORE_NAME);
+  lua_getglobal(L, core_name);
   reg_funcs(L, engine_funcs);
   lua_pushstring(L, bse_os_str);
   lua_setfield(L, -2, "os");

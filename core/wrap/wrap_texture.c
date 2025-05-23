@@ -9,7 +9,7 @@ static int L_load_tex(lua_State* L)
   const char* path = luaL_checkstring(L, 1);
   tex_t* tex = (tex_t*)mem_alloc(sizeof(tex_t));
   *tex = tex_load(engine->renderer, engine->vfs, path);
-  create_ldata(L, tex, TEX_MT_NAME, LUA_TYPE_TEX);
+  create_ldata(L, tex, tex_mt_name, lua_type_tex);
   return 1;
 }
 
@@ -20,7 +20,7 @@ luaL_Reg texture_funcs[] = {
 
 static int L_TextureMt_get_size(lua_State* L)
 {
-  tex_t* tex = (tex_t*)read_ldata(L, 1, LUA_TYPE_TEX);
+  tex_t* tex = (tex_t*)read_ldata(L, 1, lua_type_tex);
   lua_pushinteger(L, tex->size.x);
   lua_pushinteger(L, tex->size.y);
   return 2;
@@ -29,7 +29,7 @@ static int L_TextureMt_get_size(lua_State* L)
 static int L_TextureMt_gen_mipmap(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
-  tex_t* tex = (tex_t*)read_ldata(L, 1, LUA_TYPE_TEX);
+  tex_t* tex = (tex_t*)read_ldata(L, 1, lua_type_tex);
   tex_gen_mipmap(r, tex);
   return 0;
 }
@@ -37,7 +37,7 @@ static int L_TextureMt_gen_mipmap(lua_State* L)
 static int L_TextureMt_set_filter(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
-  tex_t* tex = (tex_t*)read_ldata(L, 1, LUA_TYPE_TEX);
+  tex_t* tex = (tex_t*)read_ldata(L, 1, lua_type_tex);
   tex_filter_t min = luaL_checkinteger(L, 2);
   tex_filter_t mag = luaL_checkinteger(L, 3);
   tex_set_filter(r, tex, min, mag);
@@ -47,7 +47,7 @@ static int L_TextureMt_set_filter(lua_State* L)
 static int L_TextureMt_set_wrap(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
-  tex_t* tex = (tex_t*)read_ldata(L, 1, LUA_TYPE_TEX);
+  tex_t* tex = (tex_t*)read_ldata(L, 1, lua_type_tex);
   tex_wrap_t x = luaL_checkinteger(L, 2);
   tex_wrap_t y = luaL_checkinteger(L, 3);
   tex_set_wrap(r, tex, x, y);
@@ -57,14 +57,14 @@ static int L_TextureMt_set_wrap(lua_State* L)
 static int L_TextureMt_bind(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
-  tex_t* tex = (tex_t*)read_ldata(L, 1, LUA_TYPE_TEX);
+  tex_t* tex = (tex_t*)read_ldata(L, 1, lua_type_tex);
   tex_bind(r, tex, luaL_checkinteger(L, 2));
   return 2;
 }
 
 static int L_TextureMt__index(lua_State* L)
 {
-  luaL_getmetatable(L, TEX_MT_NAME);
+  luaL_getmetatable(L, tex_mt_name);
   lua_getfield(L, -1, luaL_checkstring(L, 2));
   return 1;
 }
@@ -72,7 +72,7 @@ static int L_TextureMt__index(lua_State* L)
 static int L_TextureMt__gc(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
-  tex_t* tex = (tex_t*)read_ldata(L, 1, LUA_TYPE_TEX);
+  tex_t* tex = (tex_t*)read_ldata(L, 1, lua_type_tex);
   tex_destroy(r, tex);
   mem_destroy(tex);
   return 0;
@@ -91,10 +91,10 @@ luaL_Reg texture_mt[] = {
 
 void wrap_tex(lua_State* L)
 {
-  lua_getglobal(L, CORE_NAME);
+  lua_getglobal(L, core_name);
   reg_funcs(L, texture_funcs);
 
-  luaL_newmetatable(L, TEX_MT_NAME);
+  luaL_newmetatable(L, tex_mt_name);
   reg_funcs(L, texture_mt);
 
   lua_pop(L, 2);

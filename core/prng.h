@@ -3,15 +3,15 @@
 
 #include "include.h"
 
-typedef uint64_t Prng;
+typedef uint64_t prng_t;
 
 // 0 for a auto generated seed
-Prng prng_create(uint32_t seed);
-uint64_t prng_next(Prng* p);
-double prng_nextf(Prng* p);
-int prng_nexti(Prng* p);
+prng_t prng_create(uint32_t seed);
+uint64_t prng_next(prng_t* p);
+double prng_nextf(prng_t* p);
+int prng_nexti(prng_t* p);
 
-int prng_get_rangei(Prng* p, int min, int max);
-double prng_get_rangef(Prng* p, double min, double max);
+int prng_get_rangei(prng_t* p, int min, int max);
+double prng_get_rangef(prng_t* p, double min, double max);
 
 #endif

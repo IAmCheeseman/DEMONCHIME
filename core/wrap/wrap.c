@@ -32,16 +32,16 @@ static int L_err_handler(lua_State* L)
 static const char* ldata_type_to_str(ldata_type_t type)
 {
   switch (type) {
-    case LUA_TYPE_INVALID: return "Invalid";
-    case LUA_TYPE_ENGINE: return "Engine";
-    case LUA_TYPE_IMG: return "Image";
-    case LUA_TYPE_TEX: return "Texture";
-    case LUA_TYPE_MESH: return "Mesh";
-    case LUA_TYPE_VERT_FMT: return "VertexFormat";
-    case LUA_TYPE_SHADER: return "Shader";
-    case LUA_TYPE_MAT4: return "Mat4";
-    case LUA_TYPE_FONT: return "Font";
-    case LUA_TYPE_PRNG: return "Prng";
+    case lua_type_invalid: return "Invalid";
+    case lua_type_engine: return "Engine";
+    case lua_type_img: return "Image";
+    case lua_type_tex: return "Texture";
+    case lua_type_mesh: return "Mesh";
+    case lua_type_vert_fmt: return "VertexFormat";
+    case lua_type_shader: return "Shader";
+    case lua_type_mat4: return "Mat4";
+    case lua_type_font: return "Font";
+    case lua_type_prng: return "Prng";
   }
   return "Invalid";
 }
@@ -153,7 +153,7 @@ void wrap(lua_State* L, engine_t* engine)
   engine->lua_err_handler_idx = lua_gettop(L);
 
   lua_newtable(L);
-  lua_setglobal(L, CORE_NAME);
+  lua_setglobal(L, core_name);
 
   wrap_engine(L);
   wrap_enums(L);
@@ -166,16 +166,16 @@ void wrap(lua_State* L, engine_t* engine)
   wrap_font(L);
   wrap_prng(L);
 
-  luaL_newmetatable(L, ENGINE_MT_NAME);
+  luaL_newmetatable(L, engine_mt_name);
 
-  create_ldata(L, engine, ENGINE_MT_NAME, LUA_TYPE_ENGINE);
+  create_ldata(L, engine, engine_mt_name, lua_type_engine);
   lua_setfield(L, LUA_REGISTRYINDEX, "__BSE_ENGINE__");
 }
 
 engine_t* get_engine(lua_State* L)
 {
   lua_getfield(L, LUA_REGISTRYINDEX, "__BSE_ENGINE__");
-  engine_t* engine = (engine_t*)read_ldata(L, -1, LUA_TYPE_ENGINE);
+  engine_t* engine = (engine_t*)read_ldata(L, -1, lua_type_engine);
   lua_pop(L, 1);
   return engine;
 }

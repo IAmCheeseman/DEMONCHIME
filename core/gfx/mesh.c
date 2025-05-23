@@ -37,9 +37,9 @@ void mesh_destroy(const renderer_t* r, mesh_t* m)
 
 void mesh_finalize(const renderer_t* r, mesh_t* m, bool is_static)
 {
-  draw_mode_t mode = is_static ? DRAW_STATIC : DRAW_DYNAMIC;
+  draw_mode_t mode = is_static ? draw_static : draw_dynamic;
 
-  buf_obj_t* vbo = buf_obj_create(r, BUFFER_ARRAY);
+  buf_obj_t* vbo = buf_obj_create(r, buf_arr);
   buf_obj_set_dat(r, vbo, m->vertices, m->fmt->stride * m->vertex_count, mode);
   buf_obj_bind(r, vbo);
   vert_arr_t* vao = vert_arr_create(r, m->fmt);
@@ -47,7 +47,7 @@ void mesh_finalize(const renderer_t* r, mesh_t* m, bool is_static)
   m->vbo = vbo;
 
   if (m->index_count != 0) {
-    buf_obj_t* ebo = buf_obj_create(r, BUFFER_INDEX);
+    buf_obj_t* ebo = buf_obj_create(r, buf_idx);
     buf_obj_set_dat(
       r,
       ebo,
@@ -72,10 +72,10 @@ void mesh_draw(const renderer_t* r, const mesh_t* m)
       m->vao,
       m->ebo,
       m->index_count,
-      TYPE_USHORT,
-      INDEX_TRIANGLES
+      type_ushort,
+      idx_triangles
     );
   } else {
-    vert_arr_draw(r, m->vao, 0, m->vertex_count, INDEX_TRIANGLES);
+    vert_arr_draw(r, m->vao, 0, m->vertex_count, idx_triangles);
   }
 }

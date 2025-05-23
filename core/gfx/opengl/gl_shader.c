@@ -81,7 +81,7 @@ static shader_t* shader_create(uint32_t vert, uint32_t frag)
     char msg[512];
     glGetProgramInfoLog(handle, 512, NULL, msg);
     log_fatal(
-      1, "[" TEXT_DARK_GRAY "shader" TEXT_NORMAL "] link error: %s", msg);
+      1, "[" text_dark_gray "shader" text_normal "] link error: %s", msg);
   }
 
   s->uniforms.vars = NULL;
@@ -109,7 +109,7 @@ static uint32_t compile_src(const char* name, const char* src, uint32_t type)
   if (!status) {
     char msg[512];
     glGetShaderInfoLog(h, 512, NULL, msg);
-    log_fatal(1, "[" TEXT_DARK_GRAY "shader" TEXT_NORMAL"] %s: %s", name, msg);
+    log_fatal(1, "[" text_dark_gray "shader" text_normal "] %s: %s", name, msg);
   }
 
   return h;

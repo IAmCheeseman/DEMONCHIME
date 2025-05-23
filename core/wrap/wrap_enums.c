@@ -1,7 +1,10 @@
 #include "wrap.h"
 
+#include <string.h>
+
 #include "gfx/gfx_types.h"
 #include "key.h"
+#include "mem.h"
 
 typedef struct lenum_s
 {
@@ -9,49 +12,49 @@ typedef struct lenum_s
   int value;
 } lenum_t;
 
-#define IMAGE_FORMAT_NAME "img_format"
-#define TEXTURE_FILTER_NAME "tex_filter"
-#define TEXTURE_WRAP_NAME "tex_wrap"
-#define FULLSCREEN_WRAP_NAME "fullscreen"
-#define KEY_NAME "key"
+#define image_format_name "img_format"
+#define texture_filter_name "tex_filter"
+#define texture_wrap_name "tex_wrap"
+#define fullscreen_wrap_name "fullscreen"
+#define key_name "key"
 
 lenum_t image_format[] = {
-  {"R8", IMAGE_FORMAT_R8},
-  {"RA8", IMAGE_FORMAT_RA8},
-  {"RGB8", IMAGE_FORMAT_RGB8},
-  {"RGBA8", IMAGE_FORMAT_RGBA8},
+  {"r8", img_fmt_r8},
+  {"ra8", img_fmt_ra8},
+  {"rgb8", img_fmt_rgb8},
+  {"rgba8", img_fmt_rgba8},
   {NULL, 0},
 };
 
 lenum_t texture_filter[] = {
-  {"NEAREST", TEXTURE_FILTER_NEAREST},
-  {"NEAREST_MIPMAP", TEXTURE_FILTER_NEAREST_MIPMAP},
-  {"NEAREST_MIPMAP_NEAREST", TEXTURE_FILTER_NEAREST_MIPMAP_NEAREST},
-  {"LINEAR", TEXTURE_FILTER_LINEAR},
-  {"LINEAR_MIPMAP", TEXTURE_FILTER_LINEAR_MIPMAP},
-  {"LINEAR_MIPMAP_NEAREST", TEXTURE_FILTER_LINEAR_MIPMAP_NEAREST},
+  {"nearest", tex_filter_nearest},
+  {"nearest_mipmap", tex_filter_nearest_mipmap},
+  {"nearest_mipmap_nearest", tex_filter_nearest_mipmap_nearest},
+  {"linear", tex_filter_linear},
+  {"linear_mipmap", tex_filter_linear_mipmap},
+  {"linear_mipmap_nearest", tex_filter_linear_mipmap_nearest},
   {NULL, 0},
 };
 
 lenum_t texture_wrap[] = {
-  {"REPEAT", TEXTURE_WRAP_REPEAT},
-  {"MIRRORED_REPEAT", TEXTURE_WRAP_MIRRORED_REPEAT},
-  {"CLAMP_EDGE", TEXTURE_WRAP_CLAMP_EDGE},
-  {"CLAMP_BORDER", TEXTURE_WRAP_CLAMP_BORDER},
+  {"repeat", tex_wrap_rep},
+  {"mirrored_repeat", tex_wrap_mirror_rep},
+  {"clamp_edge", tex_wrap_clamp_edge},
+  {"clamp_border", tex_wrap_clamp_border},
   {NULL, 0},
 };
 
 lenum_t fullscreen_wrap[] = {
-  {"NONE", FULLSCREEN_NONE},
-  {"EXCLUSIVE", FULLSCREEN_EXCLUSIVE},
-  {"BORDERLESS", FULLSCREEN_BORDERLESS},
+  {"none", fullscreen_none},
+  {"exclusive", fullscreen_exclusive},
+  {"borderless", fullscreen_borderless},
   {NULL, 0},
 };
 
 lenum_t key_wrap[] = {
-#define KEY_DEF(name, _) {#name, KEY_##name},
+#define key_def(name, _) {#name, key_##name},
 #include "key_def.h"
-#undef KEY_DEF
+#undef key_def
   {NULL, 0},
 };
 
@@ -62,9 +65,9 @@ static void reg_enum(
 {
   lua_newtable(L);
 
-  for (lenum_t* enoom = lenums; enoom->name != NULL; enoom++) {
-    lua_pushinteger(L, enoom->value);
-    lua_setfield(L, -2, enoom->name);
+  for (lenum_t* enum_ = lenums; enum_->name != NULL; enum_++) {
+    lua_pushinteger(L, enum_->value);
+    lua_setfield(L, -2, enum_->name);
   }
 
   lua_setfield(L, -2, name);
@@ -72,13 +75,13 @@ static void reg_enum(
 
 void wrap_enums(lua_State* L)
 {
-  lua_getglobal(L, CORE_NAME);
+  lua_getglobal(L, core_name);
 
-  reg_enum(L, IMAGE_FORMAT_NAME, image_format);
-  reg_enum(L, TEXTURE_FILTER_NAME, texture_filter);
-  reg_enum(L, TEXTURE_WRAP_NAME, texture_wrap);
-  reg_enum(L, FULLSCREEN_WRAP_NAME, fullscreen_wrap);
-  reg_enum(L, KEY_NAME, key_wrap);
+  reg_enum(L, image_format_name, image_format);
+  reg_enum(L, texture_filter_name, texture_filter);
+  reg_enum(L, texture_wrap_name, texture_wrap);
+  reg_enum(L, fullscreen_wrap_name, fullscreen_wrap);
+  reg_enum(L, key_name, key_wrap);
 
   lua_pop(L, 1);
 }

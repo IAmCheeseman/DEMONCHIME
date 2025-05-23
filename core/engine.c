@@ -44,7 +44,7 @@ void engine_init(engine_t* engine, engine_conf_t conf)
     engine->renderer,
     engine->vfs,
     engine->screen_size,
-    FRAMEBUFFER_COLOR_BUF | FRAMEBUFFER_DEPTH_BUF | FRAMEBUFFER_DRAWABLE
+    framebuffer_color_buf | framebuffer_depth_buf | framebuffer_drawable
   );
 
   engine->timer = timer_create();
@@ -205,7 +205,7 @@ vec2i_t engine_get_screen_size(const engine_t* engine)
   return engine->screen_size;
 }
 
-bool is_key_down(const engine_t* engine, key_t key)
+bool is_key_down(const engine_t* engine, keys_t key)
 {
   return glfwGetKey(engine->window.handle, key) == GLFW_PRESS;
 }

@@ -6,12 +6,12 @@
 static img_fmt_t img_fmt_from_channel_count(int channels)
 {
   switch (channels) {
-    case 1: return IMAGE_FORMAT_R8;
-    case 2: return IMAGE_FORMAT_RA8;
-    case 3: return IMAGE_FORMAT_RGB8;
-    case 4: return IMAGE_FORMAT_RGBA8;
+    case 1: return img_fmt_r8;
+    case 2: return img_fmt_ra8;
+    case 3: return img_fmt_rgb8;
+    case 4: return img_fmt_rgba8;
   }
-  return IMAGE_FORMAT_INVALID;
+  return img_fmt_invalid;
 }
 
 img_t image_load(vfs_t* vfs, const char* path)
@@ -47,5 +47,5 @@ void image_destroy(img_t* img)
   mem_destroy(img->data);
   img->data = NULL;
   img->size = (vec2i_t){0, 0};
-  img->format = IMAGE_FORMAT_INVALID;
+  img->format = img_fmt_invalid;
 }

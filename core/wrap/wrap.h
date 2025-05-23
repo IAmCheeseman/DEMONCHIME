@@ -11,29 +11,29 @@
 
 typedef enum ldata_type_e
 {
-  LUA_TYPE_INVALID = 0,
-  LUA_TYPE_ENGINE,
-  LUA_TYPE_IMG,
-  LUA_TYPE_TEX,
-  LUA_TYPE_MESH,
-  LUA_TYPE_VERT_FMT,
-  LUA_TYPE_SHADER,
-  LUA_TYPE_FONT,
-  LUA_TYPE_MAT4,
-  LUA_TYPE_PRNG,
+  lua_type_invalid = 0,
+  lua_type_engine,
+  lua_type_img,
+  lua_type_tex,
+  lua_type_mesh,
+  lua_type_vert_fmt,
+  lua_type_shader,
+  lua_type_font,
+  lua_type_mat4,
+  lua_type_prng,
 } ldata_type_t;
 
-#define CORE_NAME "core"
+#define core_name "core"
 
-#define ENGINE_MT_NAME "__ENGINE_MT__"
-#define IMG_MT_NAME "__IMG_MT__"
-#define TEX_MT_NAME "__TEX_MT__"
-#define MESH_MT_NAME "__MESH_MT__"
-#define VERT_FMT_MT_NAME "__VERT_FMT_MT__"
-#define SHADER_MT_NAME "__SHADER_MT__"
-#define MAT4_MT_NAME "__MAT4_MT__"
-#define FONT_MT_NAME "__FONT_MT__"
-#define PRNG_MT_NAME "__PRNG_MT__"
+#define engine_mt_name "__ENGINE_MT__"
+#define img_mt_name "__IMG_MT__"
+#define tex_mt_name "__TEX_MT__"
+#define mesh_mt_name "__MESH_MT__"
+#define vert_fmt_mt_name "__VERT_FMT_MT__"
+#define shader_mt_name "__SHADER_MT__"
+#define mat4_mt_name "__MAT4_MT__"
+#define font_mt_name "__FONT_MT__"
+#define prng_mt_name "__PRNG_MT__"
 
 typedef struct lmat4_s
 {

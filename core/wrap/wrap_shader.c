@@ -14,7 +14,7 @@ static int L_load_shader(lua_State* L)
     vert_path,
     frag_path
   );
-  create_ldata(L, shader, SHADER_MT_NAME, LUA_TYPE_SHADER);
+  create_ldata(L, shader, shader_mt_name, lua_type_shader);
   return 1;
 }
 
@@ -24,7 +24,7 @@ static int L_load_shader_from_src(lua_State* L)
   const char* vert_src = luaL_checkstring(L, 1);
   const char* frag_src = luaL_checkstring(L, 2);
   shader_t* shader = shader_load_from_src(r, vert_src, frag_src);
-  create_ldata(L, shader, SHADER_MT_NAME, LUA_TYPE_SHADER);
+  create_ldata(L, shader, shader_mt_name, lua_type_shader);
   return 1;
 }
 
@@ -41,7 +41,7 @@ static int L_ShaderMt_sendf(lua_State* L)
     luaL_error(L, "cannot send more than 4 floats to shader");
   }
 
-  shader_t* shader = (shader_t*)read_ldata(L, 1, LUA_TYPE_SHADER);
+  shader_t* shader = (shader_t*)read_ldata(L, 1, lua_type_shader);
   const char* uniform = luaL_checkstring(L, 2);
 
   float args[4];
@@ -66,7 +66,7 @@ static int L_ShaderMt_sendi(lua_State* L)
     luaL_error(L, "cannot send more than 4 floats to shader");
   }
 
-  shader_t* shader = (shader_t*)read_ldata(L, 1, LUA_TYPE_SHADER);
+  shader_t* shader = (shader_t*)read_ldata(L, 1, lua_type_shader);
   const char* uniform = luaL_checkstring(L, 2);
 
   int args[4];
@@ -86,9 +86,9 @@ static int L_ShaderMt_sendi(lua_State* L)
 
 static int L_ShaderMt_send_mat4(lua_State* L)
 {
-  shader_t* shader = (shader_t*)read_ldata(L, 1, LUA_TYPE_SHADER);
+  shader_t* shader = (shader_t*)read_ldata(L, 1, lua_type_shader);
   const char* uniform = luaL_checkstring(L, 2);
-  lmat4_t* m = (lmat4_t*)read_ldata(L, 3, LUA_TYPE_MAT4);
+  lmat4_t* m = (lmat4_t*)read_ldata(L, 3, lua_type_mat4);
   
   renderer_t* r = get_engine(L)->renderer;
   shader_send_mat4(r, shader, uniform, m->m);
@@ -99,14 +99,14 @@ static int L_ShaderMt_send_mat4(lua_State* L)
 static int L_ShaderMt_bind(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
-  shader_t* shader = (shader_t*)read_ldata(L, 1, LUA_TYPE_SHADER);
+  shader_t* shader = (shader_t*)read_ldata(L, 1, lua_type_shader);
   shader_bind(r, shader);
   return 0;
 }
 
 static int L_ShaderMt__index(lua_State* L)
 {
-  luaL_getmetatable(L, SHADER_MT_NAME);
+  luaL_getmetatable(L, shader_mt_name);
   lua_getfield(L, -1, luaL_checkstring(L, 2));
   return 1;
 }
@@ -114,7 +114,7 @@ static int L_ShaderMt__index(lua_State* L)
 static int L_ShaderMt__gc(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
-  shader_t* shader = (shader_t*)read_ldata(L, 1, LUA_TYPE_SHADER);
+  shader_t* shader = (shader_t*)read_ldata(L, 1, lua_type_shader);
   shader_destroy(r, shader);
   return 0;
 }
@@ -131,10 +131,10 @@ luaL_Reg shader_mt[] = {
 
 void wrap_shader(lua_State* L)
 {
-  lua_getglobal(L, CORE_NAME);
+  lua_getglobal(L, core_name);
   reg_funcs(L, shader_funcs);
 
-  luaL_newmetatable(L, SHADER_MT_NAME);
+  luaL_newmetatable(L, shader_mt_name);
   reg_funcs(L, shader_mt);
 
   lua_pop(L, 2);

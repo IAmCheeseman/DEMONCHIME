@@ -27,7 +27,7 @@ end)
 local cubes = ecs.query("model", "trans_mat")
 local shader = core.load_shader("res/vdefault.glsl", "res/fdefault.glsl")
 local tex = core.load_tex("res/textures/grass.png")
-tex:set_filter(core.tex_filter.NEAREST, core.tex_filter.NEAREST)
+tex:set_filter(core.tex_filter.nearest, core.tex_filter.nearest)
 
 event.on("@draw", function()
   shader:bind()
