@@ -53,10 +53,18 @@ static int L_close_engine(lua_State* L)
   return 0;
 }
 
+static int L_set_fullscreen(lua_State* L)
+{
+  engine_t* engine = get_engine(L);
+  fullscreen_t fullscreen = (fullscreen_t)luaL_checkinteger(L, 1);
+  window_set_fullscreen(&engine->window, fullscreen);
+  return 0;
+}
+
 static int L_get_window_size(lua_State* L)
 {
   engine_t* engine = get_engine(L);
-  vec2i_t s = engine_get_window_size(engine);
+  vec2i_t s = window_get_size(&engine->window);
   lua_pushinteger(L, s.x);
   lua_pushinteger(L, s.y);
   return 2;
@@ -123,6 +131,7 @@ luaL_Reg engine_funcs[] = {
   {"get_tick_rate", L_get_tick_rate},
   {"get_tick_rate_sec", L_get_tick_rate_sec},
   {"close_engine", L_close_engine},
+  {"set_fullscreen", L_set_fullscreen},
   {"get_window_size", L_get_window_size},
   {"get_screen_size", L_get_screen_size},
   {"get_interpolation", L_get_interpolation},

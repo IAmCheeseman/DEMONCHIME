@@ -12,6 +12,7 @@ typedef struct lenum_s
 #define IMAGE_FORMAT_NAME "img_format"
 #define TEXTURE_FILTER_NAME "tex_filter"
 #define TEXTURE_WRAP_NAME "tex_wrap"
+#define FULLSCREEN_WRAP_NAME "fullscreen"
 #define KEY_NAME "key"
 
 lenum_t image_format[] = {
@@ -37,6 +38,13 @@ lenum_t texture_wrap[] = {
   {"MIRRORED_REPEAT", TEXTURE_WRAP_MIRRORED_REPEAT},
   {"CLAMP_EDGE", TEXTURE_WRAP_CLAMP_EDGE},
   {"CLAMP_BORDER", TEXTURE_WRAP_CLAMP_BORDER},
+  {NULL, 0},
+};
+
+lenum_t fullscreen_wrap[] = {
+  {"NONE", FULLSCREEN_NONE},
+  {"EXCLUSIVE", FULLSCREEN_FULL},
+  {"BORDERLESS", FULLSCREEN_BORDERLESS},
   {NULL, 0},
 };
 
@@ -69,6 +77,7 @@ void wrap_enums(lua_State* L)
   reg_enum(L, IMAGE_FORMAT_NAME, image_format);
   reg_enum(L, TEXTURE_FILTER_NAME, texture_filter);
   reg_enum(L, TEXTURE_WRAP_NAME, texture_wrap);
+  reg_enum(L, FULLSCREEN_WRAP_NAME, fullscreen_wrap);
   reg_enum(L, KEY_NAME, key_wrap);
 
   lua_pop(L, 1);

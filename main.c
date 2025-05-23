@@ -9,6 +9,11 @@ int main(int argc, const char* args[])
   engine_conf_t conf = (engine_conf_t){
     .mount_path = "DEMONCHIME.HAD",
     .window_title = "DEMONCHIME",
+#ifdef bse_release
+    .fullscreen = FULLSCREEN_FULL,
+#else
+    .fullscreen = FULLSCREEN_NONE,
+#endif
     .window_size = (vec2i_t){320 * 3, 180 * 3},
     .screen_size = (vec2i_t){320, 180},
     .vsync = 0,

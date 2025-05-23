@@ -70,6 +70,7 @@ event.on("@tick", function()
 end)
 
 local metal_mania = core.load_font("res/fonts/metal_mania.ttf", 48);
+local cubes = ecs.query("model", "trans_mat")
 
 event.on("@uidraw", function()
   metal_mania:draw(
@@ -80,4 +81,23 @@ event.on("@uidraw", function()
     12, 48,
     ("TPS: %d"):format(core.get_tps()),
     1, 0.2, 1)
+  metal_mania:draw(
+    12, 48 * 2,
+    ("Cubes: %d"):format(#cubes.ents),
+    1, 0.2, 1)
+end)
+
+local fullscreen = core.fullscreen.NONE
+
+event.on("@keydown", function(key, is_repeated)
+  if key ~= core.key.F11 or is_repeated then
+    return
+  end
+
+  if fullscreen == core.fullscreen.NONE then
+    fullscreen = core.fullscreen.EXCLUSIVE
+  else
+    fullscreen = core.fullscreen.NONE
+  end
+  core.set_fullscreen(fullscreen)
 end)

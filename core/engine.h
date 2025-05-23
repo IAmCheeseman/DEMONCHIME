@@ -9,10 +9,11 @@
 #include "math/vec2f.h"
 #include "timer.h"
 #include "vfs.h"
+#include "window.h"
 
 typedef struct engine_s
 {
-  struct GLFWwindow* window_handle;
+  window_t window;
   lua_State* L;
   struct renderer_s* renderer;
   vfs_t* vfs;
@@ -31,6 +32,7 @@ typedef struct engine_conf_s
 {
   const char* mount_path;
   const char* window_title;
+  fullscreen_t fullscreen;
   vec2i_t window_size;
   vec2i_t screen_size;
   float vsync;
@@ -44,11 +46,9 @@ bool is_engine_init(const engine_t* engine);
 void engine_update(engine_t* engine);
 void engine_draw(engine_t* engine);
 
-void engine_swap_buffers(const engine_t* engine);
 void engine_close(const engine_t* engine);
 bool is_engine_closed(const engine_t* engine);
 
-vec2i_t engine_get_window_size(const engine_t* engine);
 vec2i_t engine_get_screen_size(const engine_t* engine);
 
 bool is_key_down(const engine_t* engine, key_t key);

@@ -6,7 +6,7 @@ INCLUDE = \
 	-Icore -Ilib/glad/include -Ilib/miniz/include \
 	-Ilib/stb/include -Ilib/luajit -Ilib -Ilib/freetype
 CFLAGS = $(cflags) -std=c99 -Wall -Wextra -Wno-unused-parameter $(INCLUDE) \
-	-Dbse_allow_opengl
+	-Dbse_allow_opengl -DGLFW_INCLUDE_NONE
 LDFLAGS =
 
 PROJECT_NAME = DEMONCHIME
@@ -15,6 +15,7 @@ EXE = $(PROJECT_NAME)
 OBJ = \
 	main.o core/include.o core/mem.o core/log.o core/engine.o core/image.o \
 	core/prng.o core/timer.o core/vfs.o core/math/mat4.o core/math/transform.o \
+	core/window.o \
 	\
 	core/wrap/wrap.o core/wrap/wrap_enums.o core/wrap/wrap_engine.o \
 	core/wrap/wrap_log.o core/wrap/wrap_mat4.o core/wrap/wrap_mesh.o \

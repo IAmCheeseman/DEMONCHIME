@@ -100,7 +100,7 @@ static void set_backend_ptrs(renderer_t* r)
 
 void gl_init_backend(engine_t* engine)
 {
-  glfwMakeContextCurrent(engine->window_handle);
+  glfwMakeContextCurrent(engine->window.handle);
 
   renderer_t* renderer = (renderer_t*)mem_alloc(sizeof(renderer_t));
   set_backend_ptrs(renderer);

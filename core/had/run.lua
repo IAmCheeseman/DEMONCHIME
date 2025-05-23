@@ -20,3 +20,11 @@ end
 function uidraw()
   event.call("@uidraw")
 end
+
+function keydown(key, is_repeated)
+  event.call("@keydown", key, is_repeated)
+end
+
+function keyup(key)
+  event.call("@keyup", key)
+end

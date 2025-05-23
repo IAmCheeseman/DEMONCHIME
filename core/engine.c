@@ -6,32 +6,8 @@
 #include "gfx/gfx.h"
 #include "gfx/framebuffer.h"
 #include "gfx/text.h"
-#include "math.h"
 #include "mem.h"
 #include "wrap/wrap.h"
-
-void framebuf_resize_callback(GLFWwindow* window, int width, int height)
-{
-  engine_t* engine = (engine_t*)glfwGetWindowUserPointer(window);
-
-  float screen_width = engine->target_screen_size.x;
-  float screen_height = engine->target_screen_size.y;
-
-  if (width > height) { // the width should change dynamically
-    float target_aspect = (float)screen_width / (float)screen_height;
-    float aspect = (float)width / (float)height;
-    screen_width *= aspect / target_aspect;
-  } else { // the height should change dynamically
-    float target_aspect = (float)screen_height / (float)screen_width;
-    float aspect = (float)height / (float)width;
-    screen_height *= aspect / target_aspect;
-  }
-
-  vec2i_t screen_size = (vec2i_t){ceil(screen_width), ceil(screen_height)};
-
-  engine->screen_size = screen_size;
-  framebuf_resize(engine->renderer, engine->screen, screen_size);
-}
 
 void engine_init(engine_t* engine, engine_conf_t conf)
 {
@@ -53,18 +29,9 @@ void engine_init(engine_t* engine, engine_conf_t conf)
     log_fatal(1, "could not initialize glfw");
   }
 
-  engine->window_handle = glfwCreateWindow(
-    conf.window_size.x, conf.window_size.y, conf.window_title, NULL, NULL);
-  if (engine->window_handle == NULL) {
-    log_fatal(1, "could not initialize glfw window");
-  }
-  log_info("created glfw window");
+  engine->window = window_create(conf);
 
-  glfwMakeContextCurrent(engine->window_handle);
-  glfwSetWindowUserPointer(engine->window_handle, engine);
-  glfwSetFramebufferSizeCallback(
-    engine->window_handle, framebuf_resize_callback);
-  glfwSwapInterval(conf.vsync);
+  glfwSetWindowUserPointer(engine->window.handle, engine);
 
   engine->renderer = NULL;
   init_backend(engine, GFX_BACKEND_OPENGL);
@@ -113,7 +80,7 @@ void engine_destroy(engine_t* engine)
   if (engine->renderer != NULL)
     mem_destroy(engine->renderer);
 
-  glfwDestroyWindow(engine->window_handle);
+  window_destroy(&engine->window);
 
   vfs_destroy(engine->vfs);
   // for some reason this causes a false positive(?) memory leak with asan.
@@ -122,13 +89,11 @@ void engine_destroy(engine_t* engine)
 #ifndef bse_debug
   glfwTerminate();
 #endif
-
-  engine->window_handle = NULL;
 }
 
 bool is_engine_init(const engine_t* engine)
 {
-  return engine->window_handle != NULL;
+  return engine->window.handle != NULL;
 }
 
 static bool call_lua_global(const engine_t* engine, const char* fn_name)
@@ -199,11 +164,11 @@ void engine_draw(engine_t* engine)
     return;
   }
 
-  engine_swap_buffers(engine);
+  window_swap_buffers(&engine->window);
 
   // Draw screen
   framebuf_bind(engine->renderer, NULL);
-  vec2i_t wsize = engine_get_window_size(engine);
+  vec2i_t wsize = window_get_size(&engine->window);
   adjust_viewport(engine->renderer, (vec2f_t){wsize.x, wsize.y});
 
   clear_bg(engine->renderer, 0, 0, 0);
@@ -224,26 +189,15 @@ void engine_draw(engine_t* engine)
   //exit(1);
 }
 
-void engine_swap_buffers(const engine_t* engine)
-{
-  glfwSwapBuffers(engine->window_handle);
-}
 
 void engine_close(const engine_t* engine)
 {
-  glfwSetWindowShouldClose(engine->window_handle, GLFW_TRUE);
+  window_close(&engine->window);
 }
 
 bool is_engine_closed(const engine_t* engine)
 {
-  return glfwWindowShouldClose(engine->window_handle);
-}
-
-vec2i_t engine_get_window_size(const engine_t* engine)
-{
-  vec2i_t size;
-  glfwGetWindowSize(engine->window_handle, &size.x, &size.y);
-  return size;
+  return is_window_closed(&engine->window);
 }
 
 vec2i_t engine_get_screen_size(const engine_t* engine)
@@ -253,17 +207,17 @@ vec2i_t engine_get_screen_size(const engine_t* engine)
 
 bool is_key_down(const engine_t* engine, key_t key)
 {
-  return glfwGetKey(engine->window_handle, key) == GLFW_PRESS;
+  return glfwGetKey(engine->window.handle, key) == GLFW_PRESS;
 }
 
 bool is_mouse_down(const engine_t* engine, int btn)
 {
-  return glfwGetMouseButton(engine->window_handle, btn - 1) == GLFW_PRESS;
+  return glfwGetMouseButton(engine->window.handle, btn - 1) == GLFW_PRESS;
 }
 
 vec2f_t get_mouse_pos(const engine_t* engine)
 {
   double x, y;
-  glfwGetCursorPos(engine->window_handle, &x, &y);
+  glfwGetCursorPos(engine->window.handle, &x, &y);
   return (vec2f_t){x, y};
 }
