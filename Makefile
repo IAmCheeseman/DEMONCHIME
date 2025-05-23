@@ -43,7 +43,7 @@ CORE_HAD_DEP := $(CORE_HAD_DIR) $(addprefix $(CORE_HAD_DIR)/,$(CORE_HAD_DEP))
 
 GAME_HAD = $(PROJECT_NAME).HAD
 GAME_HAD_DIR = game
-GAME_HAD_DEP = systems res res/textures res/fgd
+GAME_HAD_DEP = systems res res/textures res/fgd res/fonts
 GAME_HAD_DEP := $(GAME_HAD_DIR) $(addprefix $(GAME_HAD_DIR)/,$(GAME_HAD_DEP))
 
 CLEAN_FILES = $(OBJ) $(DEP) $(EXE) $(CORE_HAD) $(GAME_HAD)

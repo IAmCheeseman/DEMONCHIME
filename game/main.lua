@@ -72,6 +72,12 @@ end)
 local metal_mania = core.load_font("res/fonts/metal_mania.ttf", 48);
 
 event.on("@uidraw", function()
-  metal_mania:draw(12, 0, ("FPS: %d"):format(core.get_fps()), 1, 0, 0)
-  metal_mania:draw(12, 48, ("TPS: %d"):format(core.get_tps()), 1, 0.2, 1)
+  metal_mania:draw(
+    12, 0,
+    ("FPS: %d, %f ms"):format(core.get_fps(), 1/core.get_fps() * 1000),
+    1, 0, 0)
+  metal_mania:draw(
+    12, 48,
+    ("TPS: %d"):format(core.get_tps()),
+    1, 0.2, 1)
 end)
