@@ -43,7 +43,7 @@ lenum_t texture_wrap[] = {
 
 lenum_t fullscreen_wrap[] = {
   {"NONE", FULLSCREEN_NONE},
-  {"EXCLUSIVE", FULLSCREEN_FULL},
+  {"EXCLUSIVE", FULLSCREEN_EXCLUSIVE},
   {"BORDERLESS", FULLSCREEN_BORDERLESS},
   {NULL, 0},
 };

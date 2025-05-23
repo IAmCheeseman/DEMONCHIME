@@ -100,7 +100,7 @@ void window_set_fullscreen(window_t* window, fullscreen_t fullscreen)
         window->original_size.x, window->original_size.y,
         GLFW_DONT_CARE);
       break;
-    case FULLSCREEN_FULL: {
+    case FULLSCREEN_EXCLUSIVE: {
       glfwGetWindowSize(
         window->handle,
         &window->original_size.x, &window->original_size.y);
@@ -117,6 +117,18 @@ void window_set_fullscreen(window_t* window, fullscreen_t fullscreen)
       break;
     }
     case FULLSCREEN_BORDERLESS:
+      glfwGetWindowSize(
+        window->handle,
+        &window->original_size.x, &window->original_size.y);
+      glfwGetWindowPos(
+        window->handle,
+        &window->original_pos.x, &window->original_pos.y);
+      GLFWmonitor* primary = glfwGetPrimaryMonitor();
+      const GLFWvidmode* mode = glfwGetVideoMode(primary);
+      glfwSetWindowMonitor(
+        window->handle, primary,
+        0, 0, mode->width, mode->height,
+        mode->refreshRate);
       break;
   }
 }

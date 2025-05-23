@@ -59,16 +59,6 @@ event.on("@tick", function()
   end
 end)
 
-event.on("@tick", function()
-  if core.is_key_down(core.key.SPACE) then
-    log_info(
-      ("%d FPS, %d TPS, %f ms"):format(
-        core.get_fps(),
-        core.get_tps(),
-        (1 / core.get_fps()) * 1000))
-  end
-end)
-
 local metal_mania = core.load_font("res/fonts/metal_mania.ttf", 48);
 local cubes = ecs.query("model", "trans_mat")
 
@@ -95,7 +85,7 @@ event.on("@keydown", function(key, is_repeated)
   end
 
   if fullscreen == core.fullscreen.NONE then
-    fullscreen = core.fullscreen.EXCLUSIVE
+    fullscreen = core.fullscreen.BORDERLESS
   else
     fullscreen = core.fullscreen.NONE
   end
