@@ -6,7 +6,7 @@
 #include <stdbool.h>
 #include <assert.h>
 
-#include "log.h"
+#include "core_log.h"
 
 #ifdef bse_linux
 # define bse_os_str "linux"

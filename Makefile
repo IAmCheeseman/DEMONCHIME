@@ -13,24 +13,24 @@ PROJECT_NAME = DEMONCHIME
 
 EXE = $(PROJECT_NAME)
 OBJ = \
-	main.o core/include.o core/mem.o core/log.o core/engine.o core/image.o \
-	core/prng.o core/timer.o core/vfs.o core/math/mat4.o core/math/transform.o \
-	core/window.o \
+	main.o core/include.o core/core_mem.o core/core_log.o core/core_engine.o \
+	core/core_image.o core/core_prng.o core/core_timer.o core/core_vfs.o \
+	core/core_window.o \
 	\
-	core/wrap/wrap.o core/wrap/wrap_enums.o core/wrap/wrap_engine.o \
-	core/wrap/wrap_log.o core/wrap/wrap_mat4.o core/wrap/wrap_mesh.o \
-	core/wrap/wrap_vertex_format.o core/wrap/wrap_shader.o \
-	core/wrap/wrap_texture.o core/wrap/wrap_prng.o core/gfx/buffer_object.o \
-	core/wrap/wrap_font.o \
+	core/math_mat4.o core/math_transform.o \
 	\
-	core/gfx/framebuffer.o core/gfx/gfx.o core/gfx/gfx_types.o core/gfx/mesh.o \
-	core/gfx/shader.o core/gfx/texture.o core/gfx/vertex_array.o \
-	core/gfx/text.o \
+	core/wrap.o core/wrap_enums.o core/wrap_engine.o core/wrap_log.o \
+	core/wrap_mat4.o core/wrap_mesh.o core/wrap_vertex_format.o \
+	core/wrap_shader.o core/wrap_texture.o core/wrap_prng.o core/wrap_font.o \
 	\
-	core/gfx/opengl/gl_buffer_object.o core/gfx/opengl/gl_framebuffer.o \
-	core/gfx/opengl/gl_gfx.o core/gfx/opengl/gl_shader.o \
-	core/gfx/opengl/gl_texture.o core/gfx/opengl/gl_type_conv.o \
-	core/gfx/opengl/gl_text.o core/gfx/opengl/gl_vertex_array.o \
+	core/gfx_framebuffer.o core/gfx.o core/gfx_types.o core/gfx_mesh.o \
+	core/gfx_shader.o core/gfx_texture.o core/gfx_vertex_array.o \
+	core/gfx_text.o core/gfx_buffer_object.o \
+	\
+	core/opengl/gl_buffer_object.o core/opengl/gl_framebuffer.o \
+	core/opengl/gl_gfx.o core/opengl/gl_shader.o \
+	core/opengl/gl_texture.o core/opengl/gl_type_conv.o \
+	core/opengl/gl_text.o core/opengl/gl_vertex_array.o \
 	\
 	lib/glad/src/glad.o lib/stb/stb.o
 DEP = $(OBJ:%.o=%.d)

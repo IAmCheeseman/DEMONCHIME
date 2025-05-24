@@ -1,5 +1,5 @@
 #include "include.h"
-#include "mem.h"
+#include "core_mem.h"
 
 #include <stdarg.h>
 #include <string.h>
