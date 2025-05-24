@@ -43,7 +43,10 @@ static void key_callback(
       }
       lua_pushinteger(engine->L, key);
       lua_pushboolean(engine->L, action == GLFW_REPEAT);
-      lua_pcall(engine->L, 2, 0, engine->lua_err_handler_idx);
+      int res = lua_pcall(engine->L, 2, 0, engine->lua_err_handler_idx);
+      if (res != LUA_OK) {
+        exit(1);
+      }
     }
   } else if (action == GLFW_RELEASE) {
     lua_getglobal(engine->L, "keyup");
@@ -52,7 +55,10 @@ static void key_callback(
         log_fatal(1, "global 'keyup' must be a function");
       }
       lua_pushinteger(engine->L, key);
-      lua_pcall(engine->L, 1, 0, engine->lua_err_handler_idx);
+      int res = lua_pcall(engine->L, 1, 0, engine->lua_err_handler_idx);
+      if (res != LUA_OK) {
+        exit(1);
+      }
     }
   }
 }
@@ -91,7 +97,6 @@ void window_destroy(window_t* window)
 
 void window_set_fullscreen(window_t* window, fullscreen_t fullscreen)
 {
-  log_info("fullscreen: %d", fullscreen);
   switch (fullscreen) {
     case fullscreen_none:
       glfwSetWindowMonitor(

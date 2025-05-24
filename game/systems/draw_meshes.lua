@@ -37,8 +37,8 @@ event.on("@draw", function()
   tex:bind(0)
   shader:sendi("tex0", 0)
 
-  for _, cube_ent in ipairs(cubes.ents) do
-    shader:send_mat4("m", cube_ent.trans_mat)
-    cube_ent.model:draw()
+  for ent in cubes.ents:iter() do
+    shader:send_mat4("m", ent.trans_mat)
+    ent.model:draw()
   end
 end)

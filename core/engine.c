@@ -34,7 +34,7 @@ void engine_init(engine_t* engine, engine_conf_t conf)
   glfwSetWindowUserPointer(engine->window.handle, engine);
 
   engine->renderer = NULL;
-  init_backend(engine, GFX_BACKEND_OPENGL);
+  init_backend(engine, gfx_backend_opengl);
 
   init_freetype(engine->renderer, engine->core_vfs);
 

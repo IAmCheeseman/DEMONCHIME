@@ -12,7 +12,7 @@
 
 typedef enum gfx_backend_type_e
 {
-  GFX_BACKEND_OPENGL,
+  gfx_backend_opengl,
 } gfx_backend_type_t;
 
 // might put more stuff here later

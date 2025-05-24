@@ -7,7 +7,7 @@
 void init_backend(engine_t* engine, gfx_backend_type_t backend)
 {
   switch (backend) {
-    case GFX_BACKEND_OPENGL:
+    case gfx_backend_opengl:
     #ifdef bse_allow_opengl
       gl_init_backend(engine);
     #else

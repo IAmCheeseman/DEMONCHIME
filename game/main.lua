@@ -30,27 +30,36 @@ local cubet = {
 
 local prng = core.create_prng()
 local t = 0
+local s = 1
+
+event.on("@keydown", function(key)
+  if key == core.key.up then s = s + 1 end
+  if key == core.key.down then s = s - 1 end
+  s = math.max(s, 0)
+end)
 
 event.on("@tick", function()
   t = t + 1
 
-  if t < 5 then
+  if t < 5 and not core.is_key_down(core.key.space) then
     return
   end
 
   t = 0
 
-  cubet.x = prng:rangef(-15, 15)
-  cubet.y = prng:rangef(-2, 2)
-  cubet.z = prng:rangef(-15, 15)
-  cubet.rx = prng:nextf() * math.pi * 2
-  cubet.ry = prng:nextf() * math.pi * 2
-  cubet.rz = prng:nextf() * math.pi * 2
+  for _=1, s do
+    cubet.x = prng:rangef(-5, 5)
+    cubet.y = prng:rangef(-2, 2)
+    cubet.z = prng:rangef(-5, 5)
+    cubet.rx = prng:nextf() * math.pi * 2
+    cubet.ry = prng:nextf() * math.pi * 2
+    cubet.rz = prng:nextf() * math.pi * 2
 
-  local cube_ent = {}
-  cube_ent.model = cube
-  cube_ent.trans_mat = core.mat4_from_trans(cubet)
-  ecs.add_ent(cube_ent)
+    local cube_ent = {}
+    cube_ent.model = cube
+    cube_ent.trans_mat = core.mat4_from_trans(cubet)
+    ecs.add_ent(cube_ent)
+  end
 end)
 
 event.on("@tick", function()
@@ -60,34 +69,52 @@ event.on("@tick", function()
 end)
 
 local metal_mania = core.load_font("res/fonts/metal_mania.ttf", 48);
-local cubes = ecs.query("model", "trans_mat")
+local models = ecs.query("model")
+
+event.on("@keydown", function(key, is_repeated)
+  if is_repeated then
+    return
+  end
+
+  if key == core.key.e then
+    for ent in models.ents:iter() do
+      ent:rem("trans_mat")
+    end
+  end
+
+  if key == core.key.r then
+    for ent in models.ents:iter() do
+      ecs.rem_ent(ent)
+    end
+  end
+end)
 
 event.on("@uidraw", function()
   metal_mania:draw(
     12, 0,
     ("FPS: %d, %f ms"):format(core.get_fps(), 1/core.get_fps() * 1000),
-    1, 0, 0)
+    1, 0.1, 0.3)
   metal_mania:draw(
     12, 48,
     ("TPS: %d"):format(core.get_tps()),
     1, 0.2, 1)
   metal_mania:draw(
     12, 48 * 2,
-    ("Cubes: %d"):format(#cubes.ents),
-    1, 0.2, 1)
+    ("Entities: %d"):format(ecs.ent_count()),
+    0, 1, 0.4)
 end)
 
-local fullscreen = "none"
+local fullscreen = core.fullscreen.none
 
 event.on("@keydown", function(key, is_repeated)
   if key ~= core.key.f11 or is_repeated then
     return
   end
 
-  if fullscreen == "none" then
-    fullscreen = "borderless"
+  if fullscreen == core.fullscreen.none then
+    fullscreen = core.fullscreen.borderless
   else
-    fullscreen = "none"
+    fullscreen = core.fullscreen.none
   end
   core.set_fullscreen(fullscreen)
 end)

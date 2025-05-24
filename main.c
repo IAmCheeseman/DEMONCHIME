@@ -2,6 +2,13 @@
 
 #include "engine.h"
 
+engine_t engine;
+
+static void cleanup()
+{
+  engine_destroy(&engine);
+}
+
 int main(int argc, const char* args[])
 {
   log_info("os: %s", bse_os_str);
@@ -19,8 +26,8 @@ int main(int argc, const char* args[])
     .vsync = 0,
   };
 
-  engine_t engine;
   engine_init(&engine, conf);
+  atexit(cleanup);
 
   if (argc > 1) {
     for (int i = 1; i < argc; i++) {
@@ -38,6 +45,4 @@ int main(int argc, const char* args[])
     engine_update(&engine);
     engine_draw(&engine);
   }
-
-  engine_destroy(&engine);
 }
