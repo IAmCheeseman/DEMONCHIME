@@ -1,0 +1,5 @@
+SOURCE:
+https://fontenddev.com/fonts/double-homicide/
+
+LICENSE:
+https://creativecommons.org/licenses/by/4.0/

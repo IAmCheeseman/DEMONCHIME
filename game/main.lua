@@ -68,7 +68,7 @@ event.on("@tick", function()
   end
 end)
 
-local metal_mania = core.load_font("res/fonts/metal_mania.ttf", 48);
+local metal_mania = core.load_font("res/fonts/dbl_homicide.ttf", 48);
 local models = ecs.query("model")
 
 event.on("@keydown", function(key, is_repeated)
