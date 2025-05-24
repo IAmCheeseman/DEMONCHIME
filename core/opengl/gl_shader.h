@@ -1,7 +1,7 @@
 #ifndef __engine_gfx_opengl_gl_shader__
 #define __engine_gfx_opengl_gl_shader__
 
-#include "gfx_shader.h"
+#include "g_shader.h"
 
 struct shader_s
 {

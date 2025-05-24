@@ -1,16 +1,16 @@
-#include "gfx.h"
+#include "g_gfx.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "gfx_backend.h"
-#include "core_mem.h"
-#include "gl_buffer_object.h"
-#include "gl_vertex_array.h"
+#include "g_backend.h"
+#include "c_mem.h"
+#include "gl_buf_obj.h"
+#include "gl_vert_arr.h"
 #include "gl_shader.h"
-#include "gl_framebuffer.h"
-#include "gl_texture.h"
-#include "gl_text.h"
+#include "gl_framebuf.h"
+#include "gl_tex.h"
+#include "gl_font.h"
 
 static void msg_callback(
   GLenum source,

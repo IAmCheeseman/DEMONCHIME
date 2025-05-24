@@ -2,7 +2,7 @@
 #define __engine_gfx_opengl_gl_type_conv__
 
 #include "include.h"
-#include "gfx_types.h"
+#include "g_types.h"
 
 uint32_t buf_obj_type_to_gl(buf_obj_type_t type);
 uint32_t draw_mode_to_gl(draw_mode_t mode);

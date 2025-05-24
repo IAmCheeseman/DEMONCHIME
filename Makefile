@@ -13,24 +13,24 @@ PROJECT_NAME = DEMONCHIME
 
 EXE = $(PROJECT_NAME)
 OBJ = \
-	main.o core/include.o core/core_mem.o core/core_log.o core/core_engine.o \
-	core/core_image.o core/core_prng.o core/core_timer.o core/core_vfs.o \
-	core/core_window.o \
+	main.o core/include.o core/c_mem.o core/c_log.o core/c_engine.o \
+	core/c_img.o core/c_prng.o core/c_timer.o core/c_vfs.o \
+	core/c_win.o \
 	\
-	core/math_mat4.o core/math_transform.o \
+	core/m_mat4.o core/m_trans.o \
 	\
-	core/wrap.o core/wrap_enums.o core/wrap_engine.o core/wrap_log.o \
-	core/wrap_mat4.o core/wrap_mesh.o core/wrap_vertex_format.o \
-	core/wrap_shader.o core/wrap_texture.o core/wrap_prng.o core/wrap_font.o \
+	core/w_wrap.o core/w_enums.o core/w_engine.o core/w_log.o \
+	core/w_mat4.o core/w_mesh.o core/w_vert_fmt.o \
+	core/w_shader.o core/w_tex.o core/w_prng.o core/w_font.o \
 	\
-	core/gfx_framebuffer.o core/gfx.o core/gfx_types.o core/gfx_mesh.o \
-	core/gfx_shader.o core/gfx_texture.o core/gfx_vertex_array.o \
-	core/gfx_text.o core/gfx_buffer_object.o \
+	core/g_framebuf.o core/g_gfx.o core/g_types.o core/g_mesh.o \
+	core/g_shader.o core/g_tex.o core/g_vert_arr.o \
+	core/g_font.o core/g_buf_obj.o \
 	\
-	core/opengl/gl_buffer_object.o core/opengl/gl_framebuffer.o \
+	core/opengl/gl_buf_obj.o core/opengl/gl_framebuf.o \
 	core/opengl/gl_gfx.o core/opengl/gl_shader.o \
-	core/opengl/gl_texture.o core/opengl/gl_type_conv.o \
-	core/opengl/gl_text.o core/opengl/gl_vertex_array.o \
+	core/opengl/gl_tex.o core/opengl/gl_type_conv.o \
+	core/opengl/gl_font.o core/opengl/gl_vert_arr.o \
 	\
 	lib/glad/src/glad.o lib/stb/stb.o
 DEP = $(OBJ:%.o=%.d)

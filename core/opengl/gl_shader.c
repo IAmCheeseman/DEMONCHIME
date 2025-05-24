@@ -2,7 +2,7 @@
 
 #include <glad/glad.h>
 
-#include "core_mem.h"
+#include "c_mem.h"
 
 #define UNIFORM_NAME_MAX 512
 
