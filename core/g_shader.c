@@ -198,7 +198,7 @@ void shader_send_mat4(
   const renderer_t* r,
   shader_t* s,
   const char* name,
-  mat4_t m)
+  const mat4_t m)
 {
   return r->backend.shader_send_mat4(s, name, m);
 }

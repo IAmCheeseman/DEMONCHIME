@@ -20,6 +20,11 @@ void init_backend(engine_t* engine, gfx_backend_type_t backend)
   }
 }
 
+void set_projection(renderer_t* renderer, mat4_t projection)
+{
+  memcpy(renderer->projection, projection, sizeof(mat4_t));
+}
+
 void clear_bg(const renderer_t* renderer, float r, float g, float b)
 {
   return renderer->backend.clear_background(r, g, b);

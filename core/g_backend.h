@@ -121,7 +121,7 @@ typedef void (*shader_send_vec4i_fn)(
   vec4i_t v
 );
 typedef void (*shader_send_mat4_fn)(
-  struct shader_s* s, const char* name, mat4_t m);
+  struct shader_s* s, const char* name, const mat4_t m);
 typedef void (*shader_bind_fn)(const struct shader_s* s);
 typedef void (*shader_destroy_fn)(struct shader_s* s);
 
@@ -145,6 +145,7 @@ typedef void (*font_init_fn)(
 typedef int (*font_get_width_fn)(const struct font_s* font, const char* text);
 typedef void (*font_destroy_fn)(struct font_s* font);
 typedef void (*font_draw_fn)(
+  const struct renderer_s* r,
   struct font_s* font,
   vec2f_t pos,
   const char* text,

@@ -50,8 +50,8 @@ void gl_font_init(font_t* font, FT_Face face)
       face->glyph->bitmap.buffer);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
     glyph_t* glyph = &glyphs[c];
     glyph->tex_handle = tex;
@@ -76,9 +76,11 @@ void gl_font_init(font_t* font, FT_Face face)
   glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
 
   glEnableVertexAttribArray(0);
-  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+  glVertexAttribPointer(
+    0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(1);
-  glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+  glVertexAttribPointer(
+    1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 
   log_debug(
     "loaded font (vao %d, vbo %d)", handle->vao, handle->vbo);
@@ -115,6 +117,7 @@ int gl_font_get_width(const font_t* font, const char* text)
 }
 
 void gl_font_draw(
+  const renderer_t* r,
   font_t* font,
   vec2f_t pos,
   const char* text,
@@ -133,14 +136,14 @@ void gl_font_draw(
   gl_shader_send_vec4f(shader, "text_color", (vec4f_t){
     color.r, color.g, color.b, color.a
   });
-  gl_shader_send_mat4(shader, "p", p);
+  gl_shader_send_mat4(shader, "p", r->projection);
   gl_shader_send_int(shader, "fontmap", 0);
 
   glActiveTexture(GL_TEXTURE0);
   glBindVertexArray(handle->vao);
 
   float x = pos.x;
-  float y = pos.y + 48;
+  float y = pos.y + font->max_height;
 
   for (const char* c = text; *c != '\0'; c++) {
     glyph_t* g = &font->glyphs[(int)*c];

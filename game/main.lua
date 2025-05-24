@@ -68,7 +68,6 @@ event.on("@tick", function()
   end
 end)
 
-local metal_mania = core.load_font("res/fonts/dbl_homicide.ttf", 48);
 local models = ecs.query("model")
 
 event.on("@keydown", function(key, is_repeated)
@@ -89,22 +88,30 @@ event.on("@keydown", function(key, is_repeated)
   end
 end)
 
+local dh = core.load_font("res/fonts/dbl_homicide.ttf", 16);
+
 event.on("@uidraw", function()
+  local screenw, screenh = core.get_screen_size()
+  local proj = core.mat4_identity()
+  proj:ortho(0, screenw, screenh, 0, 0, 100)
+  core.set_projection(proj)
+
   local st = ("s: %d"):format(s)
-  local sw = metal_mania:get_width(st)
+  local sw = dh:get_width(st)
+  local sh = dh:get_height()
 
-  metal_mania:draw(320 * 5 - sw - 5, 0, st)
+  dh:draw(screenw - sw - 5, 0, st)
 
-  metal_mania:draw(
-    12, 0,
+  dh:draw(
+    2, sh * 0,
     ("FPS: %d, %f ms"):format(core.get_fps(), 1/core.get_fps() * 1000),
     1, 0.1, 0.3)
-  metal_mania:draw(
-    12, 48,
+  dh:draw(
+    2, sh * 1,
     ("TPS: %d"):format(core.get_tps()),
     1, 0.2, 1)
-  metal_mania:draw(
-    12, 48 * 2,
+  dh:draw(
+    2, sh * 2,
     ("Entities: %d"):format(ecs.ent_count()),
     0, 1, 0.4)
 end)

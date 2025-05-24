@@ -217,7 +217,7 @@ void gl_shader_send_vec4i(shader_t* s, const char* name, vec4i_t v)
   glUniform4i(ptr->loc, v.x, v.y, v.z, v.w);
 }
 
-void gl_shader_send_mat4(shader_t* s, const char* name, mat4_t m)
+void gl_shader_send_mat4(shader_t* s, const char* name, const mat4_t m)
 {
   shader_var_t* ptr = get_uniform(s, name);
   glUniformMatrix4fv(ptr->loc, 1, GL_FALSE, m);

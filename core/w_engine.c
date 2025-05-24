@@ -4,6 +4,7 @@
 
 #include "m_math.h"
 #include "c_mem.h"
+#include "g_gfx.h"
 
 static int L_get_total_time(lua_State* L)
 {
@@ -98,6 +99,14 @@ static int L_interpolate(lua_State* L)
   return 1;
 }
 
+static int L_set_projection(lua_State* L)
+{
+  engine_t* engine = get_engine(L);
+  lmat4_t* m = (lmat4_t*)read_ldata(L, 1, lua_type_mat4);
+  set_projection(engine->renderer, m->m);
+  return 0;
+}
+
 static int L_is_key_down(lua_State* L)
 {
   engine_t* engine = get_engine(L);
@@ -136,6 +145,7 @@ luaL_Reg engine_funcs[] = {
   {"get_screen_size", L_get_screen_size},
   {"get_interpolation", L_get_interpolation},
   {"interpolate", L_interpolate},
+  {"set_projection", L_set_projection},
   {"is_key_down", L_is_key_down},
   {"is_mouse_down", L_is_mouse_down},
   {"get_mouse_pos", L_get_mouse_pos},

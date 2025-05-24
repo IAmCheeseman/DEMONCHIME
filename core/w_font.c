@@ -30,6 +30,14 @@ static int L_FontMt_get_width(lua_State* L)
   return 1;
 }
 
+static int L_FontMt_get_height(lua_State* L)
+{
+  font_t* font = (font_t*)read_ldata(L, 1, lua_type_font);
+  engine_t* engine = get_engine(L);
+  lua_pushinteger(L, font_get_height(engine->renderer, font));
+  return 1;
+}
+
 static int L_FontMt_draw(lua_State* L)
 {
   font_t* font = (font_t*)read_ldata(L, 1, lua_type_font);
@@ -66,6 +74,7 @@ static int L_FontMt__gc(lua_State* L)
 
 luaL_Reg font_mt[] = {
   {"get_width", L_FontMt_get_width},
+  {"get_height", L_FontMt_get_height},
   {"draw", L_FontMt_draw},
   {"__index", L_FontMt__index},
   {"__gc", L_FontMt__gc},

@@ -130,12 +130,12 @@ static int L_Mat4Mt_ortho(lua_State* L)
 {
   lmat4_t* m = (lmat4_t*)read_ldata(L, 1, lua_type_mat4);
   
-  float l = luaL_checknumber(L, 3);
-  float r = luaL_checknumber(L, 4);
-  float b = luaL_checknumber(L, 5);
-  float t = luaL_checknumber(L, 6);
-  float n = luaL_checknumber(L, 7);
-  float f = luaL_checknumber(L, 8);
+  float l = luaL_checknumber(L, 2);
+  float r = luaL_checknumber(L, 3);
+  float b = luaL_checknumber(L, 4);
+  float t = luaL_checknumber(L, 5);
+  float n = luaL_checknumber(L, 6);
+  float f = luaL_checknumber(L, 7);
 
   mat4_ortho(m->m, l, r, b, t, n, f);
 

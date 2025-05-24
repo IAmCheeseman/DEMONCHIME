@@ -58,7 +58,7 @@ void shader_send_vec4f(
 void shader_send_vec4i(
   const renderer_t* r, shader_t* s, const char* name, vec4i_t v);
 void shader_send_mat4(
-  const renderer_t* r, shader_t* s, const char* name, mat4_t m);
+  const renderer_t* r, shader_t* s, const char* name, const mat4_t m);
 void shader_bind(const renderer_t* r, const shader_t* s);
 void shader_destroy(const renderer_t* r, shader_t* s);
 

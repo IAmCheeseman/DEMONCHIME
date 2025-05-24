@@ -6,9 +6,7 @@
 
 #include "g_backend.h"
 #include "c_engine.h"
-#include "m_vec2f.h"
-#include "m_vec3f.h"
-#include "m_mat4.h"
+#include "m_math.h"
 
 typedef enum gfx_backend_type_e
 {
@@ -18,11 +16,13 @@ typedef enum gfx_backend_type_e
 // might put more stuff here later
 typedef struct renderer_s
 {
+  mat4_t projection;
   FT_Library freetype;
   gfx_backend_t backend;
 } renderer_t;
 
 void init_backend(engine_t* engine, gfx_backend_type_t backend);
+void set_projection(renderer_t* renderer, mat4_t projection);
 void clear_bg(const renderer_t* renderer, float r, float g, float b);
 void adjust_viewport(const renderer_t* r, vec2f_t size);
 void set_depth_test(const renderer_t* r, bool test);

@@ -66,7 +66,7 @@ int font_get_width(const renderer_t* r, const font_t* font, const char* text)
 void font_draw(
   const renderer_t* r, font_t* font, vec2f_t pos, const char* text)
 {
-  r->backend.font_draw(font, pos, text, (color_t){1, 1, 1, 1}, text_shader);
+  r->backend.font_draw(r, font, pos, text, (color_t){1, 1, 1, 1}, text_shader);
 }
 
 void font_draw_colored(
@@ -75,7 +75,7 @@ void font_draw_colored(
   vec2f_t pos, color_t color,
   const char* text)
 {
-  r->backend.font_draw(font, pos, text, color, text_shader);
+  r->backend.font_draw(r, font, pos, text, color, text_shader);
 }
 
 void font_draw_custom(
@@ -86,6 +86,6 @@ void font_draw_custom(
   const char* text,
   shader_t* shader)
 {
-  r->backend.font_draw(font, pos, text, color, shader);
+  r->backend.font_draw(r, font, pos, text, color, shader);
   mem_destroy(font);
 }
