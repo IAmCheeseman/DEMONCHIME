@@ -28,6 +28,7 @@ font_t* font_load(
     log_fatal(1, "can't load '%s' because freetype is not init", ttf);
   font_t* font = mem_alloc(sizeof(font_t));
   font->glyphs = NULL;
+  font->max_height = size;
 
   size_t ttf_size;
   uint8_t* ttf_data = vfs_read(vfs, ttf, &ttf_size);
@@ -50,6 +51,16 @@ void font_destroy(const renderer_t* r, font_t* font)
 {
   r->backend.font_destroy(font);
   mem_destroy(font);
+}
+
+int font_get_height(const renderer_t* r, const font_t* font)
+{
+  return font->max_height;
+}
+
+int font_get_width(const renderer_t* r, const font_t* font, const char* text)
+{
+  return r->backend.font_get_width(font, text);
 }
 
 void font_draw(

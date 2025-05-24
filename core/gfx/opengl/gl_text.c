@@ -104,6 +104,16 @@ void gl_font_destroy(font_t* font)
   log_debug("destroyed font");
 }
 
+int gl_font_get_width(const font_t* font, const char* text)
+{
+  int width = 0;
+  for (const char* c = text; *c != '\0'; c++) {
+    glyph_t* g = &font->glyphs[(int)*c];
+    width += g->advance >> 6;
+  }
+  return width;
+}
+
 void gl_font_draw(
   font_t* font,
   vec2f_t pos,

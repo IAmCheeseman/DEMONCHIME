@@ -148,6 +148,7 @@ typedef void (*tex_destroy_fn)(struct tex_s* tex);
 
 typedef void (*font_init_fn)(
   struct font_s* font, FT_Face face);
+typedef int (*font_get_width_fn)(const struct font_s* font, const char* text);
 typedef void (*font_destroy_fn)(struct font_s* font);
 typedef void (*font_draw_fn)(
   struct font_s* font,
@@ -203,6 +204,7 @@ typedef struct gfx_backend_s
 
   font_init_fn font_init;
   font_destroy_fn font_destroy;
+  font_get_width_fn font_get_width;
   font_draw_fn font_draw;
 } gfx_backend_t;
 

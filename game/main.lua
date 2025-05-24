@@ -90,6 +90,11 @@ event.on("@keydown", function(key, is_repeated)
 end)
 
 event.on("@uidraw", function()
+  local st = ("s: %d"):format(s)
+  local sw = metal_mania:get_width(st)
+
+  metal_mania:draw(320 * 5 - sw - 5, 0, st)
+
   metal_mania:draw(
     12, 0,
     ("FPS: %d, %f ms"):format(core.get_fps(), 1/core.get_fps() * 1000),
