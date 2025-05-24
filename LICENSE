@@ -1,34 +1,45 @@
-=== LIBRARIES & LICENSING INFO ===
+=== SOFTWARE & LICENSING INFO ===
 
 DEMONCHIME:
   License: MIT
   Copyright (c) 2025 Frederick Swan
 
 FreeType:
+  https://freetype.org/
   License: FreeType License
   Copyright 1996-2002, 2006 by David Turner, Robert Wilhelm, and Werner Lemberg
 
 GLFW:
+  https://www.glfw.org/
   License: zlib
   Copyright (c) 2002-2006 Marcus Geelnard
   Copyright (c) 2006-2019 Camilla Löwy
 
 GLAD:
+  https://glad.dav1d.de/
   License: MIT
   Copyright (c) 2013-2022 David Herberth
 
 LuaJIT:
+  https://luajit.org/
   License: MIT
   Copyright (C) 2005-2025 Mike Pall
 
 stb_image:
+  https://github.com/nothings/stb
   License: MIT
   Copyright (c) 2017 Sean Barrett
 
 miniz:
+  https://github.com/richgel999/miniz
   License: MIT
   Copyright 2013-2014 RAD Game Tools and Valve Software
   Copyright 2010-2014 Rich Geldreich and Tenacious Software LLC
+
+Double Homicide:
+  https://fontenddev.com/fonts/double-homicide/
+  License: CC BY 4.0
+  Copyright 2025 Font End Dev
 
 === LICENSE TEXT ==
 
@@ -236,3 +247,7 @@ FreeType License:
     Our home page can be found at
   
       https://www.freetype.org
+
+CC BY 4.0:
+  The text for CC BY 4.0 can be found here:
+  https://creativecommons.org/licenses/by/4.0/
