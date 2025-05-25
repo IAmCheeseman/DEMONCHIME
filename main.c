@@ -22,7 +22,7 @@ int main(int argc, const char* args[])
     .fullscreen = fullscreen_none,
 #endif
     .window_size = (vec2i_t){320 * 3, 180 * 3},
-    .screen_size = (vec2i_t){320, 180},
+    .screen_size = (vec2i_t){320 * 2, 180 * 2},
     .vsync = 0,
   };
 
