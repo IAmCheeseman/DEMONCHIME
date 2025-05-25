@@ -73,7 +73,7 @@ static int L_PrngMt_rangef(lua_State* L)
   }
 
   prng_t* p = (prng_t*)read_ldata(L, 1, lua_type_prng);
-  lua_pushinteger(L, prng_get_rangef(p, lower, upper));
+  lua_pushnumber(L, prng_get_rangef(p, lower, upper));
   return 1;
 }
 
