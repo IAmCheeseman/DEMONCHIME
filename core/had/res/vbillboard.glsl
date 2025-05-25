@@ -25,7 +25,7 @@ void main()
   gl_Position = p * v * m * vec4(pos, 1.0);
 
   mat3 normal_m = transpose(inverse(mat3(m)));
-  vec3 normal = vec3(0, 0, -1) + right;
+  vec3 normal = normalize(vec3(1, 0, 1) + right);
 
   f_pos = pos;
   f_normal = normal;

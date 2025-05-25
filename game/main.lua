@@ -45,9 +45,9 @@ event.on("@tick", function()
     cubet.x = prng:rangef(-5, 5)
     cubet.y = prng:rangef(-2, 2)
     cubet.z = prng:rangef(-5, 5)
-    cubet.rx = prng:nextf() * math.pi * 2
-    cubet.ry = prng:nextf() * math.pi * 2
-    cubet.rz = prng:nextf() * math.pi * 2
+    -- cubet.rx = prng:nextf() * math.pi * 2
+    -- cubet.ry = prng:nextf() * math.pi * 2
+    -- cubet.rz = prng:nextf() * math.pi * 2
 
     local cube_ent = {}
     cube_ent.model = cube
