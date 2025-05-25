@@ -101,6 +101,8 @@ void wrap_prng(lua_State* L)
 
   luaL_newmetatable(L, prng_mt_name);
   reg_funcs(L, prng_mt);
+  lua_pushstring(L, "prng");
+  lua_setfield(L, -2, "__type");
 
   lua_pop(L, 2);
 }

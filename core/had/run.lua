@@ -13,10 +13,12 @@ function step()
 end
 
 function draw()
+  event.call("@predraw")
   event.call("@draw")
 end
 
 function uidraw()
+  event.call("@preuidraw")
   event.call("@uidraw")
 end
 

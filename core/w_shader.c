@@ -136,6 +136,8 @@ void wrap_shader(lua_State* L)
 
   luaL_newmetatable(L, shader_mt_name);
   reg_funcs(L, shader_mt);
+  lua_pushstring(L, "shader");
+  lua_setfield(L, -2, "__type");
 
   lua_pop(L, 2);
 }

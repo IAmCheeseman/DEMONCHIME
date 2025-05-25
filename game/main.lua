@@ -6,13 +6,7 @@ end
 
 require("systems.draw_meshes")
 
-local fmt = core.create_vert_fmt()
-fmt:add_attr("float", 3) -- position
-fmt:add_attr("float", 3) -- normal
-fmt:add_attr("float", 2) -- uv
-fmt:add_attr("float", 4) -- color
-
-local cube = core.create_mesh(fmt)
+local cube = core.create_mesh(core.default_fmt)
 cube:set_vertices(require("cube"))
 cube:finalize(true)
 
@@ -30,7 +24,7 @@ local cubet = {
 
 local prng = core.create_prng()
 local t = 0
-local s = 1
+local s = 0
 
 event.on("@keydown", function(key)
   if key == core.key.up then s = s + 1 end

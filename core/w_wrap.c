@@ -32,16 +32,16 @@ static int L_err_handler(lua_State* L)
 static const char* ldata_type_to_str(ldata_type_t type)
 {
   switch (type) {
-    case lua_type_invalid: return "Invalid";
-    case lua_type_engine: return "Engine";
-    case lua_type_img: return "Image";
-    case lua_type_tex: return "Texture";
-    case lua_type_mesh: return "Mesh";
-    case lua_type_vert_fmt: return "VertexFormat";
-    case lua_type_shader: return "Shader";
-    case lua_type_mat4: return "Mat4";
-    case lua_type_font: return "Font";
-    case lua_type_prng: return "Prng";
+    case lua_type_invalid: return "invalid";
+    case lua_type_engine: return "engine";
+    case lua_type_img: return "img";
+    case lua_type_tex: return "tex";
+    case lua_type_mesh: return "mesh";
+    case lua_type_vert_fmt: return "vert_fmt";
+    case lua_type_shader: return "shader";
+    case lua_type_mat4: return "mat4";
+    case lua_type_font: return "font";
+    case lua_type_prng: return "prng";
   }
   return "Invalid";
 }

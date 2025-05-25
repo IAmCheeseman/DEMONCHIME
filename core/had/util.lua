@@ -11,9 +11,19 @@ function util.try(f, ...)
   return false, nil
 end
 
-function util.expect(v, t, i)
-  if not util.is(v, t) then
-    error("expected type '" .. t .. "' for argument " .. tostring(i))
+function util.expect_args(...)
+  local args = {...}
+
+  local i = 1
+  local argi = 1
+  while i < #args do
+    if args[i+1] ~= "any" then
+      if type(args[i]) ~= args[i+1] then
+        error("expected type '" .. args[i+1] .. "' for argument " .. argi, 2)
+      end
+    end
+    i = i + 2
+    argi = argi + 1
   end
 end
 

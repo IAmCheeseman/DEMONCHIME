@@ -96,6 +96,8 @@ void wrap_tex(lua_State* L)
 
   luaL_newmetatable(L, tex_mt_name);
   reg_funcs(L, texture_mt);
+  lua_pushstring(L, "tex");
+  lua_setfield(L, -2, "__type");
 
   lua_pop(L, 2);
 }

@@ -1,10 +1,12 @@
 function table.swaprem(t, i)
+  util.expect_args(t, "table", i, "number")
   t[i] = t[#t]
   t[#t] = nil
   return t[i]
 end
 
 function table.find(t, x)
+  util.expect_args(t, "table", x, "any")
   for i, v in ipairs(t) do
     if v == x then
       return i

@@ -25,20 +25,38 @@ event.on("@frame", function()
 end)
 
 local cubes = ecs.query("model", "trans_mat")
-local shader = core.load_shader("res/vdefault.glsl", "res/fdefault.glsl")
 local tex = core.load_tex("res/textures/grass.png")
 tex:set_filter(core.tex_filter.nearest, core.tex_filter.nearest)
 
 event.on("@draw", function()
-  shader:bind()
-  shader:send_mat4("v", view_mat)
-  shader:send_mat4("p", perspective_mat)
+  core.default_shader:bind()
+  core.default_shader:send_mat4("v", view_mat)
+  core.default_shader:send_mat4("p", perspective_mat)
 
   tex:bind(0)
-  shader:sendi("tex0", 0)
+  core.default_shader:sendi("tex0", 0)
 
   for ent in cubes.ents:iter() do
-    shader:send_mat4("m", ent.trans_mat)
+    core.default_shader:send_mat4("m", ent.trans_mat)
     ent.model:draw()
   end
+end)
+
+local bb_tex = core.load_tex("res/textures/billboard.png")
+local bb = core.create_billboard(bb_tex)
+local bbx, bbz = 0, 0
+
+local t = core.create_lerped_num()
+event.on("@tick", function()
+  t:set(t.val + 0.05)
+  bbx = math.cos(t:get())
+  bbz = math.sin(t:get())
+end)
+
+event.on("@draw", function()
+  -- bb_tex:bind(0)
+  -- core.billboard_shader:sendi("tex0", 0)
+  local m = core.mat4_identity()
+  m:translate(bbx, 0, bbz)
+  bb:draw(m, view_mat, perspective_mat)
 end)

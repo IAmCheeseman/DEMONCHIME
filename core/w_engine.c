@@ -107,6 +107,15 @@ static int L_set_projection(lua_State* L)
   return 0;
 }
 
+static int L_get_projection(lua_State* L)
+{
+  engine_t* engine = get_engine(L);
+  lmat4_t* m = (lmat4_t*)mem_alloc(sizeof(lmat4_t));
+  memcpy(m->m, engine->renderer->projection, sizeof(mat4_t));
+  create_ldata(L, m, mat4_mt_name, lua_type_mat4);
+  return 1;
+}
+
 static int L_is_key_down(lua_State* L)
 {
   engine_t* engine = get_engine(L);
@@ -146,6 +155,7 @@ luaL_Reg engine_funcs[] = {
   {"get_interpolation", L_get_interpolation},
   {"interpolate", L_interpolate},
   {"set_projection", L_set_projection},
+  {"get_projection", L_get_projection},
   {"is_key_down", L_is_key_down},
   {"is_mouse_down", L_is_mouse_down},
   {"get_mouse_pos", L_get_mouse_pos},

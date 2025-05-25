@@ -77,6 +77,8 @@ void wrap_vert_fmt(lua_State* L)
 
   luaL_newmetatable(L, vert_fmt_mt_name);
   reg_funcs(L, vertex_format_mt);
+  lua_pushstring(L, "vert_fmt");
+  lua_setfield(L, -2, "__type");
 
   lua_pop(L, 2);
 }

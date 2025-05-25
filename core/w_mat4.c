@@ -175,6 +175,8 @@ void wrap_mat4(lua_State* L)
 
   luaL_newmetatable(L, mat4_mt_name);
   reg_funcs(L, mat4_mt);
+  lua_pushstring(L, "mat4");
+  lua_setfield(L, -2, "__type");
 
   lua_pop(L, 2);
 }

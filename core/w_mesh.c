@@ -143,6 +143,8 @@ void wrap_mesh(lua_State* L)
 
   luaL_newmetatable(L, mesh_mt_name);
   reg_funcs(L, mesh_mt);
+  lua_pushstring(L, "mesh");
+  lua_setfield(L, -2, "__type");
 
   lua_pop(L, 2);
 }

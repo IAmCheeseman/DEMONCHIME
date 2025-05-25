@@ -14,6 +14,8 @@ local ent_queries = {}
 local ecs = {}
 
 local function update_queries_with_comp(ent, comp)
+  util.expect_args(ent, "table", comp, "string")
+
   local filter2query = query_filters[comp]
   if filter2query then
     for _, query in ipairs(filter2query) do
@@ -46,10 +48,13 @@ local ent_mt = {
 ent_mt.__index = ent_mt
 
 function ecs.add_ent(ent)
+  util.expect_args(ent, "table")
   add_queue:add(ent)
 end
 
 function ecs.rem_ent(ent)
+  util.expect_args(ent, "table")
+
   if not ents:has(ent) then
     return
   end

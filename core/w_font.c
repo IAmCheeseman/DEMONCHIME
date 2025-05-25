@@ -88,6 +88,8 @@ void wrap_font(lua_State* L)
 
   luaL_newmetatable(L, font_mt_name);
   reg_funcs(L, font_mt);
+  lua_pushstring(L, "font");
+  lua_setfield(L, -2, "__type");
 
   lua_pop(L, 2);
 }
