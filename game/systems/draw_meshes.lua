@@ -4,24 +4,15 @@ local vry = core.create_lerped_num()
 event.on("@tick", function()
   r = r + math.rad(2)
   vry:set(r * 0.5)
-end)
 
-local view_mat
-local perspective_mat
+  core.gfx.view.x = math.cos(vry:get()) * 10
+  core.gfx.view.y = 10
+  core.gfx.view.z = math.sin(vry:get()) * 10
 
-event.on("@frame", function()
-  local v_pitch = core.mat4_identity()
-  v_pitch:rotate(math.rad(-45), 0, 0)
-  local vt = core.mat4_identity()
-  vt:translate(0, 7, -7)
-  local v_yaw = core.mat4_identity()
-  v_yaw:rotate(0, vry:get(), 0)
-  view_mat = v_pitch:mult(vt:mult(v_yaw))
+  core.gfx.view.pitch = math.rad(-45)
 
-  local sw, sh = core.get_screen_size()
-  local a = sw / sh
-  perspective_mat = core.mat4_identity()
-  perspective_mat:perspective(45, a, 1, 100)
+  local yaw = core.vec2.angle(core.gfx.view.x, core.gfx.view.z) + math.pi / 2
+  core.gfx.view.yaw = yaw
 end)
 
 local cubes = ecs.query("model", "trans_mat")
@@ -30,8 +21,8 @@ tex:set_filter(core.tex_filter.nearest, core.tex_filter.nearest)
 
 event.on("@draw", function()
   core.default_shader:bind()
-  core.default_shader:send_mat4("v", view_mat)
-  core.default_shader:send_mat4("p", perspective_mat)
+  core.default_shader:send_mat4("v", core.gfx.view_mat)
+  core.default_shader:send_mat4("p", core.gfx.perspective_mat)
 
   tex:bind(0)
   core.default_shader:sendi("tex0", 0)
@@ -44,19 +35,19 @@ end)
 
 local bb_tex = core.load_tex("res/textures/billboard.png")
 local bb = core.create_billboard(bb_tex)
-local bbx, bbz = 0, 0
+
+local bbent = {
+  billboard = bb,
+  x = 0,
+  y = 0,
+  z = 0,
+}
+
+ecs.add_ent(bbent)
 
 local t = core.create_lerped_num()
 event.on("@tick", function()
   t:set(t.val + 0.05)
-  bbx = math.cos(t:get())
-  bbz = math.sin(t:get())
-end)
-
-event.on("@draw", function()
-  -- bb_tex:bind(0)
-  -- core.billboard_shader:sendi("tex0", 0)
-  local m = core.mat4_identity()
-  m:translate(bbx, 0, bbz)
-  bb:draw(m, view_mat, perspective_mat)
+  bbent.x = math.cos(t:get())
+  bbent.z = math.sin(t:get())
 end)

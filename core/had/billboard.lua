@@ -1,3 +1,17 @@
+local event = require("event")
+local ecs = require("ecs")
+local gfx = require("gfx")
+
+local billboards = ecs.query("billboard", "x", "y", "z")
+
+event.on("@transparentdraw", function()
+  for ent in billboards.ents:iter() do
+    local m = core.mat4_identity()
+    m:translate(ent.x, ent.y, ent.z)
+    ent.billboard:draw(m, gfx.view_mat, gfx.perspective_mat)
+  end
+end)
+
 local billboard_t = {}
 billboard_t.__index = billboard_t
 billboard_t.__type = "billboard"
@@ -33,17 +47,18 @@ local function create_billboard(tex, scale)
   return bb
 end
 
-function billboard_t:draw(m, v, p)
+function billboard_t:draw(m, v, p, shader)
+  shader = shader or core.billboard_shader
   local tw, th = self.tex:get_size()
   self.tex:bind(0)
 
-  core.billboard_shader:bind()
-  core.billboard_shader:send_mat4("m", m)
-  core.billboard_shader:send_mat4("v", v)
-  core.billboard_shader:send_mat4("p", p)
-  core.billboard_shader:sendf("scale", self.scale)
-  core.billboard_shader:sendf("tex_size", tw, th)
-  core.billboard_shader:sendi("tex0", 0)
+  shader:bind()
+  shader:send_mat4("m", m)
+  shader:send_mat4("v", v)
+  shader:send_mat4("p", p)
+  shader:sendf("scale", self.scale)
+  shader:sendf("tex_size", tw, th)
+  shader:sendi("tex0", 0)
 
   self.mesh:draw()
 end

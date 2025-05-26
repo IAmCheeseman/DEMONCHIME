@@ -142,9 +142,6 @@ void gl_font_draw(
   color_t color,
   shader_t* shader)
 {
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
   font_handle_t* handle = (font_handle_t*)font->handle;
 
   mat4_t p;
