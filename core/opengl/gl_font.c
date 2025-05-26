@@ -129,7 +129,7 @@ int gl_font_get_width(const font_t* font, const char* text)
   int width = 0;
   for (const char* c = text; *c != '\0'; c++) {
     glyph_t* g = &font->glyphs[(int)*c];
-    width += g->advance >> 6;
+    width += g->advance;
   }
   return width;
 }
