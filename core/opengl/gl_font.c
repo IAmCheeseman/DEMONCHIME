@@ -34,7 +34,7 @@ void gl_font_init(font_t* font, SFT* sft)
   {
     SFT_Glyph gid;
     if (sft_lookup(sft, c, &gid)) {
-      log_warning("failed to load glyph for '%c'", c);
+      log_warning("failed to load glyph ('%c')", c);
       continue;
     }
 
@@ -51,7 +51,7 @@ void gl_font_init(font_t* font, SFT* sft)
     char pixels[img.width * img.height];
     img.pixels = pixels;
     if (sft_render(sft, gid, img) < 0) {
-      log_warning("could not renderer '%c'", c);
+      log_warning("could not render glyph ('%c')", c);
       continue;
     }
 
