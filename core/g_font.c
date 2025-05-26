@@ -7,17 +7,12 @@ shader_t* text_shader = NULL;
 
 void init_freetype(renderer_t* r, vfs_t* core_vfs)
 {
-  if (FT_Init_FreeType(&r->freetype)) {
-    log_fatal(1, "could not init freetype");
-  }
-
   text_shader = shader_load_from_files(
     r, core_vfs, "res/vtext.glsl", "res/ftext.glsl");
 }
 
 void destroy_freetype(renderer_t* r)
 {
-  FT_Done_FreeType(r->freetype);
   shader_destroy(r, text_shader);
 }
 
@@ -33,15 +28,14 @@ font_t* font_load(
   size_t ttf_size;
   uint8_t* ttf_data = vfs_read(vfs, ttf, &ttf_size);
 
-  FT_Face face;
-  if (FT_New_Memory_Face(r->freetype, ttf_data, ttf_size, 0, &face))
+  SFT sft = {.xScale = size, .yScale = size, .flags = SFT_DOWNWARD_Y};
+  sft.font = sft_loadmem(ttf_data, ttf_size);
+  if (!sft.font)
     log_fatal(1, "could not load font '%s'", ttf);
 
-  FT_Set_Pixel_Sizes(face, 0, size);
+  r->backend.font_init(font, &sft);
 
-  r->backend.font_init(font, face);
-
-  FT_Done_Face(face);
+  sft_freefont(sft.font);
   mem_destroy(ttf_data);
 
   return font;

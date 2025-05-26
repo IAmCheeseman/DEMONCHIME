@@ -32,7 +32,7 @@ OBJ = \
 	core/opengl/gl_tex.o core/opengl/gl_type_conv.o \
 	core/opengl/gl_font.o core/opengl/gl_vert_arr.o \
 	\
-	lib/glad/src/glad.o lib/stb/stb.o
+	lib/glad/src/glad.o lib/stb/stb.o lib/schrift/schrift.o
 DEP = $(OBJ:%.o=%.d)
 
 # HAD files store game content

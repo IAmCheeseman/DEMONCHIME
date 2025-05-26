@@ -1,8 +1,7 @@
 #ifndef __engine_gfx_text__
 #define __engine_gfx_text__
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include <schrift/schrift.h>
 
 #include "include.h"
 

@@ -1,8 +1,7 @@
 #ifndef __engine_gfx_backend__
 #define __engine_gfx_backend__
 
-#include <ft2build.h>
-#include FT_FREETYPE_H
+#include <schrift/schrift.h>
 
 #include "include.h"
 
@@ -140,8 +139,7 @@ typedef void (*tex_set_wrap_fn)(
 );
 typedef void (*tex_destroy_fn)(struct tex_s* tex);
 
-typedef void (*font_init_fn)(
-  struct font_s* font, FT_Face face);
+typedef void (*font_init_fn)(struct font_s* font, SFT* sft);
 typedef int (*font_get_width_fn)(const struct font_s* font, const char* text);
 typedef void (*font_destroy_fn)(struct font_s* font);
 typedef void (*font_draw_fn)(

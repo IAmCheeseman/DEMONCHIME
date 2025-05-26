@@ -22,7 +22,7 @@ typedef struct font_handle_s
   uint32_t vbo;
 } font_handle_t;
 
-void gl_font_init(font_t* font, FT_Face face)
+void gl_font_init(font_t* font, SFT* sft)
 {
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -32,8 +32,26 @@ void gl_font_init(font_t* font, FT_Face face)
 
   for (uint8_t c = 0; c < 128; c++)
   {
-    if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
+    SFT_Glyph gid;
+    if (sft_lookup(sft, c, &gid)) {
       log_warning("failed to load glyph for '%c'", c);
+      continue;
+    }
+
+    SFT_GMetrics mtx;
+    if (sft_gmetrics(sft, gid, &mtx)) {
+      log_warning("bad glyph metrics ('%c')", c);
+      continue;
+    }
+
+    SFT_Image img = (SFT_Image){
+      .width = (mtx.minWidth + 3) & ~3,
+      .height = mtx.minHeight,
+    };
+    char pixels[img.width * img.height];
+    img.pixels = pixels;
+    if (sft_render(sft, gid, img) < 0) {
+      log_warning("could not renderer '%c'", c);
       continue;
     }
 
@@ -43,11 +61,11 @@ void gl_font_init(font_t* font, FT_Face face)
     glTexImage2D(
       GL_TEXTURE_2D,
       0, GL_RED,
-      face->glyph->bitmap.width,
-      face->glyph->bitmap.rows,
+      img.width,
+      img.height,
       0,
       GL_RED, GL_UNSIGNED_BYTE,
-      face->glyph->bitmap.buffer);
+      img.pixels);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -56,14 +74,14 @@ void gl_font_init(font_t* font, FT_Face face)
     glyph_t* glyph = &glyphs[c];
     glyph->tex_handle = tex;
     glyph->size = (vec2i_t){
-        face->glyph->bitmap.width,
-        face->glyph->bitmap.rows
+      img.width,
+      img.height,
     };
     glyph->bearing = (vec2i_t){
-        face->glyph->bitmap_left,
-        face->glyph->bitmap_top
+      -mtx.leftSideBearing,
+      -mtx.yOffset,
     };
-    glyph->advance = face->glyph->advance.x;
+    glyph->advance = mtx.advanceWidth;
   }
 
   font_handle_t* handle = (font_handle_t*)mem_alloc(sizeof(font_handle_t));
@@ -171,7 +189,7 @@ void gl_font_draw(
 
     glDrawArrays(GL_TRIANGLES, 0, 6);
 
-    x += g->advance >> 6;
+    x += g->advance;
   }
 
   glBindVertexArray(0);
