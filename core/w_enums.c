@@ -22,6 +22,7 @@ lenum_t shader[] = {
   {"default", shader_default},
   {"billboard", shader_billboard},
   {"_2d", shader_2d},
+  {"text", shader_text},
   {NULL, 0},
 };
 
