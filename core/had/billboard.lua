@@ -1,7 +1,7 @@
 local event = require("event")
 local ecs = require("ecs")
 
-local billboards = ecs.query("billboard", "x", "y", "z")
+local billboards = ecs.query("billboard", xyz)
 
 event.on("@draw", function()
   for ent in billboards.ents:iter() do

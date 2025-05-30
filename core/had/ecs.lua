@@ -24,9 +24,11 @@ local function update_queries_with_comp(ent, comp)
       if passes and not query.ents:has(ent) then
         query.ents:add(ent)
         ent_queries[ent]:add(query)
+        query:emit_callback(query.added_cb, ent)
       elseif not passes and query.ents:has(ent) then
         query.ents:rem(ent)
         ent_queries[ent]:rem(query)
+        query:emit_callback(query.rem_cb, ent)
       end
     end
   end
@@ -76,6 +78,7 @@ local function add_ent_to_queries(ent)
         if query:filter_ent(ent) then
           query.ents:add(ent)
           ent_queries[ent]:add(query)
+          query:emit_callback(query.added_cb, ent)
         end
       end
     end
@@ -104,6 +107,7 @@ local function flush_rem()
     ents:rem(ent)
     for query in ent_queries[ent]:iter() do
       query.ents:rem(ent)
+      query:emit_callback(query.rem_cb, ent)
     end
     ent_queries[ent] = nil
 
@@ -122,7 +126,17 @@ function ecs.ent_count()
 end
 
 function ecs.query(...)
-  local filters = {...}
+  local nested_filters = {...}
+  local filters = {}
+  for _, v in ipairs(nested_filters) do
+    if type(v) == "table" then
+      for _, vv in ipairs(v) do
+        table.insert(filters, vv)
+      end
+    else
+      table.insert(filters, v)
+    end
+  end
 
   -- don't duplicate queries
   for _, query in ipairs(queries) do
@@ -140,7 +154,8 @@ function ecs.query(...)
   end
 
   -- no query that already exists and matches the filters; make new one 
-  local query = create_query(...)
+  local query = create_query(filters)
+
   table.insert(queries, query)
 
   for _, filter in ipairs(filters) do
@@ -157,6 +172,7 @@ function ecs.query(...)
     if query:filter_ent(ent) then
       query.ents:add(ent)
       table.insert(ent_queries[ent], query)
+      query:emit_callback(query.added_cb, ent)
     end
   end
 

@@ -13,6 +13,9 @@ require("tablex")
 require("mathx")
 require("stringx")
 
+xyz = {"x", "y", "z"}
+vxyz = {"vx", "vy", "vz"}
+
 core.create_lerped_num = require("lerped_num")
 core.create_billboard = require("billboard")
 core.gfx = require("gfx")
