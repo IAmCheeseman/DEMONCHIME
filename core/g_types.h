@@ -9,6 +9,7 @@ typedef enum shader_e
   shader_default,
   shader_billboard,
   shader_2d,
+  shader_text,
   shader_count,
 } shader_t;
 

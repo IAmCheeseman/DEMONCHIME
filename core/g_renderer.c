@@ -165,6 +165,7 @@ void init_renderer(engine_t* engine, gfx_backend_type_t backend)
   fmts[shader_default] = vert_fmt_create(default_attrs, 4);
   fmts[shader_billboard] = vert_fmt_create(billboard_attrs, 3);
   fmts[shader_2d] = vert_fmt_create(_2d_attrs, 3);
+  fmts[shader_text] = vert_fmt_create(_2d_attrs, 3);
 
   renderer->shader_fmts = fmts;
 }

@@ -105,6 +105,13 @@ void gl_init_shaders(renderer_t* r, vfs_t* vfs)
   _2d.locs[tex_loc] = glGetUniformLocation(_2d.handle, "tex");
   progs[shader_2d] = _2d;
 
+  program_t text;
+  text.handle = load_program(vfs, "res/v2d.glsl", "res/ftext.glsl");
+  memset(text.locs, 0, sizeof(text.locs));
+  text.locs[projection_loc] = glGetUniformLocation(text.handle, "p");
+  text.locs[tex_loc] = glGetUniformLocation(text.handle, "tex");
+  progs[shader_text] = text;
+
   r->shaders = progs;
 }
 
@@ -114,6 +121,7 @@ void gl_destroy_shaders(renderer_t* r)
   glDeleteProgram(progs[shader_default].handle);
   glDeleteProgram(progs[shader_billboard].handle);
   glDeleteProgram(progs[shader_2d].handle);
+  glDeleteProgram(progs[shader_text].handle);
   mem_destroy(progs);
   r->shaders = NULL;
 }
@@ -124,11 +132,12 @@ void gl_set_active_shader(const renderer_t* r, uint8_t shader)
   glUseProgram(progs[shader].handle);
 }
 
-void gl_setup_2d(const renderer_t* r, uint32_t tex, const mat4_t projection)
+void gl_setup_2d(
+  const renderer_t* r, shader_t shader, uint32_t tex, const mat4_t projection)
 {
   glDisable(GL_DEPTH_TEST);
   program_t* progs = (program_t*)r->shaders;
-  program_t* s = &progs[shader_2d];
+  program_t* s = &progs[shader];
 
   glUniformMatrix4fv(s->locs[projection_loc], 1, GL_FALSE, projection);
 
@@ -168,8 +177,9 @@ void gl_setup_shader(const renderer_t* r, const draw_call_t* dc)
       gl_tex_bind(dc->tex, 0);
       glUniform1i(s->locs[tex_loc], 0);
       break;
+    case shader_text:
     case shader_2d:
-      gl_setup_2d(r, *(uint32_t*)dc->tex->handle, dc->projection);
+      gl_setup_2d(r, dc->shader, *(uint32_t*)dc->tex->handle, dc->projection);
       break;
     default:
       return;

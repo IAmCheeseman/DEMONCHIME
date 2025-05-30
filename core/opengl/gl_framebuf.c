@@ -185,7 +185,7 @@ void gl_framebuf_draw(
   gl_set_active_shader(r, shader_2d);
   mat4_t i;
   mat4_identity(i);
-  gl_setup_2d(r, fb->color_handle, i);
+  gl_setup_2d(r, shader_2d, fb->color_handle, i);
   gl_vert_arr_draw(fb->vao, 0, 6, idx_triangles);
 
   // glActiveTexture(GL_TEXTURE0);

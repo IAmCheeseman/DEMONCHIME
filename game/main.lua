@@ -95,13 +95,16 @@ event.on("@uidraw", function()
 
   dh:draw(
     2, sh * 0,
-    ("FPS: %d, %f ms"):format(core.get_fps(), 1/core.get_fps() * 1000))
+    ("FPS: %d, %f ms"):format(core.get_fps(), 1/core.get_fps() * 1000),
+    1, 1, 1)
   dh:draw(
     2, sh * 1,
-    ("TPS: %d"):format(core.get_tps()))
+    ("TPS: %d"):format(core.get_tps()),
+    1, 0.2, 1)
   dh:draw(
     2, sh * 2,
-    ("Entities: %d"):format(ecs.ent_count()))
+    ("Entities: %d"):format(ecs.ent_count()),
+    0, 1, 0.4)
 end)
 
 local fullscreen = core.fullscreen.none

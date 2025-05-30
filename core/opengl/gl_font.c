@@ -93,10 +93,10 @@ void gl_font_init(const renderer_t* r, font_t* font, SFT* sft)
   gl_buf_obj_set_dat(
     handle->vbo,
     NULL,
-    r->shader_fmts[shader_2d].stride * 6,
+    r->shader_fmts[shader_text].stride * 6,
     draw_dynamic);
 
-  handle->vao = gl_vert_arr_create(r, shader_2d);
+  handle->vao = gl_vert_arr_create(r, shader_text);
 
   log_debug(
     "loaded font (vao %d, vbo %d)",
@@ -142,8 +142,8 @@ void gl_font_draw(
 {
   font_handle_t* handle = (font_handle_t*)font->handle;
 
-  gl_set_active_shader(r, shader_2d);
-  gl_setup_2d(r, 0, r->projection_2d);
+  gl_set_active_shader(r, shader_text);
+  gl_setup_2d(r, shader_text, 0, r->projection_2d);
 
   // gl_shader_bind(shader);
   // gl_shader_send_vec4f(shader, "text_color", (vec4f_t){
