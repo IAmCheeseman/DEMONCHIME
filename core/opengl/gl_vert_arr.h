@@ -10,7 +10,7 @@ struct vert_arr_s
   uint32_t handle;
 };
 
-vert_arr_t* gl_vert_arr_create(const vert_fmt_t* fmt);
+vert_arr_t* gl_vert_arr_create(const renderer_t* r, shader_t shader);
 void gl_vert_arr_bind(const vert_arr_t* varr);
 void gl_vert_arr_destroy(vert_arr_t* varr);
 void gl_vert_arr_draw(

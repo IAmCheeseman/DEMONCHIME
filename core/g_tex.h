@@ -2,13 +2,13 @@
 #define __engine_texture__
 
 #include "include.h"
-#include "g_gfx.h"
+#include "g_renderer.h"
 #include "g_types.h"
 #include "c_img.h"
 #include "m_math.h"
 
 // TODO: make this consistent with other implementation-defined stuff
-typedef struct tex_s
+struct tex_s
 {
   void* handle;
   vec2i_t size;
@@ -17,7 +17,7 @@ typedef struct tex_s
   tex_filter_t mag_filter;
   tex_wrap_t x_wrap;
   tex_wrap_t y_wrap;
-} tex_t;
+};
 
 tex_t tex_load(const renderer_t* r, vfs_t* vfs, const char* path);
 tex_t tex_load_from_img(const renderer_t* r, const img_t* img);

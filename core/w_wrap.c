@@ -37,8 +37,6 @@ static const char* ldata_type_to_str(ldata_type_t type)
     case lua_type_img: return "img";
     case lua_type_tex: return "tex";
     case lua_type_mesh: return "mesh";
-    case lua_type_vert_fmt: return "vert_fmt";
-    case lua_type_shader: return "shader";
     case lua_type_mat4: return "mat4";
     case lua_type_font: return "font";
     case lua_type_prng: return "prng";
@@ -159,8 +157,6 @@ void wrap(lua_State* L, engine_t* engine)
   wrap_enums(L);
   wrap_tex(L);
   wrap_log(L);
-  wrap_shader(L);
-  wrap_vert_fmt(L);
   wrap_mesh(L);
   wrap_mat4(L);
   wrap_font(L);

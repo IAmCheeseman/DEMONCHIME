@@ -15,7 +15,6 @@ end
 function draw()
   event.call("@predraw")
   event.call("@draw")
-  event.call("@transparentdraw")
 end
 
 function uidraw()

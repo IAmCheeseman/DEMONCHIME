@@ -3,9 +3,7 @@
 
 #include "include.h"
 #include "g_types.h"
-#include "g_gfx.h"
-
-typedef struct buf_obj_s buf_obj_t;
+#include "g_renderer.h"
 
 buf_obj_t* buf_obj_create(
   const renderer_t* r,

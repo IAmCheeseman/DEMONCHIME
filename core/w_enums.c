@@ -11,11 +11,19 @@ typedef struct lenum_s
   int value;
 } lenum_t;
 
+#define shader_name "shader"
 #define image_format_name "img_format"
 #define texture_filter_name "tex_filter"
 #define texture_wrap_name "tex_wrap"
 #define fullscreen_wrap_name "fullscreen"
 #define key_name "key"
+
+lenum_t shader[] = {
+  {"default", shader_default},
+  {"billboard", shader_billboard},
+  {"_2d", shader_2d},
+  {NULL, 0},
+};
 
 lenum_t image_format[] = {
   {"r8", img_fmt_r8},
@@ -76,6 +84,7 @@ void wrap_enums(lua_State* L)
 {
   lua_getglobal(L, core_name);
 
+  reg_enum(L, shader_name, shader);
   reg_enum(L, image_format_name, image_format);
   reg_enum(L, texture_filter_name, texture_filter);
   reg_enum(L, texture_wrap_name, texture_wrap);

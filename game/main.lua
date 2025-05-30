@@ -6,7 +6,7 @@ end
 
 require("systems.draw_meshes")
 
-local cube = core.create_mesh(core.default_fmt)
+local cube = core.create_mesh(core.shader.default, false)
 cube:set_vertices(require("cube"))
 cube:finalize(true)
 
@@ -85,10 +85,7 @@ end)
 local dh = core.load_font("res/fonts/dbl_homicide.ttf", 16);
 
 event.on("@uidraw", function()
-  local screenw, screenh = core.get_screen_size()
-  local proj = core.mat4_identity()
-  proj:ortho(0, screenw, screenh, 0, 0, 100)
-  core.set_projection(proj)
+  local screenw, _ = core.get_screen_size()
 
   local st = ("s: %d"):format(s)
   local sw = dh:get_width(st)
@@ -98,16 +95,13 @@ event.on("@uidraw", function()
 
   dh:draw(
     2, sh * 0,
-    ("FPS: %d, %f ms"):format(core.get_fps(), 1/core.get_fps() * 1000),
-    1, 0.1, 0.3)
+    ("FPS: %d, %f ms"):format(core.get_fps(), 1/core.get_fps() * 1000))
   dh:draw(
     2, sh * 1,
-    ("TPS: %d"):format(core.get_tps()),
-    1, 0.2, 1)
+    ("TPS: %d"):format(core.get_tps()))
   dh:draw(
     2, sh * 2,
-    ("Entities: %d"):format(ecs.ent_count()),
-    0, 1, 0.4)
+    ("Entities: %d"):format(ecs.ent_count()))
 end)
 
 local fullscreen = core.fullscreen.none

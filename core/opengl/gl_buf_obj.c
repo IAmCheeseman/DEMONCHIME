@@ -42,5 +42,4 @@ void gl_buf_obj_set_dat(
   uint32_t type = buf_obj_type_to_gl(buf->type);
   glBindBuffer(type, buf->handle);
   glBufferData(type, size, data, gl_mode);
-  glBindBuffer(type, 0);
 }

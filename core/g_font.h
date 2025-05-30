@@ -5,7 +5,7 @@
 
 #include "include.h"
 
-#include "g_gfx.h"
+#include "g_renderer.h"
 #include "g_buf_obj.h"
 #include "g_vert_arr.h"
 #include "g_shader.h"
@@ -39,6 +39,6 @@ void font_draw_custom(
   vec2f_t pos,
   color_t color,
   const char* text,
-  shader_t* shader);
+  shader_t shader);
 
 #endif

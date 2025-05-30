@@ -3,7 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <lua.h>
 
-#include "g_gfx.h"
+#include "g_renderer.h"
 #include "g_framebuf.h"
 #include "g_font.h"
 #include "c_mem.h"
@@ -34,9 +34,7 @@ void engine_init(engine_t* engine, engine_conf_t conf)
   glfwSetWindowUserPointer(engine->window.handle, engine);
 
   engine->renderer = NULL;
-  init_backend(engine, gfx_backend_opengl);
-
-  init_freetype(engine->renderer, engine->core_vfs);
+  init_renderer(engine, gfx_backend_opengl);
 
   engine->target_screen_size = conf.screen_size;
   engine->screen_size = conf.screen_size;
@@ -73,12 +71,10 @@ void engine_destroy(engine_t* engine)
 
   lua_close(engine->L);
 
-  destroy_freetype(engine->renderer);
-
   framebuf_destroy(engine->renderer, engine->screen);
 
   if (engine->renderer != NULL)
-    mem_destroy(engine->renderer);
+    destroy_renderer(engine);
 
   window_destroy(&engine->window);
 
@@ -164,26 +160,27 @@ void engine_draw(engine_t* engine)
     return;
   }
 
-  window_swap_buffers(&engine->window);
+  if (!call_lua_global(engine, "uidraw")) {
+    engine_close(engine);
+    return;
+  }
+
+  flush_deferred(engine->renderer);
 
   // Draw screen
   framebuf_bind(engine->renderer, NULL);
   vec2i_t wsize = window_get_size(&engine->window);
   adjust_viewport(engine->renderer, (vec2f_t){wsize.x, wsize.y});
 
-  clear_bg(engine->renderer, 0, 0, 0);
+  clear_bg(engine->renderer, 0, 0.2, 0);
   set_depth_test(engine->renderer, false);
 
   framebuf_draw(
     engine->renderer,
     engine->screen,
-    (vec2i_t){-1, 1},
-    (vec2i_t){2, -2});
+    (vec2i_t){-1, 1}, (vec2i_t){2, -2});
 
-  if (!call_lua_global(engine, "uidraw")) {
-    engine_close(engine);
-    return;
-  }
+  window_swap_buffers(&engine->window);
 
   timer_end_rendering(&engine->timer);
   //exit(1);

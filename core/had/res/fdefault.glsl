@@ -1,7 +1,6 @@
 #version 330 core
 
-uniform sampler2D tex0;
-// uniform vec4 color; 
+uniform sampler2D tex;
 
 out vec4 out_color;
 
@@ -14,7 +13,7 @@ const float shadow_range = 1.0;
 
 void main()
 {
-  vec4 texel = texture(tex0, f_uv);
+  vec4 texel = texture(tex, f_uv);
 
   vec3 light_dir = normalize(vec3(1, -2, 0));
   float shadow_dot = min(dot(f_normal, light_dir), 1.0);

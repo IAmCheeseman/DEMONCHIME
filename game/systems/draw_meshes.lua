@@ -20,16 +20,8 @@ local tex = core.load_tex("res/textures/grass.png")
 tex:set_filter(core.tex_filter.nearest, core.tex_filter.nearest)
 
 event.on("@draw", function()
-  core.default_shader:bind()
-  core.default_shader:send_mat4("v", core.gfx.view_mat)
-  core.default_shader:send_mat4("p", core.gfx.perspective_mat)
-
-  tex:bind(0)
-  core.default_shader:sendi("tex0", 0)
-
   for ent in cubes.ents:iter() do
-    core.default_shader:send_mat4("m", ent.trans_mat)
-    ent.model:draw()
+    ent.model:draw(tex, ent.trans_mat)
   end
 end)
 

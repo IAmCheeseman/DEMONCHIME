@@ -16,8 +16,6 @@ typedef enum ldata_type_e
   lua_type_img,
   lua_type_tex,
   lua_type_mesh,
-  lua_type_vert_fmt,
-  lua_type_shader,
   lua_type_font,
   lua_type_mat4,
   lua_type_prng,
@@ -29,8 +27,6 @@ typedef enum ldata_type_e
 #define img_mt_name "__IMG_MT__"
 #define tex_mt_name "__TEX_MT__"
 #define mesh_mt_name "__MESH_MT__"
-#define vert_fmt_mt_name "__VERT_FMT_MT__"
-#define shader_mt_name "__SHADER_MT__"
 #define mat4_mt_name "__MAT4_MT__"
 #define font_mt_name "__FONT_MT__"
 #define prng_mt_name "__PRNG_MT__"
@@ -59,8 +55,6 @@ void wrap_engine(lua_State* L);
 void wrap_enums(lua_State* L);
 void wrap_tex(lua_State* L);
 void wrap_log(lua_State* L);
-void wrap_shader(lua_State* L);
-void wrap_vert_fmt(lua_State* L);
 void wrap_mesh(lua_State* L);
 void wrap_mat4(lua_State* L);
 void wrap_font(lua_State* L);

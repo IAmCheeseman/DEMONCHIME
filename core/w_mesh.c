@@ -2,15 +2,14 @@
 
 #include "g_mesh.h"
 #include "c_mem.h"
-#include "w_vert_fmt.h"
 
 static int L_create_mesh(lua_State* L)
 {
-  lvertex_format_t* lua_fmt = 
-    (lvertex_format_t*)read_ldata(L, 1, lua_type_vert_fmt);
+  int shader = luaL_checkinteger(L, 1);
+  bool transparent = lua_toboolean(L, 2);
 
   mesh_t* mesh = (mesh_t*)mem_alloc(sizeof(mesh_t));
-  *mesh = mesh_create(&lua_fmt->fmt);
+  *mesh = mesh_create(shader, transparent);
   create_ldata(L, mesh, mesh_mt_name, lua_type_mesh);
   return 1;
 }
@@ -25,7 +24,9 @@ static int L_MeshMt_set_vertices(lua_State* L)
   mesh_t* mesh = (mesh_t*)read_ldata(L, 1, lua_type_mesh);
   luaL_checktype(L, 2, LUA_TTABLE);
 
-  const vert_fmt_t* fmt = mesh->fmt;
+  engine_t* engine = get_engine(L);
+
+  const vert_fmt_t* fmt = &engine->renderer->shader_fmts[mesh->shader];
 
   size_t vertex_count = lua_objlen(L, 2);
 
@@ -34,6 +35,7 @@ static int L_MeshMt_set_vertices(lua_State* L)
   mesh->vertices = mem_alloc(fmt->stride * vertex_count);
   mesh->vertex_count = vertex_count;
 
+  // TODO: flatten this
   for (size_t vertex_i = 0; vertex_i < vertex_count; vertex_i++) {
     lua_pushinteger(L, vertex_i + 1);
     lua_gettable(L, 2); // index mesh table
@@ -99,7 +101,10 @@ static int L_MeshMt_draw(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
   mesh_t* mesh = (mesh_t*)read_ldata(L, 1, lua_type_mesh);
-  mesh_draw(r, mesh);
+  tex_t* tex = (tex_t*)read_ldata(L, 2, lua_type_tex);
+  lmat4_t* transform = (lmat4_t*)read_ldata(L, 3, lua_type_mat4);
+
+  mesh_draw(r, mesh, tex, transform->m);
   return 0;
 }
 
@@ -118,10 +123,10 @@ static int L_MeshMt__gc(lua_State* L)
     mem_destroy(mesh->vertices);
     mesh->vertex_count = 0;
   }
-  if (mesh->index_count != 0) {
-    mem_destroy(mesh->indices);
-    mesh->index_count = 0;
-  }
+  // if (mesh->index_count != 0) {
+  //   mem_destroy(mesh->indices);
+  //   mesh->index_count = 0;
+  // }
   mesh_destroy(r, mesh);
   mem_destroy(mesh);
   return 0;

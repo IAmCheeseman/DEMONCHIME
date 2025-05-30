@@ -17,7 +17,7 @@ int main(int argc, const char* args[])
     .mount_path = "DEMONCHIME.HAD",
     .window_title = "DEMONCHIME",
 #ifdef bse_release
-    .fullscreen = FULLSCREEN_FULL,
+    .fullscreen = fullscreen_borderless,
 #else
     .fullscreen = fullscreen_none,
 #endif

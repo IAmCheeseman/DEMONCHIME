@@ -5,6 +5,8 @@
 #include "c_mem.h"
 #include "c_color.h"
 #include "m_math.h"
+#include "gl_vert_arr.h"
+#include "gl_buf_obj.h"
 
 #define glyph_count 128
 
@@ -18,11 +20,11 @@ typedef struct glyph_s
 
 typedef struct font_handle_s
 {
-  uint32_t vao;
-  uint32_t vbo;
+  vert_arr_t* vao;
+  buf_obj_t* vbo;
 } font_handle_t;
 
-void gl_font_init(font_t* font, SFT* sft)
+void gl_font_init(const renderer_t* r, font_t* font, SFT* sft)
 {
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -87,24 +89,21 @@ void gl_font_init(font_t* font, SFT* sft)
   font_handle_t* handle = (font_handle_t*)mem_alloc(sizeof(font_handle_t));
   font->handle = handle;
 
-  glGenVertexArrays(1, &handle->vao);
-  glGenBuffers(1, &handle->vbo);
-  glBindVertexArray(handle->vao);
-  glBindBuffer(GL_ARRAY_BUFFER, handle->vbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 6 * 4, NULL, GL_DYNAMIC_DRAW);
+  handle->vbo = gl_buf_obj_create(buf_arr);
+  gl_buf_obj_set_dat(
+    handle->vbo,
+    NULL,
+    r->shader_fmts[shader_2d].stride * 6,
+    draw_dynamic);
 
-  glEnableVertexAttribArray(0);
-  glVertexAttribPointer(
-    0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
-  glEnableVertexAttribArray(1);
-  glVertexAttribPointer(
-    1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
+  handle->vao = gl_vert_arr_create(r, shader_2d);
 
   log_debug(
-    "loaded font (vao %d, vbo %d)", handle->vao, handle->vbo);
+    "loaded font (vao %d, vbo %d)",
+    handle->vao->handle, handle->vbo->handle);
 
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
+  gl_buf_obj_unbind(buf_arr);
+  gl_vert_arr_bind(NULL);
 }
 
 void gl_font_destroy(font_t* font)
@@ -115,8 +114,8 @@ void gl_font_destroy(font_t* font)
 
   font_handle_t* handle = (font_handle_t*)font->handle;
 
-  glDeleteVertexArrays(1, &handle->vao);
-  glDeleteBuffers(1, &handle->vbo);
+  gl_vert_arr_destroy(handle->vao);
+  gl_buf_obj_destroy(handle->vbo);
 
   mem_destroy(font->handle);
   mem_destroy(font->glyphs);
@@ -139,23 +138,22 @@ void gl_font_draw(
   font_t* font,
   vec2f_t pos,
   const char* text,
-  color_t color,
-  shader_t* shader)
+  color_t color)
 {
   font_handle_t* handle = (font_handle_t*)font->handle;
 
-  mat4_t p;
-  mat4_ortho(p, 0, 320 * 5, 180 * 5, 0, 0, 100);
+  gl_set_active_shader(r, shader_2d);
+  gl_setup_2d(r, 0, r->projection_2d);
 
-  gl_shader_bind(shader);
-  gl_shader_send_vec4f(shader, "text_color", (vec4f_t){
-    color.r, color.g, color.b, color.a
-  });
-  gl_shader_send_mat4(shader, "p", r->projection);
-  gl_shader_send_int(shader, "fontmap", 0);
+  // gl_shader_bind(shader);
+  // gl_shader_send_vec4f(shader, "text_color", (vec4f_t){
+  //   color.r, color.g, color.b, color.a
+  // });
+  // gl_shader_send_mat4(shader, "p", r->projection);
+  // gl_shader_send_int(shader, "fontmap", 0);
 
-  glActiveTexture(GL_TEXTURE0);
-  glBindVertexArray(handle->vao);
+  // glActiveTexture(GL_TEXTURE0);
+  gl_vert_arr_bind(handle->vao);
 
   float x = pos.x;
   float y = pos.y + font->max_height;
@@ -169,18 +167,18 @@ void gl_font_draw(
     float h = g->size.y;
 
     float verts[] = {
-      xx,     yy + h, 0, 1,
-      xx,     yy,     0, 0,
-      xx + w, yy,     1, 0,
+      xx,     yy + h,  0, 1,  color.r, color.g, color.b, color.a,
+      xx,     yy,      0, 0,  color.r, color.g, color.b, color.a,
+      xx + w, yy,      1, 0,  color.r, color.g, color.b, color.a,
 
-      xx,     yy + h, 0, 1,
-      xx + w, yy,     1, 0,
-      xx + w, yy + h, 1, 1,
+      xx,     yy + h,  0, 1,  color.r, color.g, color.b, color.a,
+      xx + w, yy,      1, 0,  color.r, color.g, color.b, color.a,
+      xx + w, yy + h,  1, 1,  color.r, color.g, color.b, color.a,
     };
-    
+
     glBindTexture(GL_TEXTURE_2D, g->tex_handle);
 
-    glBindBuffer(GL_ARRAY_BUFFER, handle->vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, handle->vbo->handle);
     glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(verts), verts);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 

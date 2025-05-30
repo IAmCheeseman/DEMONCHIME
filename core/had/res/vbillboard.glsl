@@ -2,6 +2,7 @@
 
 layout (location = 0) in vec3 v_pos;
 layout (location = 1) in vec2 v_uv;
+layout (location = 2) in vec4 v_color;
 
 uniform mat4 m;
 uniform mat4 v;
@@ -30,5 +31,5 @@ void main()
   f_pos = pos;
   f_normal = normal;
   f_uv = v_uv;
-  f_color = vec4(1);
+  f_color = v_color;
 }

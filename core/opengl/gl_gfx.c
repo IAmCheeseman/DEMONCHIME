@@ -1,4 +1,4 @@
-#include "g_gfx.h"
+#include "g_renderer.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
@@ -29,7 +29,7 @@ static void msg_callback(
 
   switch (severity) {
     case GL_DEBUG_SEVERITY_NOTIFICATION:
-      // log_debug("[" TEXT_DARK_GRAY "OpenGL" TEXT_NORMAL "] %s", message);
+      // log_debug("[" text_dark_gray "OpenGL" text_normal "] %s", msg);
       return;
     default:
       log_warning("[" text_dark_gray "OpenGL" text_normal "] %s", msg);
@@ -74,19 +74,10 @@ static void set_backend_ptrs(renderer_t* r)
   r->backend.framebuf_bind = gl_framebuf_bind;
   r->backend.framebuf_resize = gl_framebuf_resize;
   r->backend.framebuf_draw = gl_framebuf_draw;
-  r->backend.shader_load_files = gl_shader_load_from_files;
-  r->backend.shader_load_src = gl_shader_load_from_src;
-  r->backend.shader_destroy = gl_shader_destroy;
-  r->backend.shader_send_int = gl_shader_send_int;
-  r->backend.shader_send_float = gl_shader_send_float;
-  r->backend.shader_send_vec2f = gl_shader_send_vec2f;
-  r->backend.shader_send_vec2i = gl_shader_send_vec2i;
-  r->backend.shader_send_vec3f = gl_shader_send_vec3f;
-  r->backend.shader_send_vec3i = gl_shader_send_vec3i;
-  r->backend.shader_send_vec4f = gl_shader_send_vec4f;
-  r->backend.shader_send_vec4i = gl_shader_send_vec4i;
-  r->backend.shader_send_mat4 = gl_shader_send_mat4;
-  r->backend.shader_bind = gl_shader_bind;
+  r->backend.init_shaders = gl_init_shaders;
+  r->backend.destroy_shaders = gl_destroy_shaders;
+  r->backend.set_active_shader = gl_set_active_shader;
+  r->backend.setup_shader = gl_setup_shader;
   r->backend.texture_load_img = gl_tex_load_from_img;
   r->backend.texture_destroy = gl_tex_destroy;
   r->backend.texture_gen_mipmaps = gl_tex_gen_mipmap;
@@ -103,10 +94,7 @@ void gl_init_backend(engine_t* engine)
 {
   glfwMakeContextCurrent(engine->window.handle);
 
-  renderer_t* renderer = (renderer_t*)mem_alloc(sizeof(renderer_t));
-  set_backend_ptrs(renderer);
-
-  engine->renderer = renderer;
+  set_backend_ptrs(engine->renderer);
 
   if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
     log_fatal(1, "could not initialize glad");

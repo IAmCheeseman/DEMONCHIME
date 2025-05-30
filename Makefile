@@ -20,10 +20,9 @@ OBJ = \
 	core/m_mat4.o core/m_trans.o \
 	\
 	core/w_wrap.o core/w_enums.o core/w_engine.o core/w_log.o \
-	core/w_mat4.o core/w_mesh.o core/w_vert_fmt.o \
-	core/w_shader.o core/w_tex.o core/w_prng.o core/w_font.o \
+	core/w_mat4.o core/w_mesh.o core/w_tex.o core/w_prng.o core/w_font.o \
 	\
-	core/g_framebuf.o core/g_gfx.o core/g_types.o core/g_mesh.o \
+	core/g_framebuf.o core/g_renderer.o core/g_types.o core/g_mesh.o \
 	core/g_shader.o core/g_tex.o core/g_vert_arr.o \
 	core/g_font.o core/g_buf_obj.o \
 	\
@@ -67,10 +66,14 @@ endif
 ifeq ($(config),release)
 	CFLAGS += -O2 -Dbse_release
 else
-	config = debug
-	CFLAGS += -O2 -g -Dbse_debug
-	ifeq ($(HOST_SYS),Linux)
-		CFLAGS += -fsanitize=address
+	ifeq ($(config),releasesym)
+		CFLAGS += -O2 -g -Dbse_release
+	else
+		config = debug
+		CFLAGS += -O2 -g -Dbse_debug
+		ifeq ($(HOST_SYS),Linux)
+			CFLAGS += -fsanitize=address
+		endif
 	endif
 endif
 

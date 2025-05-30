@@ -3,6 +3,20 @@
 
 #include "include.h"
 
+typedef enum shader_e
+{
+  shader_none = -1,
+  shader_default,
+  shader_billboard,
+  shader_2d,
+  shader_count,
+} shader_t;
+
+typedef enum gfx_backend_type_e
+{
+  gfx_backend_opengl,
+} gfx_backend_type_t;
+
 typedef enum buf_obj_type_e
 {
   buf_arr,

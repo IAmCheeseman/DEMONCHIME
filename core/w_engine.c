@@ -4,7 +4,7 @@
 
 #include "m_math.h"
 #include "c_mem.h"
-#include "g_gfx.h"
+#include "g_renderer.h"
 
 static int L_get_total_time(lua_State* L)
 {
@@ -103,7 +103,7 @@ static int L_set_projection(lua_State* L)
 {
   engine_t* engine = get_engine(L);
   lmat4_t* m = (lmat4_t*)read_ldata(L, 1, lua_type_mat4);
-  set_projection(engine->renderer, m->m);
+  memcpy(engine->renderer->projection_3d, m->m, sizeof(mat4_t));
   return 0;
 }
 
@@ -111,7 +111,41 @@ static int L_get_projection(lua_State* L)
 {
   engine_t* engine = get_engine(L);
   lmat4_t* m = (lmat4_t*)mem_alloc(sizeof(lmat4_t));
-  memcpy(m->m, engine->renderer->projection, sizeof(mat4_t));
+  memcpy(m->m, engine->renderer->projection_3d, sizeof(mat4_t));
+  create_ldata(L, m, mat4_mt_name, lua_type_mat4);
+  return 1;
+}
+
+static int L_set_2d_projection(lua_State* L)
+{
+  engine_t* engine = get_engine(L);
+  lmat4_t* m = (lmat4_t*)read_ldata(L, 1, lua_type_mat4);
+  memcpy(engine->renderer->projection_2d, m->m, sizeof(mat4_t));
+  return 0;
+}
+
+static int L_get_2d_projection(lua_State* L)
+{
+  engine_t* engine = get_engine(L);
+  lmat4_t* m = (lmat4_t*)mem_alloc(sizeof(lmat4_t));
+  memcpy(m->m, engine->renderer->projection_2d, sizeof(mat4_t));
+  create_ldata(L, m, mat4_mt_name, lua_type_mat4);
+  return 1;
+}
+
+static int L_set_view(lua_State* L)
+{
+  engine_t* engine = get_engine(L);
+  lmat4_t* m = (lmat4_t*)read_ldata(L, 1, lua_type_mat4);
+  memcpy(engine->renderer->view, m->m, sizeof(mat4_t));
+  return 0;
+}
+
+static int L_get_view(lua_State* L)
+{
+  engine_t* engine = get_engine(L);
+  lmat4_t* m = (lmat4_t*)mem_alloc(sizeof(lmat4_t));
+  memcpy(m->m, engine->renderer->view, sizeof(mat4_t));
   create_ldata(L, m, mat4_mt_name, lua_type_mat4);
   return 1;
 }
@@ -156,6 +190,10 @@ luaL_Reg engine_funcs[] = {
   {"interpolate", L_interpolate},
   {"set_projection", L_set_projection},
   {"get_projection", L_get_projection},
+  {"set_2d_projection", L_set_2d_projection},
+  {"get_2d_projection", L_get_2d_projection},
+  {"set_view", L_set_view},
+  {"get_view", L_get_view},
   {"is_key_down", L_is_key_down},
   {"is_mouse_down", L_is_mouse_down},
   {"get_mouse_pos", L_get_mouse_pos},

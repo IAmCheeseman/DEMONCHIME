@@ -6,7 +6,7 @@ framebuf_t* framebuf_create(
   vec2i_t size,
   uint8_t flags)
 {
-  return r->backend.framebuf_create(vfs, size, flags);
+  return r->backend.framebuf_create(r, vfs, size, flags);
 }
 
 void framebuf_destroy(const renderer_t* r, framebuf_t* fb)
@@ -33,5 +33,5 @@ void framebuf_draw(
   vec2i_t start,
   vec2i_t end)
 {
-  return r->backend.framebuf_draw(fb, start, end);
+  return r->backend.framebuf_draw(r, fb, start, end);
 }

@@ -3,240 +3,175 @@
 #include <glad/glad.h>
 
 #include "c_mem.h"
+#include "gl_vert_arr.h"
+#include "gl_tex.h"
 
-#define UNIFORM_NAME_MAX 512
+#define max_locs 32
 
-static void find_shader_uniforms(shader_t* s)
+#define transform_loc 0
+#define view_loc 1
+#define projection_loc 2
+#define tex_loc 3
+
+#define tex_size_loc 4
+#define scale_loc 5
+
+typedef struct program_s
 {
-  s->uniforms.vars = NULL;
-  s->uniforms.count = 0;
-  s->uniforms.capacity = 0;
+  uint32_t handle;
+  int locs[max_locs];
+} program_t;
 
-  int uniform_count;
-  glGetProgramiv(s->handle, GL_ACTIVE_UNIFORMS, &uniform_count);
-
-  for (int i = 0; i < uniform_count; i++) {
-    int name_len;
-    char name[UNIFORM_NAME_MAX];
-    shader_var_t var;
-    var.loc = i;
-    glGetActiveUniform(
-       s->handle, i, UNIFORM_NAME_MAX, &name_len, NULL, NULL, name);
-
-    var.name = (char*)mem_alloc(sizeof(char) * (name_len + 1));
-    memcpy(var.name, name, name_len);
-    var.name[name_len] = '\0';
-    var.len = name_len;
-    var.hash = hash_var_name(name, name_len);
-
-    shader_tab_add_var(&s->uniforms, var);
-  }
-}
-
-static void find_shader_attrs(shader_t* s)
-{
-  s->attrs.vars = NULL;
-  s->attrs.count = 0;
-  s->attrs.capacity = 0;
-
-  int attr_count;
-  glGetProgramiv(s->handle, GL_ACTIVE_ATTRIBUTES, &attr_count);
-
-  for (int i = 0; i < attr_count; i++) {
-    int name_len;
-    char name[UNIFORM_NAME_MAX];
-    shader_var_t var;
-    var.loc = i;
-    glGetActiveAttrib(
-       s->handle, i, UNIFORM_NAME_MAX, &name_len, NULL, NULL, name);
-
-    var.name = (char*)mem_alloc(sizeof(char) * (name_len + 1));
-    memcpy(var.name, name, name_len);
-    var.name[name_len] = '\0';
-    var.len = name_len;
-    var.hash = hash_var_name(name, name_len);
-
-    shader_tab_add_var(&s->attrs, var);
-  }
-}
-
-static shader_t* shader_create(uint32_t vert, uint32_t frag)
-{
-  shader_t* s = (shader_t*)mem_alloc(sizeof(shader_t));
-
-  uint32_t handle = glCreateProgram();
-
-  s->handle = handle;
-
-  glAttachShader(handle, vert);
-  glAttachShader(handle, frag);
-  glLinkProgram(handle);
-
-  glDeleteShader(vert);
-  glDeleteShader(frag);
-
-  int status;
-  glGetProgramiv(handle, GL_LINK_STATUS, &status);
-  if (!status) {
-    char msg[512];
-    glGetProgramInfoLog(handle, 512, NULL, msg);
-    log_fatal(
-      1, "[" text_dark_gray "shader" text_normal "] link error: %s", msg);
-  }
-
-  s->uniforms.vars = NULL;
-  s->uniforms.count = 0;
-  s->uniforms.capacity = 0;
-  s->attrs.vars = NULL;
-  s->attrs.count = 0;
-  s->attrs.capacity = 0;
-  //FindShaderUniforms(s);
-  //FindShaderAttribs(s);
-
-  log_debug("created shader %d", handle);
-
-  return s;
-}
-
-static uint32_t compile_src(const char* name, const char* src, uint32_t type)
+uint32_t load_shader(vfs_t* vfs, const char* path, uint32_t type)
 {
   uint32_t h = glCreateShader(type);
-  glShaderSource(h, 1, &src, NULL);
+  char* src = vfs_read_txt(vfs, path, NULL);
+  if (!src) log_fatal(1, "could not load shader '%s'", path);
+  const char* s = src;
+  glShaderSource(h, 1, &s, NULL);
   glCompileShader(h);
+  mem_destroy(src);
 
   int status;
   glGetShaderiv(h, GL_COMPILE_STATUS, &status);
   if (!status) {
     char msg[512];
     glGetShaderInfoLog(h, 512, NULL, msg);
-    log_fatal(1, "[" text_dark_gray "shader" text_normal "] %s: %s", name, msg);
+    log_fatal(
+      1,
+      "[" text_dark_gray "shader" text_normal "] '%s': %s", path, msg);
   }
 
   return h;
 }
 
-shader_t* gl_shader_load_from_files(
-  vfs_t* vfs,
-  const char* vert,
-  const char* frag)
+uint32_t load_program(vfs_t* vfs, const char* vert_path, const char* frag_path)
 {
-  char* vsrc = vfs_read_txt(vfs, vert, NULL);//ReadFile(vert);
-  if (!vsrc) log_fatal(1, "could not load vertex shader '%s'", vert);
-  char* fsrc = vfs_read_txt(vfs, frag, NULL);//ReadFile(frag);
-  if (!fsrc) log_fatal(1, "could not load fragment shader '%s'", frag);
-  uint32_t vertex_handle = compile_src(vert, vsrc, GL_VERTEX_SHADER);
-  uint32_t fragment_handle = compile_src(frag, fsrc, GL_FRAGMENT_SHADER);
-  mem_destroy(vsrc);
-  mem_destroy(fsrc);
+  uint32_t vert = load_shader(vfs, vert_path, GL_VERTEX_SHADER);
+  uint32_t frag = load_shader(vfs, frag_path, GL_FRAGMENT_SHADER);
 
-  return shader_create(vertex_handle, fragment_handle);
-}
+  uint32_t program = glCreateProgram();
+  glAttachShader(program, vert);
+  glAttachShader(program, frag);
+  glLinkProgram(program);
 
-shader_t* gl_shader_load_from_src(const char* vert, const char* frag)
-{
-  uint32_t vertex_handle = compile_src(
-    "embedded vertex",
-    vert,
-    GL_VERTEX_SHADER
-  );
-  uint32_t fragment_handle = compile_src(
-    "embedded fragment",
-    frag,
-    GL_FRAGMENT_SHADER
-  );
+  glDeleteShader(vert);
+  glDeleteShader(frag);
 
-  return shader_create(vertex_handle, fragment_handle);
-}
-
-static shader_var_t* get_uniform(shader_t* s, const char* name)
-{
-  size_t len = strlen(name);
-  uint32_t hash = hash_var_name(name, len);
-  shader_var_t* var = shader_tab_find_var(&s->uniforms, name, len, hash);
-
-  if (var == NULL || var->name == NULL) {
-    int loc = glGetUniformLocation(s->handle, name);
-    if (loc == -1) log_fatal(1, "uniform '%s' does not exist", name);
-
-    shader_var_t new_var;
-    new_var.loc = loc;
-    new_var.name = (char*)mem_alloc(sizeof(char) * (len + 1));
-    strcpy(new_var.name, name);
-    new_var.len = len;
-    new_var.hash = hash;
-    return shader_tab_add_var(&s->uniforms, new_var);
+  int status;
+  glGetProgramiv(program, GL_LINK_STATUS, &status);
+  if (!status) {
+    char msg[512];
+    glGetProgramInfoLog(program, 512, NULL, msg);
+    log_fatal(
+      1,
+      "[" text_dark_gray "shader" text_normal "] link error '%s'+'%s': %s",
+      vert_path, frag_path, msg);
   }
-  return var;
+
+  log_debug("created shader %d", program);
+
+  return program;
 }
 
-void gl_shader_send_int(shader_t* s, const char* name, int i)
+void gl_init_shaders(renderer_t* r, vfs_t* vfs)
 {
-  shader_var_t* ptr = get_uniform(s, name);
-  glUniform1i(ptr->loc, i);
+  program_t* progs = (program_t*)mem_alloc(sizeof(program_t) * shader_count);
+
+  program_t def;
+  def.handle = load_program(vfs, "res/vdefault.glsl", "res/fdefault.glsl");
+  memset(def.locs, 0, sizeof(def.locs));
+  def.locs[transform_loc] = glGetUniformLocation(def.handle, "m");
+  def.locs[view_loc] = glGetUniformLocation(def.handle, "v");
+  def.locs[projection_loc] = glGetUniformLocation(def.handle, "p");
+  def.locs[tex_loc] = glGetUniformLocation(def.handle, "tex");
+  progs[shader_default] = def;
+
+  program_t bb;
+  bb.handle = load_program(vfs, "res/vbillboard.glsl", "res/fdefault.glsl");
+  memset(bb.locs, 0, sizeof(bb.locs));
+  bb.locs[transform_loc] = glGetUniformLocation(bb.handle, "m");
+  bb.locs[view_loc] = glGetUniformLocation(bb.handle, "v");
+  bb.locs[projection_loc] = glGetUniformLocation(bb.handle, "p");
+  bb.locs[tex_loc] = glGetUniformLocation(bb.handle, "tex");
+  bb.locs[tex_size_loc] = glGetUniformLocation(bb.handle, "tex_size");
+  bb.locs[scale_loc] = glGetUniformLocation(bb.handle, "scale");
+  progs[shader_billboard] = bb;
+
+  program_t _2d;
+  _2d.handle = load_program(vfs, "res/v2d.glsl", "res/f2d.glsl");
+  memset(_2d.locs, 0, sizeof(_2d.locs));
+  _2d.locs[projection_loc] = glGetUniformLocation(_2d.handle, "p");
+  _2d.locs[tex_loc] = glGetUniformLocation(_2d.handle, "tex");
+  progs[shader_2d] = _2d;
+
+  r->shaders = progs;
 }
 
-void gl_shader_send_float(shader_t* s, const char* name, float f)
+void gl_destroy_shaders(renderer_t* r)
 {
-  shader_var_t* ptr = get_uniform(s, name);
-  glUniform1f(ptr->loc, f);
+  program_t* progs = (program_t*)r->shaders;
+  glDeleteProgram(progs[shader_default].handle);
+  glDeleteProgram(progs[shader_billboard].handle);
+  glDeleteProgram(progs[shader_2d].handle);
+  mem_destroy(progs);
+  r->shaders = NULL;
 }
 
-void gl_shader_send_vec2f(shader_t* s, const char* name, vec2f_t v)
+void gl_set_active_shader(const renderer_t* r, uint8_t shader)
 {
-  shader_var_t* ptr = get_uniform(s, name);
-  glUniform2f(ptr->loc, v.x, v.y);
+  program_t* progs = (program_t*)r->shaders;
+  glUseProgram(progs[shader].handle);
 }
 
-void gl_shader_send_vec2i(shader_t* s, const char* name, vec2i_t v)
+void gl_setup_2d(const renderer_t* r, uint32_t tex, const mat4_t projection)
 {
-  shader_var_t* ptr = get_uniform(s, name);
-  glUniform2i(ptr->loc, v.x, v.y);
+  glDisable(GL_DEPTH_TEST);
+  program_t* progs = (program_t*)r->shaders;
+  program_t* s = &progs[shader_2d];
+
+  glUniformMatrix4fv(s->locs[projection_loc], 1, GL_FALSE, projection);
+
+  glActiveTexture(GL_TEXTURE0);
+  glBindTexture(GL_TEXTURE_2D, tex);
+  glUniform1i(s->locs[tex_loc], 0);
 }
 
-void gl_shader_send_vec3f(shader_t* s, const char* name, vec3f_t v)
+void gl_setup_shader(const renderer_t* r, const draw_call_t* dc)
 {
-  shader_var_t* ptr = get_uniform(s, name);
-  glUniform3f(ptr->loc, v.x, v.y, v.z);
-}
+  program_t* progs = (program_t*)r->shaders;
+  program_t* s = &progs[dc->shader];
 
-void gl_shader_send_vec3i(shader_t* s, const char* name, vec3i_t v)
-{
-  shader_var_t* ptr = get_uniform(s, name);
-  glUniform3i(ptr->loc, v.x, v.y, v.z);
-}
+  gl_set_active_shader(r, dc->shader);
 
-void gl_shader_send_vec4f(shader_t* s, const char* name, vec4f_t v)
-{
-  shader_var_t* ptr = get_uniform(s, name);
-  glUniform4f(ptr->loc, v.x, v.y, v.z, v.w);
-}
+  switch (dc->shader) {
+    case shader_default:
+      glEnable(GL_DEPTH_TEST);
+      glUniformMatrix4fv(s->locs[transform_loc], 1, GL_FALSE, dc->transform);
+      glUniformMatrix4fv(s->locs[view_loc], 1, GL_FALSE, r->view);
+      glUniformMatrix4fv(
+        s->locs[projection_loc], 1, GL_FALSE, dc->projection);
 
-void gl_shader_send_vec4i(shader_t* s, const char* name, vec4i_t v)
-{
-  shader_var_t* ptr = get_uniform(s, name);
-  glUniform4i(ptr->loc, v.x, v.y, v.z, v.w);
-}
+      gl_tex_bind(dc->tex, 0);
+      glUniform1i(s->locs[tex_loc], 0);
+      break;
+    case shader_billboard:
+      glEnable(GL_DEPTH_TEST);
+      glUniformMatrix4fv(s->locs[transform_loc], 1, GL_FALSE, dc->transform);
+      glUniformMatrix4fv(s->locs[view_loc], 1, GL_FALSE, dc->view);
+      glUniformMatrix4fv(
+        s->locs[projection_loc], 1, GL_FALSE, dc->projection);
 
-void gl_shader_send_mat4(shader_t* s, const char* name, const mat4_t m)
-{
-  shader_var_t* ptr = get_uniform(s, name);
-  glUniformMatrix4fv(ptr->loc, 1, GL_FALSE, m);
-}
+      glUniform2f(s->locs[tex_size_loc], dc->tex->size.x, dc->tex->size.y);
+      glUniform1f(s->locs[scale_loc], 0.005);
 
-void gl_shader_bind(const shader_t* s)
-{
-  uint32_t handle = 0;
-  if (s != NULL) handle = s->handle;
-  glUseProgram(handle);
-}
-
-void gl_shader_destroy(shader_t* s)
-{
-  glDeleteProgram(s->handle);
-  log_debug("destroyed shader %d", s->handle);
-
-  shader_tab_destroy(&s->uniforms);
-  shader_tab_destroy(&s->attrs);
-
-  mem_destroy(s);
+      gl_tex_bind(dc->tex, 0);
+      glUniform1i(s->locs[tex_loc], 0);
+      break;
+    case shader_2d:
+      gl_setup_2d(r, *(uint32_t*)dc->tex->handle, dc->projection);
+      break;
+    default:
+      return;
+  }
 }

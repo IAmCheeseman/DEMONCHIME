@@ -10,6 +10,7 @@
 
 struct engine_s;
 struct renderer_s;
+struct draw_call_s;
 struct buf_obj_s;
 struct vert_arr_s;
 struct vert_fmt_s;
@@ -25,104 +26,52 @@ typedef void (*clear_bg_fn)(float r, float g, float b);
 typedef void (*adjust_viewport_fn)(vec2f_t size);
 typedef void (*set_depth_test_fn)(bool do_test);
 
-typedef struct buf_obj_s* (*buf_obj_create_fn)(
-  buf_obj_type_t type
-);
+typedef struct buf_obj_s* (*buf_obj_create_fn)(buf_obj_type_t type);
 typedef void (*buf_obj_bind_fn)(const struct buf_obj_s* buf);
 typedef void (*buf_obj_unbind_fn)(buf_obj_type_t type);
 typedef void (*buf_obj_set_dat_fn)(
   struct buf_obj_s* buf,
   void* data,
   size_t size,
-  draw_mode_t mode
-);
+  draw_mode_t mode);
 typedef void (*buf_obj_destroy_fn)(struct buf_obj_s* buf);
 
 typedef struct vert_arr_s* (*vert_arr_create_fn)(
-  const struct vert_fmt_s* fmt);
+  const struct renderer_s* r, shader_t shader);
 typedef void (*vert_arr_destroy_fn)(struct vert_arr_s* varr);
 typedef void (*vert_arr_bind_fn)(const struct vert_arr_s* varr);
 typedef void (*vert_arr_draw_fn)(
   const struct vert_arr_s* varr,
   size_t start,
   size_t count,
-  idx_mode_t index_mode
-);
+  idx_mode_t index_mode);
 typedef void (*vert_arr_draw_idx_fn)(
   const struct vert_arr_s* varr,
   const struct buf_obj_s* ebo,
   size_t count,
   data_type_t type,
-  idx_mode_t index_mode
-);
+  idx_mode_t index_mode);
 
 typedef struct framebuf_s* (*framebuf_create_fn)(
+  const struct renderer_s* r,
   struct vfs_s* vfs,
   vec2i_t size,
-  uint8_t flags
-);
+  uint8_t flags);
 typedef void (*framebuf_destroy_fn)(struct framebuf_s* fb);
 typedef void (*framebuf_bind_fn)(const struct framebuf_s* fb);
 typedef void (*framebuf_resize_fn)(struct framebuf_s* fb, vec2i_t size);
 typedef void (*framebuf_draw_fn)(
+  const struct renderer_s* r,
   struct framebuf_s* fb,
   vec2i_t start,
-  vec2i_t end
-);
+  vec2i_t end);
 
-typedef struct shader_s* (*shader_load_from_files_fn)(
-  struct vfs_s* vfs,
-  const char* vert,
-  const char* frag
-);
-typedef struct shader_s* (*shader_load_from_src_fn)(
-  const char* vert,
-  const char* frag
-);
-typedef void (*shader_send_int_fn)(
-  struct shader_s* s,
-  const char* name,
-  int i
-);
-typedef void (*shader_send_float_fn)(
-  struct shader_s* s,
-  const char* name,
-  float f
-);
-typedef void (*shader_send_vec2f_fn)(
-  struct shader_s* s,
-  const char* name,
-  vec2f_t v
-);
-typedef void (*shader_send_vec2i_fn)(
-  struct shader_s* s,
-  const char* name,
-  vec2i_t v
-);
-typedef void (*shader_send_vec3f_fn)(
-  struct shader_s* s,
-  const char* name, 
-  vec3f_t v
-);
-typedef void (*shader_send_vec3i_fn)(
-  struct shader_s* s,
-  const char* name,
-  vec3i_t v
-);
-typedef void (*shader_send_vec4f_fn)(
-  struct shader_s* s,
-  const char* name,
-  vec4f_t v
-);
-typedef void (*shader_send_vec4i_fn)(
-  struct shader_s* s,
-  const char* name,
-  vec4i_t v
-);
-typedef void (*shader_send_mat4_fn)(
-  struct shader_s* s, const char* name, const mat4_t m);
-typedef void (*shader_bind_fn)(const struct shader_s* s);
-typedef void (*shader_destroy_fn)(struct shader_s* s);
+typedef void (*init_shaders_fn)(struct renderer_s* r, struct vfs_s* vfs);
+typedef void (*destroy_shaders_fn)(struct renderer_s* r);
+typedef void (*set_active_shader_fn)(
+  const struct renderer_s* r, uint8_t shader);
+typedef void (*setup_shader_fn)(
+  const struct renderer_s* r, const struct draw_call_s* dc);
 
 typedef struct tex_s (*tex_load_from_img_fn)(const struct img_s* img);
 typedef void (*tex_gen_mipmap_fn)(struct tex_s* tex);
@@ -139,7 +88,8 @@ typedef void (*tex_set_wrap_fn)(
 );
 typedef void (*tex_destroy_fn)(struct tex_s* tex);
 
-typedef void (*font_init_fn)(struct font_s* font, SFT* sft);
+typedef void (*font_init_fn)(
+    const struct renderer_s* r, struct font_s* font, SFT* sft);
 typedef int (*font_get_width_fn)(const struct font_s* font, const char* text);
 typedef void (*font_destroy_fn)(struct font_s* font);
 typedef void (*font_draw_fn)(
@@ -147,8 +97,7 @@ typedef void (*font_draw_fn)(
   struct font_s* font,
   vec2f_t pos,
   const char* text,
-  struct color_s color, 
-  struct shader_s* shader);
+  struct color_s color);
 
 typedef struct gfx_backend_s
 {
@@ -174,19 +123,10 @@ typedef struct gfx_backend_s
   framebuf_resize_fn framebuf_resize;
   framebuf_draw_fn framebuf_draw;
 
-  shader_load_from_files_fn shader_load_files;
-  shader_load_from_src_fn shader_load_src;
-  shader_destroy_fn shader_destroy;;
-  shader_send_int_fn shader_send_int;
-  shader_send_float_fn shader_send_float;
-  shader_send_vec2f_fn shader_send_vec2f;
-  shader_send_vec2i_fn shader_send_vec2i;
-  shader_send_vec3f_fn shader_send_vec3f;
-  shader_send_vec3i_fn shader_send_vec3i;
-  shader_send_vec4f_fn shader_send_vec4f;
-  shader_send_vec4i_fn shader_send_vec4i;
-  shader_send_mat4_fn shader_send_mat4;
-  shader_bind_fn shader_bind;
+  init_shaders_fn init_shaders;
+  destroy_shaders_fn destroy_shaders;
+  set_active_shader_fn set_active_shader;
+  setup_shader_fn setup_shader;
 
   tex_load_from_img_fn texture_load_img;
   tex_destroy_fn texture_destroy;

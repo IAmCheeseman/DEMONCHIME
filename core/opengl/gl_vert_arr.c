@@ -6,7 +6,7 @@
 #include "gl_type_conv.h"
 #include "gl_buf_obj.h"
 
-vert_arr_t* gl_vert_arr_create(const vert_fmt_t* fmt)
+vert_arr_t* gl_vert_arr_create(const renderer_t* r, shader_t shader)
 {
   vert_arr_t* varr =
     (vert_arr_t*)mem_alloc(sizeof(vert_arr_t));
@@ -17,6 +17,8 @@ vert_arr_t* gl_vert_arr_create(const vert_fmt_t* fmt)
   // set up vertex format 
   glBindVertexArray(varr->handle);
 
+  vert_fmt_t* fmt = &r->shader_fmts[shader];
+
   size_t offset = 0;
   for (size_t i = 0; i < fmt->attrib_count; i++) {
     const vert_attr_t* attrib = &fmt->attribs[i];
@@ -26,8 +28,7 @@ vert_arr_t* gl_vert_arr_create(const vert_fmt_t* fmt)
     glVertexAttribPointer(
       i,
       components, gl_type, GL_FALSE,
-      fmt->stride, (void*)offset
-    );
+      fmt->stride, (void*)offset);
     glEnableVertexAttribArray(i);
 
     offset += get_data_type_size(attrib->type) * components;

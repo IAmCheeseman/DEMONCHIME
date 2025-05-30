@@ -3,7 +3,7 @@
 
 #include "include.h"
 
-#include "g_gfx.h"
+#include "g_renderer.h"
 #include "g_types.h"
 #include "m_vec2i.h"
 
@@ -13,8 +13,7 @@ framebuf_t* framebuf_create(
   const renderer_t* r,
   vfs_t* vfs,
   vec2i_t size,
-  uint8_t flags
-);
+  uint8_t flags);
 void framebuf_destroy(const renderer_t* r, framebuf_t* fb);
 void framebuf_bind(const renderer_t* r, const framebuf_t* fb);
 void framebuf_resize(const renderer_t* r, framebuf_t* fb, vec2i_t size);

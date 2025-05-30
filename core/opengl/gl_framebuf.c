@@ -9,8 +9,6 @@
 #include "gl_vert_arr.h"
 #include "gl_buf_obj.h"
 
-shader_t* framebuffer_draw_shader = NULL;
-
 static void gen_tex(
   framebuf_t* fb,
   uint32_t* handle, 
@@ -83,6 +81,7 @@ static void gen_texs(framebuf_t* fb)
 }
 
 framebuf_t* gl_framebuf_create(
+  const renderer_t* r,
   vfs_t* vfs,
   vec2i_t size,
   uint8_t flags)
@@ -104,23 +103,10 @@ framebuf_t* gl_framebuf_create(
   gen_texs(fb);
 
   if (flags & framebuffer_drawable) {
-    vert_attr_t attribs[] = {
-      {type_float, 2}, // position
-      {type_float, 2}, // UV
-    };
-    vert_fmt_t format = vert_fmt_create(attribs, 2);
     fb->vbo = gl_buf_obj_create(buf_arr);
     gl_buf_obj_set_dat(fb->vbo, NULL, 0, draw_dynamic);
     gl_buf_obj_bind(fb->vbo);
-    fb->vao = gl_vert_arr_create(&format);
-
-    if (framebuffer_draw_shader == NULL) {
-      framebuffer_draw_shader = gl_shader_load_from_files(
-        vfs,
-        "res/vfbdraw.glsl",
-        "res/ffbdraw.glsl"
-      );
-    }
+    fb->vao = gl_vert_arr_create(r, shader_2d);
   }
 
   if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
@@ -172,33 +158,40 @@ void gl_framebuf_resize(framebuf_t* fb, vec2i_t size)
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void gl_framebuf_draw(framebuf_t* fb, vec2i_t start, vec2i_t end)
+void gl_framebuf_draw(
+  const renderer_t* r, framebuf_t* fb, vec2i_t start, vec2i_t end)
 {
   if (fb->vbo == NULL || fb->vao == NULL) {
     log_warning(
-      "cannot draw framebuffer %d, because it is not drawable",
+      "cannot draw framebuffer %d because it is not drawable",
       fb->fb_handle
     );
     return;
   }
 
   float vertices[] = {
-    start.x, start.y, 0, 0, // tl
-    start.x + end.x, start.y, 1, 0, // tr
-    start.x, start.y + end.y, 0, 1, // bl
+    // pos                            uv     color
+    start.x,         start.y,         0, 0,  1, 1, 1, 1, // tl
+    start.x + end.x, start.y,         1, 0,  1, 1, 1, 1, // tr
+    start.x,         start.y + end.y, 0, 1,  1, 1, 1, 1, // bl
     
-    start.x + end.x, start.y, 1, 0, // tr
-    start.x + end.x, start.y + end.y, 1, 1, // br
-    start.x, start.y + end.y, 0, 1, // bl
+    start.x + end.x, start.y,         1, 0,  1, 1, 1, 1, // tr
+    start.x + end.x, start.y + end.y, 1, 1,  1, 1, 1, 1, // br
+    start.x,         start.y + end.y, 0, 1,  1, 1, 1, 1, // bl
   };
 
-  gl_vert_arr_bind(fb->vao);
   gl_buf_obj_set_dat(fb->vbo, vertices, sizeof(vertices), draw_dynamic);
 
-  glActiveTexture(GL_TEXTURE0);
-  glBindTexture(GL_TEXTURE_2D, fb->color_handle);
-
-  gl_shader_bind(framebuffer_draw_shader);
-  gl_shader_send_int(framebuffer_draw_shader, "tex0", 0);
+  gl_set_active_shader(r, shader_2d);
+  mat4_t i;
+  mat4_identity(i);
+  gl_setup_2d(r, fb->color_handle, i);
   gl_vert_arr_draw(fb->vao, 0, 6, idx_triangles);
+
+  // glActiveTexture(GL_TEXTURE0);
+  // glBindTexture(GL_TEXTURE_2D, fb->color_handle);
+  //
+  // gl_shader_bind(framebuffer_draw_shader);
+  // gl_shader_send_int(framebuffer_draw_shader, "tex0", 0);
+  // gl_vert_arr_draw(fb->vao, 0, 6, idx_triangles);
 }
