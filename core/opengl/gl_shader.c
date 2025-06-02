@@ -157,7 +157,7 @@ void gl_setup_shader(const renderer_t* r, const draw_call_t* dc)
     case shader_default:
       glEnable(GL_DEPTH_TEST);
       glUniformMatrix4fv(s->locs[transform_loc], 1, GL_FALSE, dc->transform);
-      glUniformMatrix4fv(s->locs[view_loc], 1, GL_FALSE, r->view);
+      glUniformMatrix4fv(s->locs[view_loc], 1, GL_FALSE, dc->view);
       glUniformMatrix4fv(
         s->locs[projection_loc], 1, GL_FALSE, dc->projection);
 

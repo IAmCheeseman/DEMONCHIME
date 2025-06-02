@@ -2,11 +2,20 @@ local r = 0
 local vry = core.create_lerped_num()
 
 event.on("@tick", function()
-  r = r + math.rad(2)
+  -- r = r + math.rad(2)
+  -- vry:set(r * 0.5)
+
+  if core.is_key_down(core.key.left) then
+    r = r + 0.1
+  end
+  if core.is_key_down(core.key.right) then
+    r = r - 0.1
+  end
   vry:set(r * 0.5)
 
   core.gfx.view.x = math.cos(vry:get()) * 10
   core.gfx.view.y = 10
+  -- core.gfx.view.z = -10
   core.gfx.view.z = math.sin(vry:get()) * 10
 
   core.gfx.view.pitch = math.rad(-45)
@@ -35,11 +44,31 @@ local bbent = {
   z = 0,
 }
 
-ecs.add_ent(bbent)
+local bbent2 = {
+  billboard = bb,
+  x = 0,
+  y = 0,
+  z = 0,
+}
 
-local t = core.create_lerped_num()
+local bbent3 = {
+  billboard = bb,
+  x = 0,
+  y = 0,
+  z = 1,
+}
+
+ecs.add_ent(bbent)
+ecs.add_ent(bbent2)
+ecs.add_ent(bbent3)
+
+
+local t = 0
+local lt = core.create_lerped_num()
+
 event.on("@tick", function()
-  t:set(t.val + 0.05)
-  bbent.x = math.cos(t:get())
-  bbent.z = math.sin(t:get())
+  t = t + 0.1
+  lt:set(t)
+  bbent.x = math.cos(lt:get()) * 1.5
+  bbent.z = math.sin(lt:get()) * 1.5
 end)

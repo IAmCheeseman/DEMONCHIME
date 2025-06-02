@@ -28,7 +28,7 @@ draw_call_t create_draw_call(
   dc.shader = shader;
   memcpy(dc.transform, transform, sizeof(mat4_t));
   memcpy(dc.view, renderer->view, sizeof(mat4_t));
-  if (shader == shader_2d)
+  if (shader == shader_2d || shader == shader_text)
     memcpy(dc.projection, renderer->projection_2d, sizeof(mat4_t));
   else
     memcpy(dc.projection, renderer->projection_3d, sizeof(mat4_t));
@@ -52,14 +52,20 @@ void defer_draw_call(
   draw_call_t dc = create_draw_call(
     renderer, shader, transform, vertex_count, idx_mode, tex, vao);
 
-  vec3f_t vp = (vec3f_t){
-    dc.view[12],
-    dc.view[13],
-    dc.view[14],
-  };
+  // vec4f_t vp = mat4_mult_v4(dc.view, (vec4f_t){0.0, 0.0, 0.0, 1.0});
+  // vec4f_t p = mat4_mult_v4(transform, (vec4f_t){0.0, 0.0, 0.0, 1.0});
+  mat4_t view;
+  mat4_inverse(view, dc.view);
+  vec3f_t vp = (vec3f_t){view[12], view[13], view[14]};
   vec3f_t p = (vec3f_t){transform[12], transform[13], transform[14]};
   vec3f_t diff = (vec3f_t){vp.x - p.x, vp.y - p.y, vp.z - p.z};
-  dc.distance = sqrt(diff.x*diff.x + diff.y*diff.y + diff.z*diff.z);
+  dc.distance = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
+  log_info(
+    "i: %d\n\tvp %f %f %f\n\tp %f %f %f\n\tdist %f",
+    renderer->deferred.len + 1,
+    vp.x, vp.y, vp.z,
+    p.x, p.y, p.z,
+    sqrt(dc.distance));
 
   if (renderer->deferred.len + 1 > renderer->deferred.capacity) {
     renderer->deferred.capacity = grow_capacity(renderer->deferred.capacity);
@@ -81,35 +87,28 @@ static void flush_list(const renderer_t* renderer, draw_call_list_t* dclist)
   dclist->len = 0;
 }
 
-void quick_sort(draw_call_t* list, size_t low, size_t high)
+void sort_draw_calls(draw_call_list_t* list)
 {
-  if (low >= high) return;
-
-  float pivot = list[high].distance;
-
-  size_t i = low - 1;
-
-  for (size_t j = low; j <= high; j++) {
-    if (list[j].distance < pivot) {
-      i++;
-      draw_call_t tmp = list[i];
-      list[i] = list[j];
-      list[j] = tmp;
+  // bubble sort! :D
+  // it should be fine enough for this, and i don't care enough to figure out
+  // how other algorithms work
+  while (true) {
+    bool swapped = false;
+    for (size_t i = 0; i < list->len - 1; i++) {
+      if (list->dc[i].distance < list->dc[i+1].distance) {
+        draw_call_t tmp = list->dc[i];
+        list->dc[i] = list->dc[i+1];
+        list->dc[i+1] = tmp;
+        swapped = true;
+      }
     }
+    if (!swapped) break;
   }
-
-  i++;
-  draw_call_t tmp = list[i];
-  list[i] = list[high];
-  list[high] = tmp;
-
-  quick_sort(list, low, i - 1);
-  quick_sort(list, i + 1, high);
 }
 
 void flush_deferred(renderer_t* renderer)
 {
-  quick_sort(renderer->deferred.dc, 0, renderer->deferred.len - 1);
+  sort_draw_calls(&renderer->deferred);
   flush_list(renderer, &renderer->deferred);
 }
 
