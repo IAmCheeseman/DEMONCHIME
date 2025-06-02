@@ -60,12 +60,6 @@ void defer_draw_call(
   vec3f_t p = (vec3f_t){transform[12], transform[13], transform[14]};
   vec3f_t diff = (vec3f_t){vp.x - p.x, vp.y - p.y, vp.z - p.z};
   dc.distance = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
-  log_info(
-    "i: %d\n\tvp %f %f %f\n\tp %f %f %f\n\tdist %f",
-    renderer->deferred.len + 1,
-    vp.x, vp.y, vp.z,
-    p.x, p.y, p.z,
-    sqrt(dc.distance));
 
   if (renderer->deferred.len + 1 > renderer->deferred.capacity) {
     renderer->deferred.capacity = grow_capacity(renderer->deferred.capacity);
