@@ -18,7 +18,7 @@ timer_t timer_create()
 
 bool timer_should_tick(const timer_t* t)
 {
-  return t->accum > 1.0 / t->tick_rate;
+  return t->accum > 1.0 / (t->tick_rate + 1);
 }
 
 void timer_start_tick(timer_t* t)

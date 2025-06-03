@@ -12,7 +12,7 @@ void mat4_identity(mat4_t mat)
 }
 
 // TODO: make dis use simd (SCARY)
-void mat4_mult(mat4_t out, mat4_t a, mat4_t b)
+void mat4_mult(mat4_t out, const mat4_t a, const mat4_t b)
 {
   // 0  4  8  12
   // 1  5  9  13

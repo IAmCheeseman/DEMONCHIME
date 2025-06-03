@@ -52,14 +52,19 @@ void defer_draw_call(
   draw_call_t dc = create_draw_call(
     renderer, shader, transform, vertex_count, idx_mode, tex, vao);
 
-  // vec4f_t vp = mat4_mult_v4(dc.view, (vec4f_t){0.0, 0.0, 0.0, 1.0});
+  // mat4_t view;
+  // mat4_inverse(view, dc.view);
+  // vec4f_t vp = mat4_mult_v4(view, (vec4f_t){0.0, 0.0, 0.0, 1.0});
   // vec4f_t p = mat4_mult_v4(transform, (vec4f_t){0.0, 0.0, 0.0, 1.0});
-  mat4_t view;
-  mat4_inverse(view, dc.view);
-  vec3f_t vp = (vec3f_t){view[12], view[13], view[14]};
-  vec3f_t p = (vec3f_t){transform[12], transform[13], transform[14]};
-  vec3f_t diff = (vec3f_t){vp.x - p.x, vp.y - p.y, vp.z - p.z};
-  dc.distance = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
+
+  // vec3f_t diff = (vec3f_t){vp.x - p.x, vp.y - p.y, vp.z - p.z};
+  // dc.distance = diff.x*diff.x + diff.y*diff.y + diff.z*diff.z;
+
+  mat4_t vm;
+  mat4_mult(vm, dc.view, transform);
+  dc.distance = vm[14]; // 14 is the depth
+
+  log_info("%d\t%f", renderer->deferred.len + 1, dc.distance);
 
   if (renderer->deferred.len + 1 > renderer->deferred.capacity) {
     renderer->deferred.capacity = grow_capacity(renderer->deferred.capacity);
@@ -91,7 +96,7 @@ void sort_draw_calls(draw_call_list_t* list)
   while (true) {
     bool swapped = false;
     for (size_t i = 0; i < list->len - 1; i++) {
-      if (list->dc[i].distance < list->dc[i+1].distance) {
+      if (list->dc[i].distance > list->dc[i+1].distance) {
         draw_call_t tmp = list->dc[i];
         list->dc[i] = list->dc[i+1];
         list->dc[i+1] = tmp;
