@@ -2,7 +2,7 @@
 
 #include <string.h>
 
-typedef struct data_type_name_s
+typedef struct data_type_name
 {
   const char* name;
   size_t len;

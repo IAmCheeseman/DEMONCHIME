@@ -5,7 +5,7 @@
 
 #include "miniz.h"
 
-typedef enum vfs_err_e
+typedef enum vfs_err
 {
   vfs_ok = 0,
   vfs_cannot_mnt,
@@ -17,15 +17,15 @@ typedef enum vfs_err_e
   vfs_cannot_read,
 } vfs_err_t;
 
-typedef enum vfs_type_e
+typedef enum vfs_type
 {
   vfs_dir,
   vfs_zip,
 } vfs_type_t;
 
-typedef struct vfs_s
+typedef struct vfs
 {
-  struct vfs_s* next;
+  struct vfs* next;
   vfs_type_t type;
   mz_zip_archive zip;
   char* path;

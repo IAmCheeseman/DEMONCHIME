@@ -4,7 +4,7 @@
 #include "include.h"
 #include "g_buf_obj.h"
 
-struct buf_obj_s
+struct buf_obj
 {
   buf_obj_type_t type;
   uint32_t handle;

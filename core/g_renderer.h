@@ -5,12 +5,12 @@
 #include "m_math.h"
 #include "g_backend.h"
 
-typedef struct buf_obj_s buf_obj_t;
-typedef struct vert_fmt_s vert_fmt_t;
-typedef struct vert_arr_s vert_arr_t;
-typedef struct tex_s tex_t;
+typedef struct buf_obj buf_obj_t;
+typedef struct vert_fmt vert_fmt_t;
+typedef struct vert_arr vert_arr_t;
+typedef struct tex tex_t;
 
-typedef struct draw_call_s
+typedef struct draw_call
 {
   shader_t shader;
 
@@ -30,14 +30,14 @@ typedef struct draw_call_s
   // buf_obj_t* ebo;
 } draw_call_t;
 
-typedef struct draw_call_list_s
+typedef struct draw_call_list
 {
   draw_call_t* dc;
   size_t len;
   size_t capacity;
 } draw_call_list_t;
 
-typedef struct renderer_s
+typedef struct renderer
 {
   mat4_t projection_3d;
   mat4_t projection_2d;

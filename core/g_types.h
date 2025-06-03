@@ -3,7 +3,7 @@
 
 #include "include.h"
 
-typedef enum shader_e
+typedef enum shader
 {
   shader_none = -1,
   shader_default,
@@ -13,25 +13,25 @@ typedef enum shader_e
   shader_count,
 } shader_t;
 
-typedef enum gfx_backend_type_e
+typedef enum gfx_backend_type
 {
   gfx_backend_opengl,
 } gfx_backend_type_t;
 
-typedef enum buf_obj_type_e
+typedef enum buf_obj_type
 {
   buf_arr,
   buf_idx,
 } buf_obj_type_t;
 
-typedef enum draw_mode_e
+typedef enum draw_mode
 {
   draw_static,
   draw_dynamic,
   draw_stream,
 } draw_mode_t;
 
-typedef enum idx_mode_e
+typedef enum idx_mode
 {
   idx_triangles,
   idx_triangle_strip,
@@ -42,7 +42,7 @@ typedef enum idx_mode_e
   idx_points,
 } idx_mode_t;
 
-typedef enum data_type_e
+typedef enum data_type
 {
   type_unknown = 0,
 
@@ -60,7 +60,7 @@ typedef enum data_type_e
   type_int,
 } data_type_t;
 
-typedef enum img_fmt_e
+typedef enum img_fmt
 {
   img_fmt_invalid = 0,
   img_fmt_r8,
@@ -69,7 +69,7 @@ typedef enum img_fmt_e
   img_fmt_rgba8,
 } img_fmt_t;
 
-typedef enum tex_filter_e
+typedef enum tex_filter
 {
   tex_filter_nearest,
   tex_filter_nearest_mipmap,
@@ -79,7 +79,7 @@ typedef enum tex_filter_e
   tex_filter_linear_mipmap_nearest,
 } tex_filter_t;
 
-typedef enum tex_wrap_e
+typedef enum tex_wrap
 {
   tex_wrap_rep,
   tex_wrap_mirror_rep,

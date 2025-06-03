@@ -9,7 +9,7 @@
 #include "c_engine.h"
 #include "m_math.h"
 
-typedef enum ldata_type_e
+typedef enum ldata_type
 {
   lua_type_invalid = 0,
   lua_type_engine,
@@ -31,12 +31,12 @@ typedef enum ldata_type_e
 #define font_mt_name "__FONT_MT__"
 #define prng_mt_name "__PRNG_MT__"
 
-typedef struct lmat4_s
+typedef struct lmat4
 {
   mat4_t m;
 } lmat4_t;
 
-typedef struct ldata_s
+typedef struct ldata
 {
   ldata_type_t type;
   void* ptr;

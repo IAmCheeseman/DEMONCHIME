@@ -7,7 +7,7 @@
 #include "g_types.h"
 #include "m_vec2i.h"
 
-typedef struct framebuf_s framebuf_t;
+typedef struct framebuf framebuf_t;
 
 framebuf_t* framebuf_create(
   const renderer_t* r,

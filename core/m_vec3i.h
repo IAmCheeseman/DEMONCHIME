@@ -3,7 +3,7 @@
 
 #include "include.h"
 
-typedef struct vec3i_s
+typedef struct vec3i
 {
   int x;
   int y;

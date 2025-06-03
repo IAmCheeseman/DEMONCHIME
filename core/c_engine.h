@@ -10,24 +10,24 @@
 #include "c_win.h"
 #include "m_math.h"
 
-typedef struct engine_s
+typedef struct engine
 {
   window_t window;
   lua_State* L;
-  struct renderer_s* renderer;
+  struct renderer* renderer;
   vfs_t* vfs;
   vfs_t* core_vfs;
   vfs_t* game_vfs;
   int lua_err_handler_idx;
 
   vec2i_t target_screen_size;
-  struct framebuf_s* screen;
+  struct framebuf* screen;
   vec2i_t screen_size;
 
   timer_t timer;
 } engine_t;
 
-typedef struct engine_conf_s
+typedef struct engine_conf
 {
   const char* mount_path;
   const char* window_title;

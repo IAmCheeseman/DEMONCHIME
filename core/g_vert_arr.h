@@ -7,13 +7,13 @@
 #include "g_types.h"
 #include "g_buf_obj.h"
 
-typedef struct vert_attr_s
+typedef struct vert_attr
 {
   data_type_t type;
   uint8_t components; // is it a vec2, vec3, or whatever?
 } vert_attr_t;
 
-struct vert_fmt_s
+struct vert_fmt
 {
   const vert_attr_t* attribs;
   size_t attrib_count;

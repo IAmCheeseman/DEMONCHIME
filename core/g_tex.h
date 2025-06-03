@@ -8,7 +8,7 @@
 #include "m_math.h"
 
 // TODO: make this consistent with other implementation-defined stuff
-struct tex_s
+struct tex
 {
   void* handle;
   vec2i_t size;

@@ -4,7 +4,7 @@
 #include "m_vec3f.h"
 #include "m_mat4.h"
 
-typedef struct trans_s
+typedef struct trans
 {
   vec3f_t pos;
   vec3f_t rot;

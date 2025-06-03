@@ -6,7 +6,7 @@
 #include "m_math.h"
 #include "c_vfs.h"
 
-typedef struct img_s
+typedef struct img
 {
   uint8_t* data;
   vec2i_t size;

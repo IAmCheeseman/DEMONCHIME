@@ -3,7 +3,7 @@
 
 #include "include.h"
 
-typedef struct color_s
+typedef struct color
 {
   float r;
   float g;

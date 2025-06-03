@@ -8,96 +8,95 @@
 #include "g_types.h"
 #include "m_math.h"
 
-struct engine_s;
-struct renderer_s;
-struct draw_call_s;
-struct buf_obj_s;
-struct vert_arr_s;
-struct vert_fmt_s;
-struct img_s;
-struct tex_s;
-struct shader_s;
-struct framebuf_s;
-struct font_s;
-struct vfs_s;
-struct color_s;
+struct engine;
+struct renderer;
+struct draw_call;
+struct buf_obj;
+struct vert_arr;
+struct vert_fmt;
+struct img;
+struct tex;
+struct framebuf;
+struct font;
+struct vfs;
+struct color;
 
 typedef void (*clear_bg_fn)(float r, float g, float b);
 typedef void (*adjust_viewport_fn)(vec2f_t size);
 typedef void (*set_depth_test_fn)(bool do_test);
 
-typedef struct buf_obj_s* (*buf_obj_create_fn)(buf_obj_type_t type);
-typedef void (*buf_obj_bind_fn)(const struct buf_obj_s* buf);
+typedef struct buf_obj* (*buf_obj_create_fn)(buf_obj_type_t type);
+typedef void (*buf_obj_bind_fn)(const struct buf_obj* buf);
 typedef void (*buf_obj_unbind_fn)(buf_obj_type_t type);
 typedef void (*buf_obj_set_dat_fn)(
-  struct buf_obj_s* buf,
+  struct buf_obj* buf,
   void* data,
   size_t size,
   draw_mode_t mode);
-typedef void (*buf_obj_destroy_fn)(struct buf_obj_s* buf);
+typedef void (*buf_obj_destroy_fn)(struct buf_obj* buf);
 
-typedef struct vert_arr_s* (*vert_arr_create_fn)(
-  const struct renderer_s* r, shader_t shader);
-typedef void (*vert_arr_destroy_fn)(struct vert_arr_s* varr);
-typedef void (*vert_arr_bind_fn)(const struct vert_arr_s* varr);
+typedef struct vert_arr* (*vert_arr_create_fn)(
+  const struct renderer* r, shader_t shader);
+typedef void (*vert_arr_destroy_fn)(struct vert_arr* varr);
+typedef void (*vert_arr_bind_fn)(const struct vert_arr* varr);
 typedef void (*vert_arr_draw_fn)(
-  const struct vert_arr_s* varr,
+  const struct vert_arr* varr,
   size_t start,
   size_t count,
   idx_mode_t index_mode);
 typedef void (*vert_arr_draw_idx_fn)(
-  const struct vert_arr_s* varr,
-  const struct buf_obj_s* ebo,
+  const struct vert_arr* varr,
+  const struct buf_obj* ebo,
   size_t count,
   data_type_t type,
   idx_mode_t index_mode);
 
-typedef struct framebuf_s* (*framebuf_create_fn)(
-  const struct renderer_s* r,
-  struct vfs_s* vfs,
+typedef struct framebuf* (*framebuf_create_fn)(
+  const struct renderer* r,
+  struct vfs* vfs,
   vec2i_t size,
   uint8_t flags);
-typedef void (*framebuf_destroy_fn)(struct framebuf_s* fb);
-typedef void (*framebuf_bind_fn)(const struct framebuf_s* fb);
-typedef void (*framebuf_resize_fn)(struct framebuf_s* fb, vec2i_t size);
+typedef void (*framebuf_destroy_fn)(struct framebuf* fb);
+typedef void (*framebuf_bind_fn)(const struct framebuf* fb);
+typedef void (*framebuf_resize_fn)(struct framebuf* fb, vec2i_t size);
 typedef void (*framebuf_draw_fn)(
-  const struct renderer_s* r,
-  struct framebuf_s* fb,
+  const struct renderer* r,
+  struct framebuf* fb,
   vec2i_t start,
   vec2i_t end);
 
-typedef void (*init_shaders_fn)(struct renderer_s* r, struct vfs_s* vfs);
-typedef void (*destroy_shaders_fn)(struct renderer_s* r);
+typedef void (*init_shaders_fn)(struct renderer* r, struct vfs* vfs);
+typedef void (*destroy_shaders_fn)(struct renderer* r);
 typedef void (*set_active_shader_fn)(
-  const struct renderer_s* r, uint8_t shader);
+  const struct renderer* r, uint8_t shader);
 typedef void (*setup_shader_fn)(
-  const struct renderer_s* r, const struct draw_call_s* dc);
+  const struct renderer* r, const struct draw_call* dc);
 
-typedef struct tex_s (*tex_load_from_img_fn)(const struct img_s* img);
-typedef void (*tex_gen_mipmap_fn)(struct tex_s* tex);
-typedef void (*tex_bind_fn)(const struct tex_s* tex, uint8_t slot);
+typedef struct tex (*tex_load_from_img_fn)(const struct img* img);
+typedef void (*tex_gen_mipmap_fn)(struct tex* tex);
+typedef void (*tex_bind_fn)(const struct tex* tex, uint8_t slot);
 typedef void (*tex_set_filter_fn)(
-  struct tex_s* tex,
+  struct tex* tex,
   tex_filter_t min,
   tex_filter_t mag
 );
 typedef void (*tex_set_wrap_fn)(
-  struct tex_s* tex,
+  struct tex* tex,
   tex_wrap_t x_wrap,
   tex_wrap_t y_wrap
 );
-typedef void (*tex_destroy_fn)(struct tex_s* tex);
+typedef void (*tex_destroy_fn)(struct tex* tex);
 
 typedef void (*font_init_fn)(
-    const struct renderer_s* r, struct font_s* font, SFT* sft);
-typedef int (*font_get_width_fn)(const struct font_s* font, const char* text);
-typedef void (*font_destroy_fn)(struct font_s* font);
+    const struct renderer* r, struct font* font, SFT* sft);
+typedef int (*font_get_width_fn)(const struct font* font, const char* text);
+typedef void (*font_destroy_fn)(struct font* font);
 typedef void (*font_draw_fn)(
-  const struct renderer_s* r,
-  struct font_s* font,
+  const struct renderer* r,
+  struct font* font,
   vec2f_t pos,
   const char* text,
-  struct color_s color);
+  struct color color);
 
 typedef struct gfx_backend_s
 {

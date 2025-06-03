@@ -5,7 +5,7 @@
 
 #include "g_vert_arr.h"
 
-struct vert_arr_s
+struct vert_arr
 {
   uint32_t handle;
 };

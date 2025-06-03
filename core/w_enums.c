@@ -5,7 +5,7 @@
 #include "g_types.h"
 #include "c_key.h"
 
-typedef struct lenum_s
+typedef struct lenum
 {
   const char* name;
   int value;

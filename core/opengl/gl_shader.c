@@ -16,7 +16,7 @@
 #define tex_size_loc 4
 #define scale_loc 5
 
-typedef struct program_s
+typedef struct program
 {
   uint32_t handle;
   int locs[max_locs];

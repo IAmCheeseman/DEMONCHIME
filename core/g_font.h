@@ -11,11 +11,11 @@
 #include "g_shader.h"
 #include "c_color.h"
 
-typedef struct font_s
+typedef struct font
 {
   void* handle;
   int max_height;
-  struct glyph_s* glyphs;
+  struct glyph* glyphs;
 } font_t;
 
 void init_freetype(renderer_t* r, vfs_t* core_vfs);

@@ -6,7 +6,7 @@
 #include "g_vert_arr.h"
 #include "g_shader.h"
 
-typedef struct mesh_s
+typedef struct mesh
 {
   bool transparent;
 

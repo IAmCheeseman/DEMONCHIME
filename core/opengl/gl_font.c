@@ -10,7 +10,7 @@
 
 #define glyph_count 128
 
-typedef struct glyph_s
+typedef struct glyph
 {
   uint32_t tex_handle;
   vec2i_t size;
@@ -18,7 +18,7 @@ typedef struct glyph_s
   uint32_t advance;
 } glyph_t;
 
-typedef struct font_handle_s
+typedef struct font_handle
 {
   vert_arr_t* vao;
   buf_obj_t* vbo;

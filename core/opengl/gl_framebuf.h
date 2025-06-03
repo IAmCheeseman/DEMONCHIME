@@ -6,7 +6,7 @@
 #include "g_vert_arr.h"
 #include "g_buf_obj.h"
 
-struct framebuf_s
+struct framebuf
 {
   vec2i_t size;
   uint8_t flags;

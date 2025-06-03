@@ -86,6 +86,8 @@ void sort_draw_calls(draw_call_list_t* list)
   // bubble sort! :D
   // it should be fine enough for this, and i don't care enough to figure out
   // how other algorithms work
+  if (list->len == 0) return;
+
   while (true) {
     bool swapped = false;
     for (size_t i = 0; i < list->len - 1; i++) {
