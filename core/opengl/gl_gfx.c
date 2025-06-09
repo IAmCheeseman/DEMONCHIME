@@ -29,10 +29,10 @@ static void msg_callback(
 
   switch (severity) {
     case GL_DEBUG_SEVERITY_NOTIFICATION:
-      // log_debug("[" text_dark_gray "OpenGL" text_normal "] %s", msg);
+      // log_debug("[" txt_dark_gray "OpenGL" txt_normal "] %s", msg);
       return;
     default:
-      log_warning("[" text_dark_gray "OpenGL" text_normal "] %s", msg);
+      log_warning("[" txt_dark_gray "OpenGL" txt_normal "] %s", msg);
       return;
   }
 }
@@ -78,12 +78,13 @@ static void set_backend_ptrs(renderer_t* r)
   r->backend.destroy_shaders = gl_destroy_shaders;
   r->backend.set_active_shader = gl_set_active_shader;
   r->backend.setup_shader = gl_setup_shader;
-  r->backend.texture_load_img = gl_tex_load_from_img;
-  r->backend.texture_destroy = gl_tex_destroy;
-  r->backend.texture_gen_mipmaps = gl_tex_gen_mipmap;
-  r->backend.texture_bind = gl_tex_bind;
-  r->backend.texture_set_filter = gl_tex_set_filter;
-  r->backend.texture_set_wrap = gl_tex_set_wrap;
+  r->backend.tex_load_img = gl_tex_load_from_img;
+  r->backend.tex_1x1_color = gl_tex_1x1_color;
+  r->backend.tex_destroy = gl_tex_destroy;
+  r->backend.tex_gen_mipmaps = gl_tex_gen_mipmap;
+  r->backend.tex_bind = gl_tex_bind;
+  r->backend.tex_set_filter = gl_tex_set_filter;
+  r->backend.tex_set_wrap = gl_tex_set_wrap;
   r->backend.font_init = gl_font_init;
   r->backend.font_destroy = gl_font_destroy;
   r->backend.font_get_width = gl_font_get_width;

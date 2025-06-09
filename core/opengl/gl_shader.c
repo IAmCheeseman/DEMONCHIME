@@ -39,7 +39,7 @@ uint32_t load_shader(vfs_t* vfs, const char* path, uint32_t type)
     glGetShaderInfoLog(h, 512, NULL, msg);
     log_fatal(
       1,
-      "[" text_dark_gray "shader" text_normal "] '%s': %s", path, msg);
+      "[" txt_dark_gray "shader" txt_normal "] '%s': %s", path, msg);
   }
 
   return h;
@@ -65,7 +65,7 @@ uint32_t load_program(vfs_t* vfs, const char* vert_path, const char* frag_path)
     glGetProgramInfoLog(program, 512, NULL, msg);
     log_fatal(
       1,
-      "[" text_dark_gray "shader" text_normal "] link error '%s'+'%s': %s",
+      "[" txt_dark_gray "shader" txt_normal "] link error '%s'+'%s': %s",
       vert_path, frag_path, msg);
   }
 

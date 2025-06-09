@@ -84,27 +84,58 @@ end)
 
 local dh = core.load_font("res/fonts/dbl_homicide.ttf", 16);
 
-event.on("@uidraw", function()
-  local screenw, _ = core.get_screen_size()
+local rect_mesh = core.create_mesh(core.shader._2d, false)
 
-  local st = ("s: %d"):format(s)
-  local sw = dh:get_width(st)
+local function draw_region(r, cr, cg, cb, ca)
+  cr = cr or 0
+  cg = cg or cr
+  cb = cb or cg
+  ca = ca or 1
+
+  rect_mesh:set_vertices({
+    {r.x,     r.y,     0, 0,  cr, cg, cb, ca},
+    {r.x+r.w, r.y,     1, 0,  cr, cg, cb, ca},
+    {r.x,     r.y+r.h, 0, 1,  cr, cg, cb, ca},
+    {r.x+r.w, r.y,     1, 0,  cr, cg, cb, ca},
+    {r.x+r.w, r.y+r.h, 1, 1,  cr, cg, cb, ca},
+    {r.x,     r.y+r.h, 0, 1,  cr, cg, cb, ca},
+  })
+  rect_mesh:finalize(false)
+
+  local ident = core.mat4_identity()
+  rect_mesh:draw(core.gfx.white_tex, ident)
+end
+
+event.on("@uidraw", function()
+  local region = core.create_region(10, 50, 180, 180)
+  local title, content = region:split_v(0.1)
+
+  title = title:shrink_by(2)
+  content = content:shrink_by(2)
+
+  draw_region(title)
+  draw_region(content)
+
+  title = title:shrink_by(2)
+  content = content:shrink_by(2)
+
   local sh = dh:get_height()
 
-  dh:draw(screenw - sw - 5, 0, st)
+  dh:draw(title.x, title.y - (sh * 0.25), "Stats")
 
   dh:draw(
-    2, sh * 0,
+    content.x, content.y + sh * 0,
     ("FPS: %d, %f ms"):format(core.get_fps(), 1/core.get_fps() * 1000),
-    1, 1, 1)
+    0.2, 0.4, 1)
   dh:draw(
-    2, sh * 1,
+    content.x, content.y + sh * 1,
     ("TPS: %d"):format(core.get_tps()),
     1, 0.2, 1)
   dh:draw(
-    2, sh * 2,
+    content.x, content.y + sh * 2,
     ("Entities: %d"):format(ecs.ent_count()),
     0, 1, 0.4)
+  dh:draw(content.x, content.y + sh * 3, ("s: %d"):format(s))
 end)
 
 local fullscreen = core.fullscreen.none

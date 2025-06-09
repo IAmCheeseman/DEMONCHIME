@@ -23,12 +23,12 @@ vert_arr_t* vert_arr_create(const renderer_t* r, shader_t shader)
 
 void vert_arr_destroy(const renderer_t* r, vert_arr_t* varr)
 {
-  return r->backend.vert_arr_destroy(varr);
+  r->backend.vert_arr_destroy(varr);
 }
 
 void vert_arr_bind(const renderer_t* r, const vert_arr_t* varr)
 {
-  return r->backend.vert_arr_bind(varr);
+  r->backend.vert_arr_bind(varr);
 }
 
 void vert_arr_draw(
@@ -38,7 +38,7 @@ void vert_arr_draw(
   size_t count,
   idx_mode_t index_mode)
 {
-  return r->backend.vert_arr_draw(varr, start, count, index_mode);
+  r->backend.vert_arr_draw(varr, start, count, index_mode);
 }
 
 void vert_arr_draw_idx(
@@ -49,7 +49,7 @@ void vert_arr_draw_idx(
   data_type_t type,
   idx_mode_t index_mode)
 {
-  return r->backend.vert_arr_draw_idx(
+  r->backend.vert_arr_draw_idx(
     varr, ebo,
     count, type,
     index_mode);

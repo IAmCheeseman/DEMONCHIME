@@ -2,6 +2,7 @@ local create_sparse = require("sparse_set")
 
 local query_t = {}
 query_t.__index = query_t
+query_t.__type = "query"
 
 local function create_query(filters)
   local q = setmetatable({}, query_t)

@@ -10,7 +10,7 @@ typedef struct img
 {
   uint8_t* data;
   vec2i_t size;
-  img_fmt_t format;
+  img_fmt_t fmt;
 } img_t;
 
 img_t image_load(vfs_t* vfs, const char* path);

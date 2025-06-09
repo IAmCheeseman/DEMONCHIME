@@ -6,14 +6,9 @@
 #include "g_tex.h"
 #include "gl_type_conv.h"
 
-tex_t gl_tex_load_from_img(const img_t* img)
+static void create_tex(tex_t* tex, img_fmt_t fmt, void* data, vec2i_t size)
 {
-  tex_t tex;
-
-  tex.size = img->size;
-  tex.format = img->format;
-
-  uint32_t gl_format = img_fmt_to_gl(img->format);
+  uint32_t gl_fmt = img_fmt_to_gl(fmt);
 
   uint32_t handle;
 
@@ -21,18 +16,43 @@ tex_t gl_tex_load_from_img(const img_t* img)
   glBindTexture(GL_TEXTURE_2D, handle);
   glTexImage2D(
     GL_TEXTURE_2D,
-    0, gl_format, tex.size.x, tex.size.y,
-    0, gl_format, GL_UNSIGNED_BYTE, img->data);
+    0, gl_fmt, size.x, size.y,
+    0, gl_fmt, GL_UNSIGNED_BYTE, data);
 
   log_debug("loaded texture %d", handle);
 
   uint32_t* handle_ptr = (uint32_t*)mem_alloc(sizeof(uint32_t));
   *handle_ptr = handle;
 
-  tex.handle = handle_ptr;
+  tex->handle = handle_ptr;
 
-  gl_tex_set_filter(&tex, tex_filter_nearest, tex_filter_nearest);
-  gl_tex_set_wrap(&tex, tex_wrap_rep, tex_wrap_rep);
+  gl_tex_set_filter(tex, tex_filter_nearest, tex_filter_nearest);
+  gl_tex_set_wrap(tex, tex_wrap_rep, tex_wrap_rep);
+}
+
+tex_t gl_tex_load_from_img(const img_t* img)
+{
+  tex_t tex;
+
+  tex.size = img->size;
+  tex.fmt = img->fmt;
+
+  create_tex(&tex, img->fmt, img->data, img->size);
+
+  return tex;
+}
+
+tex_t gl_tex_1x1_color(color_t color)
+{
+  tex_t tex;
+
+  tex.size = (vec2i_t){1, 1};
+  tex.fmt = img_fmt_rgba8;
+
+  uint8_t data[4];
+  color_to_bytes(color, &data[0], &data[1], &data[2], &data[3]);
+
+  create_tex(&tex, tex.fmt, data, tex.size);
 
   return tex;
 }

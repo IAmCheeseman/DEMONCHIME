@@ -1,5 +1,6 @@
 local lerped_num_t = {}
 lerped_num_t.__index = lerped_num_t
+lerped_num_t.__type = "lerped_num"
 
 local function create_lerped_num(init)
   local n = setmetatable({}, lerped_num_t)

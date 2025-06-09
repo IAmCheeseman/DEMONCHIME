@@ -13,8 +13,25 @@ static int L_load_tex(lua_State* L)
   return 1;
 }
 
+static int L_create_1x1_tex(lua_State* L)
+{
+  engine_t* engine = get_engine(L);
+
+  color_t color;
+  color.r = luaL_checknumber(L, 1);
+  color.g = luaL_checknumber(L, 2);
+  color.b = luaL_checknumber(L, 3);
+  color.a = luaL_optnumber(L, 4, 1);
+
+  tex_t* tex = (tex_t*)mem_alloc(sizeof(tex_t));
+  *tex = tex_1x1_color(engine->renderer, color);
+  create_ldata(L, tex, tex_mt_name, lua_type_tex);
+  return 1;
+}
+
 luaL_Reg texture_funcs[] = {
   {"load_tex", L_load_tex},
+  {"create_1x1_tex", L_create_1x1_tex},
   {NULL, NULL},
 };
 

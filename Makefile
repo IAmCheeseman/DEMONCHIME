@@ -5,8 +5,8 @@ Q = @
 INCLUDE = \
 	-Icore -Ilib/glad/include -Ilib/miniz/include \
 	-Ilib/stb/include -Ilib/luajit -Ilib -Ilib/freetype
-CFLAGS = $(cflags) -std=c99 -Wall -Wextra -Wno-unused-parameter $(INCLUDE) \
-	-Dbse_allow_opengl -DGLFW_INCLUDE_NONE
+CFLAGS = $(cflags) -std=c99 -Wall -Wextra -Wno-unused-parameter \
+				 $(INCLUDE) -Dbse_allow_opengl -DGLFW_INCLUDE_NONE
 LDFLAGS =
 
 PROJECT_NAME = DEMONCHIME
@@ -15,7 +15,7 @@ EXE = $(PROJECT_NAME)
 OBJ = \
 	main.o core/include.o core/c_mem.o core/c_log.o core/c_engine.o \
 	core/c_img.o core/c_prng.o core/c_timer.o core/c_vfs.o \
-	core/c_win.o \
+	core/c_win.o core/c_color.o \
 	\
 	core/m_mat4.o core/m_trans.o \
 	\
@@ -38,7 +38,7 @@ DEP = $(OBJ:%.o=%.d)
 # this one contains every core resource and script
 CORE_HAD = CORE.HAD
 CORE_HAD_DIR = core/had
-CORE_HAD_DEP = res
+CORE_HAD_DEP = res gui
 CORE_HAD_DEP := $(CORE_HAD_DIR) $(addprefix $(CORE_HAD_DIR)/,$(CORE_HAD_DEP))
 
 GAME_HAD = $(PROJECT_NAME).HAD

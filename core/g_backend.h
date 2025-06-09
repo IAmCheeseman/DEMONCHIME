@@ -73,6 +73,7 @@ typedef void (*setup_shader_fn)(
   const struct renderer* r, const struct draw_call* dc);
 
 typedef struct tex (*tex_load_from_img_fn)(const struct img* img);
+typedef struct tex (*tex_1x1_color_fn)(struct color color);
 typedef void (*tex_gen_mipmap_fn)(struct tex* tex);
 typedef void (*tex_bind_fn)(const struct tex* tex, uint8_t slot);
 typedef void (*tex_set_filter_fn)(
@@ -127,12 +128,13 @@ typedef struct gfx_backend_s
   set_active_shader_fn set_active_shader;
   setup_shader_fn setup_shader;
 
-  tex_load_from_img_fn texture_load_img;
-  tex_destroy_fn texture_destroy;
-  tex_gen_mipmap_fn texture_gen_mipmaps;
-  tex_bind_fn texture_bind;
-  tex_set_filter_fn texture_set_filter;
-  tex_set_wrap_fn texture_set_wrap;
+  tex_load_from_img_fn tex_load_img;
+  tex_1x1_color_fn tex_1x1_color;
+  tex_destroy_fn tex_destroy;
+  tex_gen_mipmap_fn tex_gen_mipmaps;
+  tex_bind_fn tex_bind;
+  tex_set_filter_fn tex_set_filter;
+  tex_set_wrap_fn tex_set_wrap;
 
   font_init_fn font_init;
   font_destroy_fn font_destroy;

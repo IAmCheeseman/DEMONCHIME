@@ -4,6 +4,7 @@
 #include "g_tex.h"
 
 tex_t gl_tex_load_from_img(const img_t* img);
+tex_t gl_tex_1x1_color(color_t color);
 void gl_tex_destroy(tex_t* tex);
 void gl_tex_bind(const tex_t* tex, uint8_t slot);
 void gl_tex_gen_mipmap(tex_t* tex);

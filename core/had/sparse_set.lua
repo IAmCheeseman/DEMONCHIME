@@ -1,5 +1,6 @@
 local sparse_set_t = {}
 sparse_set_t.__index = sparse_set_t
+sparse_set_t.__type = "sparse_set"
 
 local function create_sparse()
   local s = setmetatable({}, sparse_set_t)

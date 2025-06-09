@@ -9,17 +9,17 @@ buf_obj_t* buf_obj_create(
 
 void buf_obj_destroy(const renderer_t* r, buf_obj_t* buf)
 {
-  return r->backend.buf_obj_destroy(buf);
+  r->backend.buf_obj_destroy(buf);
 }
 
 void buf_obj_bind(const renderer_t* r, const buf_obj_t* buf)
 {
-  return r->backend.buf_obj_bind(buf);
+  r->backend.buf_obj_bind(buf);
 }
 
 void buf_obj_unbind(const renderer_t* r, buf_obj_type_t type)
 {
-  return r->backend.buf_obj_unbind(type);
+  r->backend.buf_obj_unbind(type);
 }
 
 void buf_obj_set_dat(
@@ -29,5 +29,5 @@ void buf_obj_set_dat(
   size_t size,
   draw_mode_t mode)
 {
-  return r->backend.buf_obj_set(buf, data, size, mode);
+  r->backend.buf_obj_set(buf, data, size, mode);
 }

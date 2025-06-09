@@ -2,6 +2,8 @@ local event = require("event")
 
 local gfx = {}
 
+gfx.white_tex = core.create_1x1_tex(1, 1, 1)
+
 gfx.view = {
   x = 0,
   y = 0,

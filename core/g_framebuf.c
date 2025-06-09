@@ -11,12 +11,12 @@ framebuf_t* framebuf_create(
 
 void framebuf_destroy(const renderer_t* r, framebuf_t* fb)
 {
-  return r->backend.framebuf_destroy(fb);
+  r->backend.framebuf_destroy(fb);
 }
 
 void framebuf_bind(const renderer_t* r, const framebuf_t* fb)
 {
-  return r->backend.framebuf_bind(fb);
+  r->backend.framebuf_bind(fb);
 }
 
 void framebuf_resize(
@@ -24,7 +24,7 @@ void framebuf_resize(
   framebuf_t* fb,
   vec2i_t size)
 {
-  return r->backend.framebuf_resize(fb, size);
+  r->backend.framebuf_resize(fb, size);
 }
 
 void framebuf_draw(
@@ -33,5 +33,5 @@ void framebuf_draw(
   vec2i_t start,
   vec2i_t end)
 {
-  return r->backend.framebuf_draw(r, fb, start, end);
+  r->backend.framebuf_draw(r, fb, start, end);
 }

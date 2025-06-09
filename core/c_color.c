@@ -1,4 +1,4 @@
-#include "color.h"
+#include "c_color.h"
 
 color_t color_from_rgba(float r, float g, float b, float a)
 {

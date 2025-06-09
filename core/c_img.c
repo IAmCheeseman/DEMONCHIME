@@ -27,19 +27,19 @@ img_t image_load(vfs_t* vfs, const char* path)
     &size.x, &size.y, &channel_count, 0);
   mem_destroy(file_dat);
 
-  img_fmt_t format = img_fmt_from_channel_count(channel_count);
+  img_fmt_t fmt = img_fmt_from_channel_count(channel_count);
 
   log_debug("loading image '%s'", path);
 
-  return image_load_from_mem(data, size, format);
+  return image_load_from_mem(data, size, fmt);
 }
 
-img_t image_load_from_mem(uint8_t* data, vec2i_t size, img_fmt_t format)
+img_t image_load_from_mem(uint8_t* data, vec2i_t size, img_fmt_t fmt)
 {
   img_t img;
   img.data = data;
   img.size = size;
-  img.format = format;
+  img.fmt = fmt;
   return img;
 }
 
@@ -48,5 +48,5 @@ void image_destroy(img_t* img)
   mem_destroy(img->data);
   img->data = NULL;
   img->size = (vec2i_t){0, 0};
-  img->format = img_fmt_invalid;
+  img->fmt = img_fmt_invalid;
 }

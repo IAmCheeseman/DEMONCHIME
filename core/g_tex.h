@@ -5,6 +5,7 @@
 #include "g_renderer.h"
 #include "g_types.h"
 #include "c_img.h"
+#include "c_color.h"
 #include "m_math.h"
 
 // TODO: make this consistent with other implementation-defined stuff
@@ -12,7 +13,7 @@ struct tex
 {
   void* handle;
   vec2i_t size;
-  img_fmt_t format;
+  img_fmt_t fmt;
   tex_filter_t min_filter;
   tex_filter_t mag_filter;
   tex_wrap_t x_wrap;
@@ -20,6 +21,7 @@ struct tex
 };
 
 tex_t tex_load(const renderer_t* r, vfs_t* vfs, const char* path);
+tex_t tex_1x1_color(const renderer_t* r, color_t color);
 tex_t tex_load_from_img(const renderer_t* r, const img_t* img);
 void tex_destroy(const renderer_t* r, tex_t* tex);
 void tex_gen_mipmap(const renderer_t* r, tex_t* tex);

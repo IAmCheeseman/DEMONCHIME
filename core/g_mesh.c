@@ -42,6 +42,13 @@ void mesh_finalize(const renderer_t* r, mesh_t* m, bool is_static)
 
   vert_fmt_t* fmt = &r->shader_fmts[m->shader];
 
+  if (m->vbo && m->vao) {
+    // Just update data
+    buf_obj_set_dat(
+      r, m->vbo, m->vertices, fmt->stride * m->vertex_count, mode);
+    return;
+  }
+
   buf_obj_t* vbo = buf_obj_create(r, buf_arr);
   buf_obj_set_dat(r, vbo, m->vertices, fmt->stride * m->vertex_count, mode);
   buf_obj_bind(r, vbo);
