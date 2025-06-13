@@ -36,6 +36,11 @@ miniz:
   Copyright 2013-2014 RAD Game Tools and Valve Software
   Copyright 2010-2014 Rich Geldreich and Tenacious Software LLC
 
+Kirigami:
+  https://github.com/pakeke-constructor/Kirigami
+  License: MIT
+  Copyright (c) Oliver Garrett (pakeke-constructor)
+
 Double Homicide:
   https://fontenddev.com/fonts/double-homicide/
   License: CC BY 4.0

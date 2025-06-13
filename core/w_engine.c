@@ -26,6 +26,13 @@ static int L_get_tps(lua_State* L)
   return 1;
 }
 
+static int L_get_dt(lua_State* L)
+{
+  engine_t* engine = get_engine(L);
+  lua_pushnumber(L, engine->timer.dt);
+  return 1;
+}
+
 static int L_set_tick_rate(lua_State* L)
 {
   engine_t* engine = get_engine(L);
@@ -178,6 +185,7 @@ static int L_get_mouse_pos(lua_State* L)
 luaL_Reg engine_funcs[] = {
   {"get_total_time", L_get_total_time},
   {"get_fps", L_get_fps},
+  {"get_dt", L_get_dt},
   {"get_tps", L_get_tps},
   {"set_tick_rate", L_set_tick_rate},
   {"get_tick_rate", L_get_tick_rate},

@@ -5,8 +5,6 @@
 
 #include "g_renderer.h"
 #include "g_framebuf.h"
-#include "g_font.h"
-#include "c_mem.h"
 #include "w_wrap.h"
 
 void engine_init(engine_t* engine, engine_conf_t conf)
@@ -107,29 +105,13 @@ static bool call_lua_global(const engine_t* engine, const char* fn_name)
   return true;
 }
 
-static bool call_lua_update(const engine_t* engine, const char* fn_name)
-{
-  if (engine->L == NULL) return true;
-  lua_getglobal(engine->L, fn_name);
-  if (!lua_isnil(engine->L, -1)) {
-    if (!lua_isfunction(engine->L, -1)) {
-      log_error("global '%s' must be a function", fn_name);
-      return false;
-    }
-    lua_pushnumber(engine->L, engine->timer.dt);
-    int res = lua_pcall(engine->L, 1, 0, engine->lua_err_handler_idx);
-    return res == LUA_OK;
-  }
-  return true;
-}
-
 void engine_update(engine_t* engine)
 {
   glfwPollEvents();
 
   timer_update(&engine->timer);
 
-  if (!call_lua_update(engine, "update")) {
+  if (!call_lua_global(engine, "frame")) {
     engine_close(engine);
     return;
   }
@@ -159,6 +141,8 @@ void engine_draw(engine_t* engine)
     engine_close(engine);
     return;
   }
+
+  flush_deferred(engine->renderer);
 
   if (!call_lua_global(engine, "uidraw")) {
     engine_close(engine);

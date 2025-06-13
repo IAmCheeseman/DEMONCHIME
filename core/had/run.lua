@@ -1,8 +1,8 @@
 local event = require("event")
 local ecs = require("ecs")
 
-function update(dt)
-  event.call("@frame", dt)
+function frame()
+  event.call("@frame", core.get_dt())
 end
 
 function step()

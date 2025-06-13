@@ -18,7 +18,7 @@ vxyz = {"vx", "vy", "vz"}
 
 core.create_lerped_num = require("lerped_num")
 core.create_billboard = require("billboard")
-core.create_region = require("gui.region")
+core.create_region = require("gui.kirigami.init").Region
 core.gfx = require("gfx")
 core.vec2 = require("vec2")
 core.vec3 = require("vec3")

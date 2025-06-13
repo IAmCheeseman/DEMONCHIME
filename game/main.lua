@@ -108,20 +108,20 @@ end
 
 event.on("@uidraw", function()
   local region = core.create_region(10, 50, 180, 180)
-  local title, content = region:split_v(0.1)
+  local title, content = region:split_v(0.1, 0.9)
 
-  title = title:shrink_by(2)
-  content = content:shrink_by(2)
+  title = title:pad_px(1)
+  content = content:pad_px(1)
 
   draw_region(title)
   draw_region(content)
 
-  title = title:shrink_by(2)
-  content = content:shrink_by(2)
+  title = title:pad_px(1)
+  content = content:pad_px(1)
 
   local sh = dh:get_height()
 
-  dh:draw(title.x, title.y - (sh * 0.25), "Stats")
+  dh:draw(title.x, title.y - sh * 0.5, "Stats")
 
   dh:draw(
     content.x, content.y + sh * 0,
