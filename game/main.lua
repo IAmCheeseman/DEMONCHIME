@@ -1,8 +1,11 @@
 require("systems.draw_meshes")
+require("debug_info")
 
 local cube = core.create_mesh("default", false)
 cube:set_vertices(require("cube"))
 cube:finalize("static")
+
+core.gui.font = core.load_font("res/fonts/dbl_homicide.ttf", 16);
 
 local cubet = {
   x = 0,
@@ -73,57 +76,6 @@ event.on("@keydown", function(key, is_repeated)
     for ent in models.ents:iter() do
       ecs.rem_ent(ent)
     end
-  end
-end)
-
-local dh = core.load_font("res/fonts/dbl_homicide.ttf", 16);
-
-local function draw_text(x, y, text, r, g, b)
-end
-
-event.on("@uidraw", function()
-  local texts = {
-    {
-      str = "Stats",
-      color = {1, 1, 1},
-    },
-    {
-      str = ("FPS: %d, %f ms"):format(core.get_fps(), 1/core.get_fps() * 1000),
-      color = {0.2, 0.4, 1},
-    },
-    {
-      str = ("TPS: %d"):format(core.get_tps()),
-      color = {1, 0.2, 1},
-    },
-    {
-      str = ("Entities: %d"):format(ecs.ent_count()),
-      color = {0, 1, 0.4},
-    },
-    {
-      str = ("Draw Calls: %d"):format(core.get_draw_call_count()),
-      color = {1, 1, 0.4},
-    },
-    {
-      str = ("s: %d"):format(s),
-      color = {1, 1, 1},
-    },
-  }
-
-  local region = core.gui.create_region(
-    2, 2,
-    180, dh:get_height() * #texts + 2)
-
-  local text_boxes = region:rows(#texts)
-  for i, box in ipairs(text_boxes) do
-    text_boxes[i] = box:pad_px(1)
-    core.gui.queue_region_draw(text_boxes[i])
-  end
-  core.gui.flush_regions()
-
-  for i, text in ipairs(texts) do
-    local box = text_boxes[i]
-    local y = box.y - box.h + dh:get_height() / 2
-    dh:draw(box.x, y, text.str, unpack(text.color))
   end
 end)
 
