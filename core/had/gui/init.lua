@@ -24,7 +24,7 @@ end
 
 function gui.flush_regions()
   rect_mesh:set_vertices(region_vertices)
-  rect_mesh:finalize(false)
+  rect_mesh:finalize("dynamic")
 
   rect_mesh:draw(core.gfx.white_tex, ident)
 

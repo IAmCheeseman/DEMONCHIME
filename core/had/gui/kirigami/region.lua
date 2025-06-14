@@ -165,12 +165,12 @@ function Region:grid(rows, cols)
 end
 
 
-function Region:rows(rows)
+function Region:columns(rows)
   return self:grid(rows, 1)
 end
 
 
-function Region:columns(columns)
+function Region:rows(columns)
   return self:grid(1, columns)
 end
 

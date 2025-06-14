@@ -93,7 +93,8 @@ static int L_MeshMt_finalize(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
   mesh_t* mesh = (mesh_t*)read_ldata(L, 1, lua_type_mesh);
-  mesh_finalize(r, mesh, lua_toboolean(L, 2));
+  int draw_mode = get_enum_from_str(L, luaL_checkstring(L, 2), draw_mode_enum);
+  mesh_finalize(r, mesh, draw_mode);
   return 0;
 }
 

@@ -2,7 +2,7 @@ require("systems.draw_meshes")
 
 local cube = core.create_mesh("default", false)
 cube:set_vertices(require("cube"))
-cube:finalize(true)
+cube:finalize("static")
 
 local cubet = {
   x = 0,
@@ -78,42 +78,53 @@ end)
 
 local dh = core.load_font("res/fonts/dbl_homicide.ttf", 16);
 
+local function draw_text(x, y, text, r, g, b)
+end
+
 event.on("@uidraw", function()
-  local region = core.gui.create_region(10, 50, 180, 180)
-  local title, content = region:split_v(0.1, 0.9)
+  local texts = {
+    {
+      str = "Stats",
+      color = {1, 1, 1},
+    },
+    {
+      str = ("FPS: %d, %f ms"):format(core.get_fps(), 1/core.get_fps() * 1000),
+      color = {0.2, 0.4, 1},
+    },
+    {
+      str = ("TPS: %d"):format(core.get_tps()),
+      color = {1, 0.2, 1},
+    },
+    {
+      str = ("Entities: %d"):format(ecs.ent_count()),
+      color = {0, 1, 0.4},
+    },
+    {
+      str = ("Draw Calls: %d"):format(core.get_draw_call_count()),
+      color = {1, 1, 0.4},
+    },
+    {
+      str = ("s: %d"):format(s),
+      color = {1, 1, 1},
+    },
+  }
 
-  title = title:pad_px(1)
-  content = content:pad_px(1)
+  local region = core.gui.create_region(
+    2, 2,
+    180, dh:get_height() * #texts + 2)
 
-  core.gui.queue_region_draw(title)
-  core.gui.queue_region_draw(content)
+  local text_boxes = region:rows(#texts)
+  for i, box in ipairs(text_boxes) do
+    text_boxes[i] = box:pad_px(1)
+    core.gui.queue_region_draw(text_boxes[i])
+  end
   core.gui.flush_regions()
 
-  title = title:pad_px(1)
-  content = content:pad_px(1)
-
-  local sh = dh:get_height()
-
-  -- dh:draw(title.x, title.y - sh * 0.5, "Stats")
-  dh:draw(title.x, title.y - sh * 0.5, "Stats")
-
-  dh:draw(
-    content.x, content.y + sh * 0,
-    ("FPS: %d, %f ms"):format(core.get_fps(), 1/core.get_fps() * 1000),
-    0.2, 0.4, 1)
-  dh:draw(
-    content.x, content.y + sh * 1,
-    ("TPS: %d"):format(core.get_tps()),
-    1, 0.2, 1)
-  dh:draw(
-    content.x, content.y + sh * 2,
-    ("Entities: %d"):format(ecs.ent_count()),
-    0, 1, 0.4)
-  dh:draw(
-    content.x, content.y + sh * 3,
-    ("Draw Calls: %d"):format(core.get_draw_call_count()),
-    1, 1, 0.4)
-  dh:draw(content.x, content.y + sh * 4, ("s: %d"):format(s))
+  for i, text in ipairs(texts) do
+    local box = text_boxes[i]
+    local y = box.y - box.h + dh:get_height() / 2
+    dh:draw(box.x, y, text.str, unpack(text.color))
+  end
 end)
 
 local fullscreen = "none"

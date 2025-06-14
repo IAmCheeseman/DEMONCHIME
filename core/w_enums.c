@@ -19,6 +19,13 @@ lenum_t shader[] = {
   {NULL, 0},
 };
 
+lenum_t draw_mode[] = {
+  {"static", draw_static},
+  {"dynamic", draw_dynamic},
+  {"stream", draw_stream},
+  {NULL, 0},
+};
+
 lenum_t image_format[] = {
   {"r8", img_fmt_r8},
   {"ra8", img_fmt_ra8},
@@ -101,6 +108,7 @@ void wrap_enums(lua_State* L)
   lua_getglobal(L, core_name);
 
   reg_enum(L, shader_enum, shader);
+  reg_enum(L, draw_mode_enum, draw_mode);
   reg_enum(L, image_fmt_enum, image_format);
   reg_enum(L, tex_filter_enum, texture_filter);
   reg_enum(L, tex_wrap_enum, texture_wrap);

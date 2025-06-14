@@ -37,7 +37,7 @@ local function create_billboard(tex, scale)
   local bb = setmetatable({}, billboard_t)
   bb.mesh = core.create_mesh("billboard", true)
   bb.mesh:set_vertices(vertices)
-  bb.mesh:finalize(true)
+  bb.mesh:finalize("static")
   bb.tex = tex
   bb.scale = scale
   return bb

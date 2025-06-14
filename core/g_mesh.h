@@ -24,7 +24,7 @@ typedef struct mesh
 
 mesh_t mesh_create(shader_t shader, bool transparent);
 void mesh_destroy(const renderer_t* r, mesh_t* m);
-void mesh_finalize(const renderer_t* r, mesh_t* m, bool is_static);
+void mesh_finalize(const renderer_t* r, mesh_t* m, draw_mode_t draw_mode);
 void mesh_draw(
   renderer_t* r,
   const mesh_t* m,

@@ -32,6 +32,7 @@ typedef enum ldata_type
 #define prng_mt_name "__PRNG_MT__"
 
 #define shader_enum "__SHADER_E__"
+#define draw_mode_enum "__DRAW_MODE_E__"
 #define image_fmt_enum "__IMG_FMT_E__"
 #define tex_filter_enum "__TEX_FILTER_E__"
 #define tex_wrap_enum "__TEX_WRAP_E__"

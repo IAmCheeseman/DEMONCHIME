@@ -36,21 +36,20 @@ void mesh_destroy(const renderer_t* r, mesh_t* m)
   // }
 }
 
-void mesh_finalize(const renderer_t* r, mesh_t* m, bool is_static)
+void mesh_finalize(const renderer_t* r, mesh_t* m, draw_mode_t draw_mode)
 {
-  draw_mode_t mode = is_static ? draw_static : draw_dynamic;
-
   vert_fmt_t* fmt = &r->shader_fmts[m->shader];
 
   if (m->vbo && m->vao) {
     // Just update data
     buf_obj_set_dat(
-      r, m->vbo, m->vertices, fmt->stride * m->vertex_count, mode);
+      r, m->vbo, m->vertices, fmt->stride * m->vertex_count, draw_mode);
     return;
   }
 
   buf_obj_t* vbo = buf_obj_create(r, buf_arr);
-  buf_obj_set_dat(r, vbo, m->vertices, fmt->stride * m->vertex_count, mode);
+  buf_obj_set_dat(
+    r, vbo, m->vertices, fmt->stride * m->vertex_count, draw_mode);
   buf_obj_bind(r, vbo);
   vert_arr_t* vao = vert_arr_create(r, m->shader);
   m->vao = vao;
