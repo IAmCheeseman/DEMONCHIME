@@ -43,6 +43,9 @@ typedef struct renderer
   mat4_t projection_2d;
   mat4_t view;
 
+  int draw_call_counter;
+  int draw_call_count;
+
   vert_fmt_t* shader_fmts;
   void* shaders;
   shader_t active_shader;

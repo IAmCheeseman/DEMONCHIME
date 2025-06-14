@@ -82,7 +82,6 @@ static void gen_texs(framebuf_t* fb)
 
 framebuf_t* gl_framebuf_create(
   const renderer_t* r,
-  vfs_t* vfs,
   vec2i_t size,
   uint8_t flags)
 {
@@ -158,8 +157,7 @@ void gl_framebuf_resize(framebuf_t* fb, vec2i_t size)
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void gl_framebuf_draw(
-  const renderer_t* r, framebuf_t* fb, vec2i_t start, vec2i_t end)
+void gl_framebuf_draw(renderer_t* r, framebuf_t* fb, vec2i_t start, vec2i_t end)
 {
   if (fb->vbo == NULL || fb->vao == NULL) {
     log_warning(
@@ -186,7 +184,7 @@ void gl_framebuf_draw(
   mat4_t i;
   mat4_identity(i);
   gl_setup_2d(r, shader_2d, fb->color_handle, i);
-  gl_vert_arr_draw(fb->vao, 0, 6, idx_triangles);
+  gl_vert_arr_draw(r, fb->vao, 0, 6, idx_triangles);
 
   // glActiveTexture(GL_TEXTURE0);
   // glBindTexture(GL_TEXTURE_2D, fb->color_handle);

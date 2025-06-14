@@ -1,12 +1,8 @@
 #include "g_framebuf.h"
 
-framebuf_t* framebuf_create(
-  const renderer_t* r,
-  vfs_t* vfs,
-  vec2i_t size,
-  uint8_t flags)
+framebuf_t* framebuf_create(const renderer_t* r, vec2i_t size, uint8_t flags)
 {
-  return r->backend.framebuf_create(r, vfs, size, flags);
+  return r->backend.framebuf_create(r, size, flags);
 }
 
 void framebuf_destroy(const renderer_t* r, framebuf_t* fb)
@@ -28,7 +24,7 @@ void framebuf_resize(
 }
 
 void framebuf_draw(
-  const renderer_t* r,
+  renderer_t* r,
   framebuf_t* fb,
   vec2i_t start,
   vec2i_t end)

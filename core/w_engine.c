@@ -26,6 +26,13 @@ static int L_get_tps(lua_State* L)
   return 1;
 }
 
+static int L_get_draw_call_count(lua_State* L)
+{
+  engine_t* engine = get_engine(L);
+  lua_pushinteger(L, engine->renderer->draw_call_count);
+  return 1;
+}
+
 static int L_get_dt(lua_State* L)
 {
   engine_t* engine = get_engine(L);
@@ -188,6 +195,7 @@ luaL_Reg engine_funcs[] = {
   {"get_total_time", L_get_total_time},
   {"get_fps", L_get_fps},
   {"get_dt", L_get_dt},
+  {"get_draw_call_count", L_get_draw_call_count},
   {"get_tps", L_get_tps},
   {"set_tick_rate", L_set_tick_rate},
   {"get_tick_rate", L_get_tick_rate},

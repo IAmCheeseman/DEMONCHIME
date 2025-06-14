@@ -40,11 +40,13 @@ typedef struct vert_arr* (*vert_arr_create_fn)(
 typedef void (*vert_arr_destroy_fn)(struct vert_arr* varr);
 typedef void (*vert_arr_bind_fn)(const struct vert_arr* varr);
 typedef void (*vert_arr_draw_fn)(
+  struct renderer* r,
   const struct vert_arr* varr,
   size_t start,
   size_t count,
   idx_mode_t index_mode);
 typedef void (*vert_arr_draw_idx_fn)(
+  struct renderer* r,
   const struct vert_arr* varr,
   const struct buf_obj* ebo,
   size_t count,
@@ -53,14 +55,13 @@ typedef void (*vert_arr_draw_idx_fn)(
 
 typedef struct framebuf* (*framebuf_create_fn)(
   const struct renderer* r,
-  struct vfs* vfs,
   vec2i_t size,
   uint8_t flags);
 typedef void (*framebuf_destroy_fn)(struct framebuf* fb);
 typedef void (*framebuf_bind_fn)(const struct framebuf* fb);
 typedef void (*framebuf_resize_fn)(struct framebuf* fb, vec2i_t size);
 typedef void (*framebuf_draw_fn)(
-  const struct renderer* r,
+  struct renderer* r,
   struct framebuf* fb,
   vec2i_t start,
   vec2i_t end);
@@ -88,12 +89,11 @@ typedef void (*tex_set_wrap_fn)(
 );
 typedef void (*tex_destroy_fn)(struct tex* tex);
 
-typedef void (*font_init_fn)(
-    const struct renderer* r, struct font* font, SFT* sft);
+typedef void (*font_init_fn)(struct renderer* r, struct font* font, SFT* sft);
 typedef int (*font_get_width_fn)(const struct font* font, const char* text);
 typedef void (*font_destroy_fn)(struct font* font);
 typedef void (*font_draw_fn)(
-  const struct renderer* r,
+  struct renderer* r,
   struct font* font,
   vec2f_t pos,
   const char* text,

@@ -26,13 +26,13 @@ vert_arr_t* vert_arr_create(const renderer_t* r, shader_t shader);
 void vert_arr_destroy(const renderer_t* r, vert_arr_t* varr);
 void vert_arr_bind(const renderer_t* r, const vert_arr_t* varr);
 void vert_arr_draw(
-  const renderer_t* r,
+  renderer_t* r,
   const vert_arr_t* varr,
   size_t start,
   size_t count,
   idx_mode_t index_mode);
 void vert_arr_draw_idx(
-  const renderer_t* r,
+  renderer_t* r,
   const vert_arr_t* varr,
   const buf_obj_t* ebo,
   size_t count,

@@ -1,3 +1,10 @@
+local path = "./?/init.lua"
+-- why is this not consistent between operating systems?
+if core.os ~= "windows" then
+  path = ";" .. path
+end
+package.path = package.path .. path
+
 util = require("util")
 
 local old_type = type
@@ -18,7 +25,7 @@ vxyz = {"vx", "vy", "vz"}
 
 core.create_lerped_num = require("lerped_num")
 core.create_billboard = require("billboard")
-core.create_region = require("gui.kirigami.init").Region
+core.gui = require("gui")
 core.gfx = require("gfx")
 core.vec2 = require("vec2")
 core.vec3 = require("vec3")

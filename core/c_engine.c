@@ -38,7 +38,6 @@ void engine_init(engine_t* engine, engine_conf_t conf)
   engine->screen_size = conf.screen_size;
   engine->screen = framebuf_create(
     engine->renderer,
-    engine->vfs,
     engine->screen_size,
     framebuffer_color_buf | framebuffer_depth_buf | framebuffer_drawable
   );
@@ -127,6 +126,9 @@ void engine_update(engine_t* engine)
 
 void engine_draw(engine_t* engine)
 {
+  engine->renderer->draw_call_count = engine->renderer->draw_call_counter;
+  engine->renderer->draw_call_counter = 0;
+
   // Draw to screen
   framebuf_bind(engine->renderer, engine->screen);
   set_depth_test(engine->renderer, true);

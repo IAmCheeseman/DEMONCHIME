@@ -18,7 +18,6 @@ void gl_buf_obj_set_dat(
   buf_obj_t* buf,
   void* data,
   size_t size,
-  draw_mode_t mode
-);
+  draw_mode_t mode);
 
 #endif

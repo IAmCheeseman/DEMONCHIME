@@ -1,9 +1,3 @@
-if core.os == "windows" then
-  package.path = package.path .. "./?/init.lua"
-elseif core.os == "linux" then
-  package.path = package.path .. ";./?/init.lua"
-end
-
 require("systems.draw_meshes")
 
 local cube = core.create_mesh("default", false)
@@ -84,43 +78,23 @@ end)
 
 local dh = core.load_font("res/fonts/dbl_homicide.ttf", 16);
 
-local rect_mesh = core.create_mesh("2d", false)
-
-local function draw_region(r, cr, cg, cb, ca)
-  cr = cr or 0
-  cg = cg or cr
-  cb = cb or cg
-  ca = ca or 1
-
-  rect_mesh:set_vertices({
-    {r.x,     r.y,     0, 0,  cr, cg, cb, ca},
-    {r.x+r.w, r.y,     1, 0,  cr, cg, cb, ca},
-    {r.x,     r.y+r.h, 0, 1,  cr, cg, cb, ca},
-    {r.x+r.w, r.y,     1, 0,  cr, cg, cb, ca},
-    {r.x+r.w, r.y+r.h, 1, 1,  cr, cg, cb, ca},
-    {r.x,     r.y+r.h, 0, 1,  cr, cg, cb, ca},
-  })
-  rect_mesh:finalize(false)
-
-  local ident = core.mat4_identity()
-  rect_mesh:draw(core.gfx.white_tex, ident)
-end
-
 event.on("@uidraw", function()
-  local region = core.create_region(10, 50, 180, 180)
+  local region = core.gui.create_region(10, 50, 180, 180)
   local title, content = region:split_v(0.1, 0.9)
 
   title = title:pad_px(1)
   content = content:pad_px(1)
 
-  draw_region(title)
-  draw_region(content)
+  core.gui.queue_region_draw(title)
+  core.gui.queue_region_draw(content)
+  core.gui.flush_regions()
 
   title = title:pad_px(1)
   content = content:pad_px(1)
 
   local sh = dh:get_height()
 
+  -- dh:draw(title.x, title.y - sh * 0.5, "Stats")
   dh:draw(title.x, title.y - sh * 0.5, "Stats")
 
   dh:draw(
@@ -135,7 +109,11 @@ event.on("@uidraw", function()
     content.x, content.y + sh * 2,
     ("Entities: %d"):format(ecs.ent_count()),
     0, 1, 0.4)
-  dh:draw(content.x, content.y + sh * 3, ("s: %d"):format(s))
+  dh:draw(
+    content.x, content.y + sh * 3,
+    ("Draw Calls: %d"):format(core.get_draw_call_count()),
+    1, 1, 0.4)
+  dh:draw(content.x, content.y + sh * 4, ("s: %d"):format(s))
 end)
 
 local fullscreen = "none"

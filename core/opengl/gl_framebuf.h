@@ -22,13 +22,12 @@ struct framebuf
 
 framebuf_t* gl_framebuf_create(
   const renderer_t* r,
-  vfs_t* vfs,
   vec2i_t size,
   uint8_t flags);
 void gl_framebuf_destroy(framebuf_t* fb);
 void gl_framebuf_bind(const framebuf_t* fb);
 void gl_framebuf_resize(framebuf_t* fb, vec2i_t size);
 void gl_framebuf_draw(
-  const renderer_t* r, framebuf_t* fb, vec2i_t start, vec2i_t end);
+  renderer_t* r, framebuf_t* fb, vec2i_t start, vec2i_t end);
 
 #endif

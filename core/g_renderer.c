@@ -66,7 +66,7 @@ void defer_draw_call(
   renderer->deferred.dc[renderer->deferred.len++] = dc;
 }
 
-static void flush_list(const renderer_t* renderer, draw_call_list_t* dclist)
+static void flush_list(renderer_t* renderer, draw_call_list_t* dclist)
 {
   for (size_t i = 0; i < dclist->len; i++) {
     draw_call_t* dc = &dclist->dc[i];

@@ -32,17 +32,17 @@ void vert_arr_bind(const renderer_t* r, const vert_arr_t* varr)
 }
 
 void vert_arr_draw(
-  const renderer_t* r,
+  renderer_t* r,
   const vert_arr_t* varr,
   size_t start,
   size_t count,
   idx_mode_t index_mode)
 {
-  r->backend.vert_arr_draw(varr, start, count, index_mode);
+  r->backend.vert_arr_draw(r, varr, start, count, index_mode);
 }
 
 void vert_arr_draw_idx(
-  const renderer_t* r,
+  renderer_t* r,
   const vert_arr_t* varr,
   const buf_obj_t* ebo,
   size_t count,
@@ -50,6 +50,7 @@ void vert_arr_draw_idx(
   idx_mode_t index_mode)
 {
   r->backend.vert_arr_draw_idx(
+    r,
     varr, ebo,
     count, type,
     index_mode);

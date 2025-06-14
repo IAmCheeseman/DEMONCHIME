@@ -21,24 +21,16 @@ typedef struct font
 void init_freetype(renderer_t* r, vfs_t* core_vfs);
 void destroy_freetype(renderer_t* r);
 
-font_t* font_load(const renderer_t* r, vfs_t* vfs, const char* ttf, int size);
+font_t* font_load(renderer_t* r, vfs_t* vfs, const char* ttf, int size);
 void font_destroy(const renderer_t* r, font_t* font);
 int font_get_height(const renderer_t* r, const font_t* font);
 int font_get_width(const renderer_t* r, const font_t* font, const char* text);
-void font_draw(
-  const renderer_t* r, font_t* font, vec2f_t pos, const char* text);
+void font_draw(renderer_t* r, font_t* font, vec2f_t pos, const char* text);
 void font_draw_colored(
-  const renderer_t* r,
+  renderer_t* r,
   font_t* font,
   vec2f_t pos,
   color_t color,
   const char* text);
-void font_draw_custom(
-  const renderer_t* r,
-  font_t* font,
-  vec2f_t pos,
-  color_t color,
-  const char* text,
-  shader_t shader);
 
 #endif

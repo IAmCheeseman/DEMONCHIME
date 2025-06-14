@@ -3,8 +3,7 @@
 #include "g_shader.h"
 #include "c_mem.h"
 
-font_t* font_load(
-  const renderer_t* r, vfs_t* vfs, const char* ttf, int size)
+font_t* font_load(renderer_t* r, vfs_t* vfs, const char* ttf, int size)
 {
   font_t* font = mem_alloc(sizeof(font_t));
   font->glyphs = NULL;
@@ -42,14 +41,13 @@ int font_get_width(const renderer_t* r, const font_t* font, const char* text)
   return r->backend.font_get_width(font, text);
 }
 
-void font_draw(
-  const renderer_t* r, font_t* font, vec2f_t pos, const char* text)
+void font_draw(renderer_t* r, font_t* font, vec2f_t pos, const char* text)
 {
   r->backend.font_draw(r, font, pos, text, (color_t){1, 1, 1, 1});
 }
 
 void font_draw_colored(
-  const renderer_t* r,
+  renderer_t* r,
   font_t* font,
   vec2f_t pos, color_t color,
   const char* text)

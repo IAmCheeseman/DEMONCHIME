@@ -54,6 +54,7 @@ void gl_vert_arr_destroy(vert_arr_t* varr)
 }
 
 void gl_vert_arr_draw(
+  renderer_t* r,
   const vert_arr_t* varr,
   size_t start,
   size_t count,
@@ -62,9 +63,11 @@ void gl_vert_arr_draw(
   glBindVertexArray(varr->handle);
   glDrawArrays(idx_mode_to_gl(index_mode), start, count);
   glBindVertexArray(0);
+  r->draw_call_counter++;
 }
 
 void gl_vert_arr_draw_idx(
+  renderer_t* r,
   const vert_arr_t* varr,
   const buf_obj_t* ebo,
   size_t count,
@@ -88,4 +91,6 @@ void gl_vert_arr_draw_idx(
 
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
+
+  r->draw_call_counter++;
 }
