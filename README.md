@@ -26,14 +26,18 @@ $ make config=debug
 ## Project Structure
 The project structure is very simple:
 - `core`: this is the engine
-- `core/opengl`: for any opengl-specific code
+- `core/w_*.c/h`: lua wrapper
+- `core/g_*.c/h`: graphics api
+- `core/c_*.c/h`: engine core
+- `core/m_*.c/h`: math
+- `core/opengl`: OpenGL implementation
 - `core/had`: contains scripts and resources that the core engine needs
 - `lib`: third-party libraries
 - `game`: where the game code goes
 - `game/res`: resources, like shaders, textures, audio, etc
 ## HAD files
-HAD file store game data, the main executable will need both `CORE.HAD` and
-`DEMONCHIME.HAD` to run.
+HAD (Here's All the Data) files store game data, the main executable will need
+both `CORE.HAD` and `DEMONCHIME.HAD` to run.
 HAD files are just zip files, but with a different extension so you know that
 they're for this engine. You can load additional HAD files by passing them to
-the executable in the CLI. HAD stands for "Here's All the Data".
+the executable in the CLI.
