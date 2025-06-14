@@ -5,7 +5,7 @@
 
 static int L_create_mesh(lua_State* L)
 {
-  int shader = luaL_checkinteger(L, 1);
+  int shader = get_enum_from_str(L, luaL_checkstring(L, 1), shader_enum);
   bool transparent = lua_toboolean(L, 2);
 
   mesh_t* mesh = (mesh_t*)mem_alloc(sizeof(mesh_t));

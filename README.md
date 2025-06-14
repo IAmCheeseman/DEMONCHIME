@@ -26,10 +26,7 @@ $ make config=debug
 ## Project Structure
 The project structure is very simple:
 - `core`: this is the engine
-- `core/gfx`: for any rendering code
-- `core/wrap`: wraps the engine api into Lua
-- `core/math`: linear algebra
-- `core/gfx/opengl`: for any opengl-specific code
+- `core/opengl`: for any opengl-specific code
 - `core/had`: contains scripts and resources that the core engine needs
 - `lib`: third-party libraries
 - `game`: where the game code goes

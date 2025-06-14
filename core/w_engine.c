@@ -64,7 +64,9 @@ static int L_close_engine(lua_State* L)
 static int L_set_fullscreen(lua_State* L)
 {
   engine_t* engine = get_engine(L);
-  fullscreen_t fullscreen = (fullscreen_t)luaL_checkinteger(L, 1);
+  fullscreen_t fullscreen =
+    (fullscreen_t)get_enum_from_str(
+      L, luaL_checkstring(L, 1), fullscreen_enum);
   window_set_fullscreen(&engine->window, fullscreen);
   return 0;
 }
@@ -160,7 +162,7 @@ static int L_get_view(lua_State* L)
 static int L_is_key_down(lua_State* L)
 {
   engine_t* engine = get_engine(L);
-  int key = luaL_checkinteger(L, 1);
+  int key = get_enum_from_str(L, luaL_checkstring(L, 1), key_enum);
   lua_pushboolean(L, is_key_down(engine, (keys_t)key));
   return 1;
 }

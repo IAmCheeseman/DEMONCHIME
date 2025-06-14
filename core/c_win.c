@@ -3,6 +3,7 @@
 #include "c_engine.h"
 #include "g_framebuf.h"
 #include "m_math.h"
+#include "w_wrap.h"
 
 void framebuf_resize_callback(GLFWwindow* window, int width, int height)
 {
@@ -34,13 +35,15 @@ static void key_callback(
 
   if (engine->L == NULL) return;
 
+  const char* key_str = get_str_from_enum(engine->L, key, key_enum);
+
   if (action == GLFW_PRESS || action == GLFW_REPEAT) {
     lua_getglobal(engine->L, "keydown");
     if (!lua_isnil(engine->L, -1)) {
       if (!lua_isfunction(engine->L, -1)) {
         log_fatal(1, "global 'keydown' must be a function");
       }
-      lua_pushinteger(engine->L, key);
+      lua_pushstring(engine->L, key_str);
       lua_pushboolean(engine->L, action == GLFW_REPEAT);
       int res = lua_pcall(engine->L, 2, 0, engine->lua_err_handler_idx);
       if (res != LUA_OK) {
@@ -53,7 +56,7 @@ static void key_callback(
       if (!lua_isfunction(engine->L, -1)) {
         log_fatal(1, "global 'keyup' must be a function");
       }
-      lua_pushinteger(engine->L, key);
+      lua_pushstring(engine->L, key_str);
       int res = lua_pcall(engine->L, 1, 0, engine->lua_err_handler_idx);
       if (res != LUA_OK) {
         exit(1);

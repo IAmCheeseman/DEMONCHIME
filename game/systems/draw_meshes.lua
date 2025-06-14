@@ -5,10 +5,10 @@ event.on("@tick", function()
   -- r = r + math.rad(2)
   -- vry:set(r * 0.5)
 
-  if core.is_key_down(core.key.left) then
+  if core.is_key_down("left") then
     r = r + 0.1
   end
-  if core.is_key_down(core.key.right) then
+  if core.is_key_down("right") then
     r = r - 0.1
   end
   vry:set(r * 0.5)
@@ -26,7 +26,7 @@ end)
 
 local cubes = ecs.query("model", "trans_mat")
 local tex = core.load_tex("res/textures/grass.png")
-tex:set_filter(core.tex_filter.nearest, core.tex_filter.nearest)
+tex:set_filter("nearest", "nearest")
 
 event.on("@draw", function()
   for ent in cubes.ents:iter() do

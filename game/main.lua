@@ -6,7 +6,7 @@ end
 
 require("systems.draw_meshes")
 
-local cube = core.create_mesh(core.shader.default, false)
+local cube = core.create_mesh("default", false)
 cube:set_vertices(require("cube"))
 cube:finalize(true)
 
@@ -27,15 +27,15 @@ local t = 0
 local s = 0
 
 event.on("@keydown", function(key)
-  if key == core.key.up then s = s + 1 end
-  if key == core.key.down then s = s - 1 end
+  if key == "up" then s = s + 1 end
+  if key == "down" then s = s - 1 end
   s = math.max(s, 0)
 end)
 
 event.on("@tick", function()
   t = t + 1
 
-  if t < 5 and not core.is_key_down(core.key.space) then
+  if t < 5 and not core.is_key_down("space") then
     return
   end
 
@@ -57,7 +57,7 @@ event.on("@tick", function()
 end)
 
 event.on("@tick", function()
-  if core.is_key_down(core.key.escape) then
+  if core.is_key_down("escape") then
     core.close_engine()
   end
 end)
@@ -69,13 +69,13 @@ event.on("@keydown", function(key, is_repeated)
     return
   end
 
-  if key == core.key.e then
+  if key == "e" then
     for ent in models.ents:iter() do
       ent:rem("trans_mat")
     end
   end
 
-  if key == core.key.r then
+  if key == "r" then
     for ent in models.ents:iter() do
       ecs.rem_ent(ent)
     end
@@ -84,7 +84,7 @@ end)
 
 local dh = core.load_font("res/fonts/dbl_homicide.ttf", 16);
 
-local rect_mesh = core.create_mesh(core.shader._2d, false)
+local rect_mesh = core.create_mesh("2d", false)
 
 local function draw_region(r, cr, cg, cb, ca)
   cr = cr or 0
@@ -138,17 +138,17 @@ event.on("@uidraw", function()
   dh:draw(content.x, content.y + sh * 3, ("s: %d"):format(s))
 end)
 
-local fullscreen = core.fullscreen.none
+local fullscreen = "none"
 
 event.on("@keydown", function(key, is_repeated)
-  if key ~= core.key.f11 or is_repeated then
+  if key ~= "f11" or is_repeated then
     return
   end
 
-  if fullscreen == core.fullscreen.none then
-    fullscreen = core.fullscreen.borderless
+  if fullscreen == "none" then
+    fullscreen = "borderless"
   else
-    fullscreen = core.fullscreen.none
+    fullscreen = "none"
   end
   core.set_fullscreen(fullscreen)
 end)

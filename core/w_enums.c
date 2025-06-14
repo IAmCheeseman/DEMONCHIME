@@ -11,17 +11,10 @@ typedef struct lenum
   int value;
 } lenum_t;
 
-#define shader_name "shader"
-#define image_format_name "img_format"
-#define texture_filter_name "tex_filter"
-#define texture_wrap_name "tex_wrap"
-#define fullscreen_wrap_name "fullscreen"
-#define key_name "key"
-
 lenum_t shader[] = {
   {"default", shader_default},
   {"billboard", shader_billboard},
-  {"_2d", shader_2d},
+  {"2d", shader_2d},
   {"text", shader_text},
   {NULL, 0},
 };
@@ -76,21 +69,43 @@ static void reg_enum(
   for (lenum_t* enum_ = lenums; enum_->name != NULL; enum_++) {
     lua_pushinteger(L, enum_->value);
     lua_setfield(L, -2, enum_->name);
+    
+    lua_pushstring(L, enum_->name);
+    lua_rawseti(L, -2, enum_->value);
   }
 
-  lua_setfield(L, -2, name);
+  lua_setfield(L, LUA_REGISTRYINDEX, name);
+}
+
+const char* get_str_from_enum(lua_State* L, int e, const char* enum_table)
+{
+  lua_getfield(L, LUA_REGISTRYINDEX, enum_table);
+  lua_rawgeti(L, -1, e);
+  const char* s = luaL_checkstring(L, -1);
+  lua_pop(L, 2);
+  return s;
+}
+
+int get_enum_from_str(
+    lua_State* L, const char* enum_name, const char* enum_table)
+{
+  lua_getfield(L, LUA_REGISTRYINDEX, enum_table);
+  lua_getfield(L, -1, enum_name);
+  int e = lua_tonumber(L, -1);
+  lua_pop(L, 2);
+  return e;
 }
 
 void wrap_enums(lua_State* L)
 {
   lua_getglobal(L, core_name);
 
-  reg_enum(L, shader_name, shader);
-  reg_enum(L, image_format_name, image_format);
-  reg_enum(L, texture_filter_name, texture_filter);
-  reg_enum(L, texture_wrap_name, texture_wrap);
-  reg_enum(L, fullscreen_wrap_name, fullscreen_wrap);
-  reg_enum(L, key_name, key_wrap);
+  reg_enum(L, shader_enum, shader);
+  reg_enum(L, image_fmt_enum, image_format);
+  reg_enum(L, tex_filter_enum, texture_filter);
+  reg_enum(L, tex_wrap_enum, texture_wrap);
+  reg_enum(L, fullscreen_enum, fullscreen_wrap);
+  reg_enum(L, key_enum, key_wrap);
 
   lua_pop(L, 1);
 }

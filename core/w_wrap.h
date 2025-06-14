@@ -31,6 +31,13 @@ typedef enum ldata_type
 #define font_mt_name "__FONT_MT__"
 #define prng_mt_name "__PRNG_MT__"
 
+#define shader_enum "__SHADER_E__"
+#define image_fmt_enum "__IMG_FMT_E__"
+#define tex_filter_enum "__TEX_FILTER_E__"
+#define tex_wrap_enum "__TEX_WRAP_E__"
+#define fullscreen_enum "__FULLSCREEN_E__"
+#define key_enum "__KEY_E__"
+
 typedef struct lmat4
 {
   mat4_t m;
@@ -49,6 +56,8 @@ engine_t* get_engine(lua_State* L);
 void reg_funcs(lua_State* L, const luaL_Reg* funcs);
 bool protected_do_file(lua_State* L, vfs_t* vfs, const char* file);
 void raw_insert(lua_State* L, int t, int k, int pos);
+const char* get_str_from_enum(lua_State* L, int e, const char* enum_table);
+int get_enum_from_str(lua_State* L, const char* e, const char* enum_table);
 
 void wrap(lua_State* L, engine_t* engine);
 void wrap_engine(lua_State* L);

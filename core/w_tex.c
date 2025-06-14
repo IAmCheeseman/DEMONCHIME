@@ -55,8 +55,8 @@ static int L_TextureMt_set_filter(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
   tex_t* tex = (tex_t*)read_ldata(L, 1, lua_type_tex);
-  tex_filter_t min = luaL_checkinteger(L, 2);
-  tex_filter_t mag = luaL_checkinteger(L, 3);
+  tex_filter_t min = get_enum_from_str(L, luaL_checkstring(L, 2), tex_filter_enum);
+  tex_filter_t mag = get_enum_from_str(L, luaL_checkstring(L, 3), tex_filter_enum);
   tex_set_filter(r, tex, min, mag);
   return 0;
 }
@@ -65,8 +65,8 @@ static int L_TextureMt_set_wrap(lua_State* L)
 {
   renderer_t* r = get_engine(L)->renderer;
   tex_t* tex = (tex_t*)read_ldata(L, 1, lua_type_tex);
-  tex_wrap_t x = luaL_checkinteger(L, 2);
-  tex_wrap_t y = luaL_checkinteger(L, 3);
+  tex_wrap_t x = get_enum_from_str(L, luaL_checkstring(L, 2), tex_wrap_enum);
+  tex_wrap_t y = get_enum_from_str(L, luaL_checkstring(L, 3), tex_wrap_enum);
   tex_set_wrap(r, tex, x, y);
   return 0;
 }
